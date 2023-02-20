@@ -1,0 +1,166 @@
+#logo {
+    margin-bottom: 50px;
+}
+
+main {
+    width: 650px;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+main > div {
+    width: 65%;
+}
+
+aside {
+    width: calc(100vw - 650px);
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+aside .usp_container {
+    display: flex;
+    width: 850px;
+    margin-bottom: 15px;
+}
+
+aside .usp_container:last-of-type {
+    margin-bottom: 0px;
+}
+
+aside .usp_container .usp:nth-child(odd) {
+    margin-right: 15px;
+}
+
+aside .usp_container .usp {
+    padding: 25px;
+    font-weight: 500;
+    color: #CBCBCD;
+    height: 150px;
+    width: 370px;
+    background-color: #13111A;
+}
+
+aside .usp_container .usp.transparent {
+    background-color: transparent;
+    border: 1px solid #13111A;
+}
+
+aside .usp_container .usp h2 {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 15px;
+}
+
+aside .usp_container .usp p {
+    line-height: 20px;
+}
+
+aside .usp_container .usp div {
+    width: 50px;
+    height: 50px;
+    border-radius: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0B0A10;
+    margin-bottom: 15px;
+}
+
+aside .usp_container .usp.transparent div {
+    background-color: #13111A;
+}
+
+.form-group:first-of-type {
+    margin-bottom: 30px;
+}
+
+input {
+    border: none;
+    border: 1px solid #232227;
+    background-color: #0B0A10;
+    padding: 10px 0px 10px 10px;
+    border-radius: 10px;
+    font-family: "NewRodinPro";
+    font-weight: 600;
+    width: 100%;
+    color: white;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+button {
+    border: none;
+    background-color: white;
+    width: 100%;
+    height: 50px;
+    border-radius: 8px;
+    box-shadow: none;
+    font-family: "NewRodinPro";
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button#register {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+label {
+    color: #E0E0E0;
+    font-size: 14px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+a {
+    color: #4C5370;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+    display: block;
+}
+
+#seperator {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#seperator p {
+    color: #4C5370;
+    font-weight: 600;
+    margin-left: 15px;
+    margin-right: 15px;
+    font-size: 12px;
+}
+
+#seperator span {
+    width: 40%;
+    background-color: #4C5370;
+    height: 2px;
+}
+
+@media only screen and (max-width: 1500px) {
+    main {
+        width: 100vw;
+    }
+
+    aside {
+        display: none;
+    }
+}

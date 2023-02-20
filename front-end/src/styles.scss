@@ -1,0 +1,45 @@
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_UB.otf');
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_EB.otf');
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_B.otf');
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_DB.otf');
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_M.otf');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'NewRodinPro';
+    src: url('assets/font/NewRodinPro_L.otf');
+    font-weight: 400;
+}
+
+body {
+    font-family: 'NewRodinPro';
+    background-color: #0B0A10;
+    color: white;
+}
+
+.container {
+    display: flex;
+}

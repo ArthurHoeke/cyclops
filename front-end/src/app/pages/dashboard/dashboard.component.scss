@@ -1,0 +1,52 @@
+.container {
+    flex-direction: column;
+}
+
+nav {
+    width: 100vw;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+nav div:first-of-type {
+    margin-left: 50px;
+}
+
+nav #logo {
+    width: 100px;
+}
+
+main {
+    width: 100vw;
+    min-height: calc(100vh - 100px);
+    display: flex;
+}
+
+main aside {
+    width: 400px;
+}
+
+main section {
+    width: calc(100vw - 400px);
+}
+
+main .wrapper {
+    padding: 50px;
+}
+
+main aside h2 {
+    color: #525978;
+    font-weight: 600;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+main aside h3 {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+main aside h3 span {
+    color: #32E7B1;
+}
