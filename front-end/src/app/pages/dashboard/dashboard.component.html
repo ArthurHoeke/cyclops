@@ -1,19 +1,135 @@
-<div class="container">
-    <nav id="logo">
-        <div>
-            <img src="assets/logo/cyclops.svg" id="logo">
-        </div>
-        <div></div>
-    </nav>
-    <main>
-        <aside>
-            <div class="wrapper">
+<nav class="container mt-5 mb-5">
+    <div>
+        <a><img src="assets/logo/cyclops.svg" id="logo"></a>
+    </div>
+</nav>
+<main class="container">
+    <div class="row">
+        <aside class="col-sm-12 col-md-12 col-lg-5 col-xl-4 mb-3">
+            <div class="card">
                 <h2>My validators</h2>
-                <h3>Today: <span>$ ?</span></h3>
+                <h3>Today: <span>$ 124.12</span></h3>
+                <div id="manageButtonWrapper" class="mt-2">
+                    <button class="active"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M4.66667 1H1.61111C1.2736 1 1 1.2736 1 1.61111V4.66667C1 5.00417 1.2736 5.27778 1.61111 5.27778H4.66667C5.00417 5.27778 5.27778 5.00417 5.27778 4.66667V1.61111C5.27778 1.2736 5.00417 1 4.66667 1Z"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M4.66667 7.72223H1.61111C1.2736 7.72223 1 7.99583 1 8.33334V11.3889C1 11.7264 1.2736 12 1.61111 12H4.66667C5.00417 12 5.27778 11.7264 5.27778 11.3889V8.33334C5.27778 7.99583 5.00417 7.72223 4.66667 7.72223Z"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M11.3888 1H8.33328C7.99577 1 7.72217 1.2736 7.72217 1.61111V4.66667C7.72217 5.00417 7.99577 5.27778 8.33328 5.27778H11.3888C11.7263 5.27778 11.9999 5.00417 11.9999 4.66667V1.61111C11.9999 1.2736 11.7263 1 11.3888 1Z"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <path
+                                d="M11.3888 7.72223H8.33328C7.99577 7.72223 7.72217 7.99583 7.72217 8.33334V11.3889C7.72217 11.7264 7.99577 12 8.33328 12H11.3888C11.7263 12 11.9999 11.7264 11.9999 11.3889V8.33334C11.9999 7.99583 11.7263 7.72223 11.3888 7.72223Z"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>Overview</button>
+                    <button><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 11V6M6 6V1M6 6H11M6 6H1" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Add validator</button>
+                </div>
+                <div id="validatorList">
+                    <div class="validator mt-3">
+                        <div class="logoWrapper">
+                            <img src="assets/logo/dot.png">
+                        </div>
+                        <div class="detailsWrapper">
+                            <div>
+                                <p>Amsterdam</p>
+                                <span class="active">Active</span>
+                            </div>
+                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
+                        </div>
+                    </div>
+                    <div class="validator mt-3">
+                        <div class="logoWrapper">
+                            <img src="assets/logo/dot.png">
+                        </div>
+                        <div class="detailsWrapper">
+                            <div>
+                                <p>Dublin</p>
+                                <span class="active">Active</span>
+                            </div>
+                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
+                        </div>
+                    </div>
+                    <div class="validator mt-3">
+                        <div class="logoWrapper">
+                            <img src="assets/logo/dot.png">
+                        </div>
+                        <div class="detailsWrapper">
+                            <div>
+                                <p>Paris</p>
+                                <span class="active">Active</span>
+                            </div>
+                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </aside>
-        <section>
-            b
+        <section class="col-sm-12 col-md-12 col-lg-7 col-xl-8">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="card incomePieContainer">
+                            <div class="head">
+                                <p>Income pie</p>
+                            </div>
+                            <div class="body wrapCenter">
+                                <div class="pieWrap">
+                                    <div class="pieMeta">
+                                        <p>$23,482</p>
+                                        <p>All-time Income</p>
+                                    </div>
+                                    <canvas class="incomePie" baseChart class="chart" [data]="incomePieData"
+                                        [options]="incomeChartOption" [type]="incomeChartType">
+                                    </canvas>
+                                </div>
+                                <div class="legenda">
+                                    <ul>
+                                        <li class="red">Amsterdam</li>
+                                        <li class="blue">Dublin</li>
+                                        <li class="yellow">Paris</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="card">
+                            <div class="head">
+                                <p>Token prices</p>
+                            </div>
+                            <div class="body">
+                                <div id="chart">
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="head">
+                                <p>Daily income</p>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart class="chart"
+                                [data]="dailyIncomeData"
+                                [options]="dailyIncomeChartOption"
+                                [type]="dailyIncomeChartType">
+                                </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
-    </main>
-</div>
+    </div>
+</main>

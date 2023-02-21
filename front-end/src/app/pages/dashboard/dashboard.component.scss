@@ -1,52 +1,214 @@
-.container {
-    flex-direction: column;
+main aside .card {
+    background-color: #0D0C12;
+    border: 1px solid #202127;
+    padding: 16px; 
 }
 
-nav {
-    width: 100vw;
-    height: 100px;
+main section .card {
+    background-color: #0D0C12;
+    border: 1px solid #202127;
+}
+
+main section .card .head {
+    padding: 15px;
+    border-bottom: 1px solid #202127;
+}
+
+main section .card .body {
+    padding: 15px;
+}
+
+main section .card .body.wrapCenter {
     display: flex;
     align-items: center;
 }
 
-nav div:first-of-type {
-    margin-left: 50px;
+main section .card .head p {
+    margin: 0;
+    font-weight: 500;
 }
 
-nav #logo {
-    width: 100px;
+h2 {
+    color: #525978;
+    font-size: 16px;
+    font-weight: 600;
 }
 
-main {
-    width: 100vw;
-    min-height: calc(100vh - 100px);
+h3 {
+    color: white;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+h3 span {
+    color: #32E7B1;
+    font-weight: 600;
+}
+
+#manageButtonWrapper {
+    width: 100%;
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-main aside {
-    width: 400px;
+#manageButtonWrapper button {
+    background-color: #0D0C12;
+    border: 1px solid #202127;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5A5A5A;
+    border-radius: 6px;
+    font-weight: 600;
+    padding: 12px 18px;
+    font-size: 14px;
+    width: 45%;
 }
 
-main section {
-    width: calc(100vw - 400px);
+#manageButtonWrapper button svg {
+    stroke: #5A5A5A;
+    margin-right: 8px;
 }
 
-main .wrapper {
-    padding: 50px;
+#manageButtonWrapper button.active {
+    background-color: #14151B;
+    color: white;
 }
 
-main aside h2 {
+#manageButtonWrapper button.active svg {
+    stroke: white;
+}
+
+#validatorList {
+    display: flex;
+    flex-direction: column;
+}
+
+#validatorList .validator {
+    border: 1px solid #202127;
+    border-radius: 6px;
+    display: flex;
+    padding: 16px;
+    cursor: pointer;
+}
+
+#validatorList .validator .logoWrapper img {
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+}
+
+#validatorList .validator .detailsWrapper {
+    width: 100%;
+    padding-left: 15px;
+    margin-top: 3px;
+}
+
+#validatorList .validator .detailsWrapper p {
+    margin: 0;
+    font-weight: 600;
+}
+
+#validatorList .validator .detailsWrapper .address {
+    font-size: 14px;
     color: #525978;
     font-weight: 600;
-    margin-bottom: 10px;
-    font-size: 14px;
 }
 
-main aside h3 {
+#validatorList .validator .detailsWrapper > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#validatorList .validator .detailsWrapper > div span {
+    border-radius: 100px;
+    background-color: white;
+    padding: 4px 20px;
+    color: black;
     font-weight: 600;
-    font-size: 20px;
 }
 
-main aside h3 span {
-    color: #32E7B1;
+#validatorList .validator .detailsWrapper > div span.active {
+    background-color: #32E7B1; 
+}
+
+//incomePie
+
+.incomePieContainer .pieWrap {
+    height: 200px !important;   
+    width: 200px !important;
+    position: relative;
+}
+
+.incomePieContainer .pieWrap .pieMeta {
+    height: 200px !important;
+    width: 200px !important;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.incomePieContainer .pieWrap .pieMeta p {
+    margin-bottom: 0;
+}
+
+.incomePieContainer .pieWrap .pieMeta p:first-of-type {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.incomePieContainer .pieWrap .pieMeta p:last-of-type {
+    font-weight: 500;
+    font-size: 16px;
+    color: #7A7A7D;
+}
+
+.incomePieContainer .legenda {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.incomePieContainer .legenda ul {
+    margin-bottom: 0;
+}
+
+.incomePieContainer .legenda li {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.incomePieContainer .legenda li:before {
+    content: "";
+    display: block;
+    width: 15px;
+    height: 15px;
+    border-radius: 5px;
+    background-color: white;
+    position: absolute;
+    left: -25px;
+    top: 5px;
+}
+
+.incomePieContainer .legenda li.blue:before {
+    background-color: #36A2EB;
+}
+
+.incomePieContainer .legenda li.red:before {
+    background-color: #FF6384;
+}
+
+.incomePieContainer .legenda li.yellow:before {
+    background-color: #FFCD56;
+}
+
+.incomePieContainer .incomePie {
+    height: 200px !important;   
+    width: 200px !important;
 }
