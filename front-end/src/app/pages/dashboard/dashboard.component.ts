@@ -228,4 +228,124 @@ export class DashboardComponent {
       }
     } 
   }
+
+
+
+
+  public tokenChartData: ChartData<'line', number[], string | string[]> = {
+    labels: this.coingeckoService.getTestLabels(60),
+    datasets: [{
+      data: this.coingeckoService.getTestData(6, 12, 60),
+      borderWidth: 3,
+      pointRadius: 0,
+      tension: 0.25,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(93,212,37,0)',
+            10000: 'rgba(93,212,37,1)'
+          }
+        },
+        borderColor: {
+          axis: 'x',
+          colors: {
+            1: '#68C813',
+          }
+        }
+      },
+      pointBorderColor: "white",
+      fill: true,
+    }],
+  };
+
+  tokenChartOptions: any = {
+    responsive: false,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scaleShowLabels: false,
+    scales: {
+      y: {
+        ticks: {
+          display: true,
+        },
+        grid: {
+          color: '#141318',
+          display: true
+        }
+      },
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          color: '#141318',
+          display: false
+        }
+      }
+    } 
+  }
+
+
+  public eraChartData: ChartData<'line', number[], string | string[]> = {
+    labels: ['19:10', '19:15', '19:20', '19:25', '19:30', '19:35', '19:40'],
+    datasets: [{
+      data: [0, 20, 40, 80, 160, 240, 500],
+      borderWidth: 2,
+      pointRadius: 2,
+      tension: 0.35,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(255,238,122,0)',
+            10000: 'rgba(239,157,0,1)'
+          }
+        },
+        borderColor: {
+          axis: 'x',
+          colors: {
+            1: '#FFC300',
+          }
+        }
+      },
+      pointBorderColor: "white",
+      fill: true,
+    }],
+  };
+
+  eraChartOptions: any = {
+    responsive: false,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scaleShowLabels: false,
+    scales: {
+      y: {
+        ticks: {
+          display: true,
+        },
+        grid: {
+          color: '#141318',
+          display: true
+        }
+      },
+      x: {
+        ticks: {
+          display: true,
+        },
+        grid: {
+          color: '#141318',
+          display: false
+        }
+      }
+    } 
+  }
 }

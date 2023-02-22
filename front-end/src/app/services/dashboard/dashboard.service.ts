@@ -7,24 +7,24 @@ export class DashboardService {
 
   // Number variable that keeps track of the selected validator and used for panel switching
   // index 0 = overview
-  selectedValidator: Number = 0;
+  private selectedValidator: Number = 0;
 
   constructor() { }
 
-  selectValidator(index: Number) {
+  public selectValidator(index: Number) {
     this.selectedValidator = index;
   }
 
-  getSelectedValidator() {
+  public getSelectedValidator() {
     return this.selectedValidator;
   }
 
-  getTotalCombinedRewards() {
+  public getTotalCombinedRewards() {
     //dummy
     return "$ 23,482";
   }
 
-  getTotalRewardsToday() {
+  public getTotalRewardsToday() {
     //dummy
     return "$ 124.12";
   }

@@ -10,8 +10,8 @@
                 <h2>My validators</h2>
                 <h3>Today: <span>{{dashboardService.getTotalRewardsToday()}}</span></h3>
                 <div id="manageButtonWrapper" class="mt-2">
-                    <button [ngClass]="{'active' : isActive(0)}" (click)="dashboardService.selectValidator(0)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
+                    <button [ngClass]="{'active' : isActive(0)}" (click)="dashboardService.selectValidator(0)"><svg
+                            width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M4.66667 1H1.61111C1.2736 1 1 1.2736 1 1.61111V4.66667C1 5.00417 1.2736 5.27778 1.61111 5.27778H4.66667C5.00417 5.27778 5.27778 5.00417 5.27778 4.66667V1.61111C5.27778 1.2736 5.00417 1 4.66667 1Z"
                                 stroke-linecap="round" stroke-linejoin="round" />
@@ -32,7 +32,8 @@
                         Add validator</button>
                 </div>
                 <div id="validatorList">
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(1)}" (click)="dashboardService.selectValidator(1)">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(1)}"
+                        (click)="dashboardService.selectValidator(1)">
                         <div class="logoWrapper">
                             <img src="assets/logo/dot.png">
                         </div>
@@ -44,26 +45,28 @@
                             <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
                         </div>
                     </div>
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(2)}" (click)="dashboardService.selectValidator(2)">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(2)}"
+                        (click)="dashboardService.selectValidator(2)">
                         <div class="logoWrapper">
                             <img src="assets/logo/ksm.png">
                         </div>
                         <div class="detailsWrapper">
                             <div>
                                 <p>Dublin</p>
-                                <span class="active">Active</span>
+                                <span class="waiting">Waiting</span>
                             </div>
                             <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
                         </div>
                     </div>
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(3)}" (click)="dashboardService.selectValidator(3)">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(3)}"
+                        (click)="dashboardService.selectValidator(3)">
                         <div class="logoWrapper">
                             <img src="assets/logo/astar.png">
                         </div>
                         <div class="detailsWrapper">
                             <div>
                                 <p>Paris</p>
-                                <span class="active">Active</span>
+                                <span class="offline">Offline</span>
                             </div>
                             <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
                         </div>
@@ -76,6 +79,55 @@
 
                 <!-- Dashboard overview container -->
                 <ng-container *ngIf="onOverview()">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Critical events</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Validator</th>
+                                            <th>Event</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Paris</b></td>
+                                            <td>Slash</td>
+                                            <td>10/03/2023</td>
+                                            <td>11:35 AM</td>
+                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-TrashCan"><path d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z"/><path d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z"/><path d="M2 6h20"/><path d="M10 11v5"/><path d="M14 11v5"/></svg></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Notices</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Event</th>
+                                            <th>Validator</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                        </tr>
+                                        <tr>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card incomePieContainer">
@@ -103,7 +155,7 @@
                             </div>
                         </div>
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card tokenPriceContainer">
+                            <div class="card tableWrapper">
                                 <div class="head">
                                     <p>Token prices</p>
                                 </div>
@@ -134,17 +186,16 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col-12 mb-3">
                             <div class="card">
                                 <div class="head">
-                                    <p>Daily income</p>
+                                    <p>Combined daily rewards</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart"
-                                    [data]="dailyIncomeData"
-                                    [options]="dailyIncomeChartOption"
-                                    [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                    <canvas baseChart class="chart" [data]="dailyIncomeData"
+                                        [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
+                                        style="max-height: 300px;">
                                     </canvas>
                                 </div>
                             </div>
@@ -176,23 +227,84 @@
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card tokenPriceContainer">
                                 <div class="head">
-                                    <p>Token price</p>
+                                    <p>30d price change</p>
+                                    <p>$ 7.58 per <img src="assets/logo/dot.png"></p>
                                 </div>
                                 <div class="body">
-                                    
+                                    <canvas baseChart class="chart" [data]="tokenChartData"
+                                        [options]="tokenChartOptions" [type]="lineChartType"
+                                        style="width: 100%; height: 200px;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-5">
-                        <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Weekly overview</p>
+                                </div>
+                                <div class="body">
+                                    <canvas baseChart class="chart" [data]="dailyIncomeData"
+                                        [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
+                                        style="max-height: 300px;">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Reward overview</p>
+                                </div>
+                                <div class="body">
+                                    daily, weekly, monthly, yearly reward table
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
                                 <div class="head">
                                     <p>Stash balance</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="lineChartData"
-                                    [options]="lineChartOptions" [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                    <canvas baseChart class="chart" [data]="lineChartData" [options]="lineChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>ERA points</p>
+                                </div>
+                                <div class="body">
+                                    <canvas baseChart class="chart" [data]="eraChartData" [options]="eraChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Income report</p>
+                                </div>
+                                <div class="body">
+a
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Critical events</p>
+                                </div>
+                                <div class="body">
+b
                                 </div>
                             </div>
                         </div>

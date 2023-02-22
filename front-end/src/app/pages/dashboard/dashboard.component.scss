@@ -29,10 +29,20 @@ main {
         .head {
             padding: 15px;
             border-bottom: 1px solid #202127;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
             p {
                 margin: 0;
                 font-weight: 500;
+            }
+
+            img {
+                border-radius: 100px;
+                width: 25px;
+                height: 25px;
+                margin-left: 5px;
             }
         }
 
@@ -140,6 +150,14 @@ main {
                     span.active {
                         background-color: #32E7B1;
                     }
+
+                    span.waiting {
+                        background-color: #FFD057;
+                    }
+
+                    span.offline {
+                        background-color: #DB4F4F;
+                    }
                 }
             }
 
@@ -150,7 +168,7 @@ main {
     }
 
     section {
-        .tokenPriceContainer table {
+        .tableWrapper table {
             border-collapse: collapse;
             width: 100%;
 
@@ -174,6 +192,11 @@ main {
 
             tr:nth-child(even) {
                 background-color: #111217;
+            }
+
+            svg {
+                width: 15px;
+                height: 15px;
             }
         }
     }
