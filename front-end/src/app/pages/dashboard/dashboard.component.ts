@@ -2,6 +2,8 @@ import { Component, ViewChild, Directive, Input, Output, EventEmitter } from '@a
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType, ChartOptions, Chart } from 'chart.js';
 
+import { CoingeckoService } from 'src/app/services/coingecko.service';
+
 import gradient from 'chartjs-plugin-gradient';
 
 @Component({
@@ -13,8 +15,9 @@ import gradient from 'chartjs-plugin-gradient';
 export class DashboardComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  constructor() {
+  constructor(private coingeckoService: CoingeckoService) {
     Chart.register(gradient);
+    // coingeckoService.getTokenData("polkadot", "usd");
   }
 
   //income pie chart
