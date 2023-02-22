@@ -110,7 +110,7 @@ export class DashboardComponent {
   public lineChartData: ChartData<'line', number[], string | string[]> = {
     labels: ['2/22', '2/23', '2/24', '2/25', '2/26', '2/27', '2/28'],
     datasets: [{
-      data: [7, 6.5, 7.7, 8.12, 8.3, 8, 8.6],
+      data: [0, 1823, 3855, 5873, 6880, 7895, 8293, 9281],
       borderWidth: 2,
       pointRadius: 1,
       tension: 0.35,
@@ -119,8 +119,7 @@ export class DashboardComponent {
           axis: 'y',
           colors: {
             0: 'rgba(255,255,255,0)',
-            50: 'rgba(255,255,255,.5)',
-            100: 'rgba(255,255,255,1)'
+            10000: 'rgba(255,255,255,1)'
           }
         },
         borderColor: {
@@ -150,12 +149,20 @@ export class DashboardComponent {
     scales: {
       y: {
         ticks: {
-          display: false,
+          display: true,
+        },
+        grid: {
+          color: '#141318',
+          display: true
         }
       },
       x: {
         ticks: {
-          display: false,
+          display: true,
+        },
+        grid: {
+          color: '#141318',
+          display: false
         }
       }
     } 
