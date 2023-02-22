@@ -1,4 +1,4 @@
-<nav class="container mt-5 mb-5">
+<nav class="container mt-4 mb-4">
     <div>
         <a><img src="assets/logo/cyclops.svg" id="logo"></a>
     </div>
@@ -100,20 +100,30 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                        <div class="card">
+                        <div class="card tokenPriceContainer">
                             <div class="head">
                                 <p>Token prices</p>
                             </div>
                             <div class="body">
-                                <div id="chart">
-
-                                </div>
-
+                                <table>
+                                    <tr>
+                                        <th>Token</th>
+                                        <th>Price</th>
+                                        <th>Change</th>
+                                        <th>Chart</th>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="assets/logo/dot.png"></td>
+                                        <td>$8.23</td>
+                                        <td>2.34</td>
+                                        <td></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row mb-5">
                     <div class="col-12">
                         <div class="card">
                             <div class="head">
@@ -125,6 +135,19 @@
                                 [options]="dailyIncomeChartOption"
                                 [type]="dailyIncomeChartType">
                                 </canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="head">
+                                <p>Daily income</p>
+                            </div>
+                            <div class="body">
+                                <canvas baseChart class="chart" [data]="lineChartData"
+                                [options]="lineChartOptions" [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                             </div>
                         </div>
                     </div>

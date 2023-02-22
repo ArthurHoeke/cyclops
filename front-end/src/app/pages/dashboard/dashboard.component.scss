@@ -1,7 +1,11 @@
+nav #logo {
+    width: 100px;
+}
+
 main aside .card {
     background-color: #0D0C12;
     border: 1px solid #202127;
-    padding: 16px; 
+    padding: 16px;
 }
 
 main section .card {
@@ -116,13 +120,13 @@ h3 span {
     font-weight: 600;
 }
 
-#validatorList .validator .detailsWrapper > div {
+#validatorList .validator .detailsWrapper>div {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-#validatorList .validator .detailsWrapper > div span {
+#validatorList .validator .detailsWrapper>div span {
     border-radius: 100px;
     background-color: white;
     padding: 4px 20px;
@@ -130,14 +134,51 @@ h3 span {
     font-weight: 600;
 }
 
-#validatorList .validator .detailsWrapper > div span.active {
-    background-color: #32E7B1; 
+#validatorList .validator .detailsWrapper>div span.active {
+    background-color: #32E7B1;
+}
+
+//token price
+
+.tokenPriceContainer table {
+    width: 100%;
+}
+
+.tokenPriceContainer table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.tokenPriceContainer table td,
+.tokenPriceContainer table th {
+    padding: 8px;
+}
+
+.tokenPriceContainer table tr:nth-child(even) {
+    background-color: #111217;
+}
+
+.tokenPriceContainer table tr img {
+    border-radius: 100px;
+    width: 30px;
+    height: 30px;
+}
+
+.tokenPriceContainer table tr:hover {
+    background-color: #ddd;
+}
+
+.tokenPriceContainer table th {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: left;
+    color: #7A7A7D;
 }
 
 //incomePie
 
 .incomePieContainer .pieWrap {
-    height: 200px !important;   
+    height: 200px !important;
     width: 200px !important;
     position: relative;
 }
@@ -209,6 +250,6 @@ h3 span {
 }
 
 .incomePieContainer .incomePie {
-    height: 200px !important;   
+    height: 200px !important;
     width: 200px !important;
 }

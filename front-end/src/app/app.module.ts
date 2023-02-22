@@ -8,20 +8,22 @@ import { LoginComponent } from './pages/login/login.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
-import { NgApexchartsModule } from 'ng-apexcharts';
+import { FormsModule } from '@angular/forms';
+import { GradientChartDirective } from './gradient-chart.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
-    LoginComponent
+    LoginComponent,
+    GradientChartDirective
   ],
   imports: [
     BrowserModule,
     NgbModule,
     AppRoutingModule,
     NgChartsModule,
-    NgApexchartsModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
