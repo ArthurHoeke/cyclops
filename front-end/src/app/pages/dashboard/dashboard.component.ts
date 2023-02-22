@@ -31,7 +31,7 @@ export class DashboardComponent {
       borderAlign: 'center',
       borderRadius: 100,
       borderWidth: 0,
-      spacing: 10
+      spacing: 10,
     }]
   };
 
@@ -62,12 +62,21 @@ export class DashboardComponent {
       borderColor: [
         '#202127'
       ],
-      borderWidth: 2,
+      borderWidth: 0,
       borderRadius: 5,
       // barPercentage: 0.5,
       barThickness: 30,
       maxBarThickness: 30,
       minBarLength: 2,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(230,0,122,.2)',
+            100: 'rgba(230,0,122,1)'
+          }
+        },
+      },
     }]
   };
 
