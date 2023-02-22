@@ -8,9 +8,9 @@
         <aside class="col-sm-12 col-md-12 col-lg-5 col-xl-4 mb-3">
             <div class="card">
                 <h2>My validators</h2>
-                <h3>Today: <span>$ 124.12</span></h3>
+                <h3>Today: <span>{{dashboardService.getTotalRewardsToday()}}</span></h3>
                 <div id="manageButtonWrapper" class="mt-2">
-                    <button class="active"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"
+                    <button [ngClass]="{'active' : isActive(0)}" (click)="dashboardService.selectValidator(0)"><svg width="13" height="13" viewBox="0 0 13 13" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M4.66667 1H1.61111C1.2736 1 1 1.2736 1 1.61111V4.66667C1 5.00417 1.2736 5.27778 1.61111 5.27778H4.66667C5.00417 5.27778 5.27778 5.00417 5.27778 4.66667V1.61111C5.27778 1.2736 5.00417 1 4.66667 1Z"
@@ -32,7 +32,7 @@
                         Add validator</button>
                 </div>
                 <div id="validatorList">
-                    <div class="validator mt-3">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(1)}" (click)="dashboardService.selectValidator(1)">
                         <div class="logoWrapper">
                             <img src="assets/logo/dot.png">
                         </div>
@@ -44,7 +44,7 @@
                             <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
                         </div>
                     </div>
-                    <div class="validator mt-3">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(2)}" (click)="dashboardService.selectValidator(2)">
                         <div class="logoWrapper">
                             <img src="assets/logo/dot.png">
                         </div>
@@ -56,7 +56,7 @@
                             <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
                         </div>
                     </div>
-                    <div class="validator mt-3">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(3)}" (click)="dashboardService.selectValidator(3)">
                         <div class="logoWrapper">
                             <img src="assets/logo/dot.png">
                         </div>
@@ -73,88 +73,92 @@
         </aside>
         <section class="col-sm-12 col-md-12 col-lg-7 col-xl-8">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                        <div class="card incomePieContainer">
-                            <div class="head">
-                                <p>Income pie</p>
-                            </div>
-                            <div class="body wrapCenter">
-                                <div class="pieWrap">
-                                    <div class="pieMeta">
-                                        <p>$23,482</p>
-                                        <p>All-time Income</p>
+                <ng-container *ngIf="dashboardService.getSelectedValidator() == 0">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card incomePieContainer">
+                                <div class="head">
+                                    <p>Income pie</p>
+                                </div>
+                                <div class="body wrapCenter">
+                                    <div class="pieWrap">
+                                        <div class="pieMeta">
+                                            <p>{{dashboardService.getTotalCombinedIncome()}}</p>
+                                            <p>All-time Income</p>
+                                        </div>
+                                        <canvas class="incomePie" baseChart class="chart" [data]="incomePieData"
+                                            [options]="incomeChartOption" [type]="incomeChartType">
+                                        </canvas>
                                     </div>
-                                    <canvas class="incomePie" baseChart class="chart" [data]="incomePieData"
-                                        [options]="incomeChartOption" [type]="incomeChartType">
+                                    <div class="legenda">
+                                        <ul>
+                                            <li class="red">Amsterdam</li>
+                                            <li class="blue">Dublin</li>
+                                            <li class="yellow">Paris</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card tokenPriceContainer">
+                                <div class="head">
+                                    <p>Token prices</p>
+                                </div>
+                                <div class="body">
+                                    <table>
+                                        <tr>
+                                            <th>Token</th>
+                                            <th>Price</th>
+                                            <th>Change</th>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="assets/logo/dot.png"></td>
+                                            <td>$8.23</td>
+                                            <td>2.34%</td>
+                                        </tr>
+                                        <tr>
+                                            <td><img src="assets/logo/ksm.png"></td>
+                                            <td>$28.23</td>
+                                            <td>3.72%</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Daily income</p>
+                                </div>
+                                <div class="body">
+                                    <canvas baseChart class="chart"
+                                    [data]="dailyIncomeData"
+                                    [options]="dailyIncomeChartOption"
+                                    [type]="dailyIncomeChartType" style="max-height: 300px;">
                                     </canvas>
                                 </div>
-                                <div class="legenda">
-                                    <ul>
-                                        <li class="red">Amsterdam</li>
-                                        <li class="blue">Dublin</li>
-                                        <li class="yellow">Paris</li>
-                                    </ul>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="dashboardService.getSelectedValidator() != 0">
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Daily income</p>
+                                </div>
+                                <div class="body">
+                                    <canvas baseChart class="chart" [data]="lineChartData"
+                                    [options]="lineChartOptions" [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                        <div class="card tokenPriceContainer">
-                            <div class="head">
-                                <p>Token prices</p>
-                            </div>
-                            <div class="body">
-                                <table>
-                                    <tr>
-                                        <th>Token</th>
-                                        <th>Price</th>
-                                        <th>Change</th>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="assets/logo/dot.png"></td>
-                                        <td>$8.23</td>
-                                        <td>2.34%</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img src="assets/logo/ksm.png"></td>
-                                        <td>$28.23</td>
-                                        <td>3.72%</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="head">
-                                <p>Daily income</p>
-                            </div>
-                            <div class="body">
-                                <canvas baseChart class="chart"
-                                [data]="dailyIncomeData"
-                                [options]="dailyIncomeChartOption"
-                                [type]="dailyIncomeChartType" style="max-height: 300px;">
-                                </canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-5">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="head">
-                                <p>Daily income</p>
-                            </div>
-                            <div class="body">
-                                <canvas baseChart class="chart" [data]="lineChartData"
-                                [options]="lineChartOptions" [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                </ng-container>
             </div>
         </section>
     </div>

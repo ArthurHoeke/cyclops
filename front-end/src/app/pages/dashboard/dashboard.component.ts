@@ -2,7 +2,8 @@ import { Component, ViewChild, Directive, Input, Output, EventEmitter } from '@a
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartEvent, ChartType, ChartOptions, Chart } from 'chart.js';
 
-import { CoingeckoService } from 'src/app/services/coingecko.service';
+import { CoingeckoService } from 'src/app/services/coingecko/coingecko.service';
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 import gradient from 'chartjs-plugin-gradient';
 
@@ -13,14 +14,30 @@ import gradient from 'chartjs-plugin-gradient';
 })
 
 export class DashboardComponent {
+
+  //// ViewChild decorator that assigns BaseChartDirective to chart variable
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  constructor(private coingeckoService: CoingeckoService) {
+  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService) {
     Chart.register(gradient);
-    // coingeckoService.getTokenData("polkadot", "usd");
   }
 
-  //income pie chart
+  // Function used in HTML to check if 'active' CSS class can be added to panel button
+  isActive(index: Number) {
+    if(this.dashboardService.getSelectedValidator() == index) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  //-------------------------
+  // Overview functionality
+  //-------------------------
+
+  incomeChartType: ChartType = 'doughnut';
+  dailyIncomeChartType: ChartType = 'bar';
+  lineChartType: ChartType = 'line';
 
   public incomePieData: ChartData<'doughnut', number[], string | string[]> = {
     labels: ['Amsterdam', 'Dublin', 'Paris', 'Test'],
@@ -37,23 +54,6 @@ export class DashboardComponent {
       spacing: 10,
     }]
   };
-
-  incomeChartType: ChartType = 'doughnut';
-
-  incomeChartOption: any = {
-    cutout: '90%',
-    radius: '80%',
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      legend: {
-        display: false,
-        position: 'right',
-      },
-    }
-  }
-
-  //daily income chart
 
   public dailyIncomeData: ChartData<'bar', number[], string | string[]> = {
     labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
@@ -83,7 +83,18 @@ export class DashboardComponent {
     }]
   };
 
-  dailyIncomeChartType: ChartType = 'bar';
+  incomeChartOption: any = {
+    cutout: '90%',
+    radius: '80%',
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false,
+        position: 'right',
+      },
+    }
+  }
 
   dailyIncomeChartOption: any = {
     responsive: true,
@@ -109,7 +120,11 @@ export class DashboardComponent {
     }
   }
 
-  //price chart
+
+  //-------------------------
+  // Validator functionality
+  //-------------------------
+
   public lineChartData: ChartData<'line', number[], string | string[]> = {
     labels: ['2/22', '2/23', '2/24', '2/25', '2/26', '2/27', '2/28'],
     datasets: [{
@@ -137,8 +152,6 @@ export class DashboardComponent {
     }],
     
   };
-
-  lineChartType: ChartType = 'line';
 
   lineChartOptions: any = {
     responsive: false,

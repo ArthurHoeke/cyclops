@@ -97,6 +97,10 @@ h3 span {
     cursor: pointer;
 }
 
+#validatorList .validator.active {
+    background-color: #14151B;
+}
+
 #validatorList .validator .logoWrapper img {
     width: 40px;
     height: 40px;

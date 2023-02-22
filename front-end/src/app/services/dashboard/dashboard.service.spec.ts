@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CoingeckoService } from './coingecko.service';
+import { DashboardService } from './dashboard.service';
 
-describe('CoingeckoService', () => {
-  let service: CoingeckoService;
+describe('DashboardService', () => {
+  let service: DashboardService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(CoingeckoService);
+    service = TestBed.inject(DashboardService);
   });
 
   it('should be created', () => {
