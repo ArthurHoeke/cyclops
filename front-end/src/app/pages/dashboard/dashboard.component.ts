@@ -31,6 +31,14 @@ export class DashboardComponent {
     }
   }
 
+  onOverview() {
+    if(this.isActive(0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   //-------------------------
   // Overview functionality
   //-------------------------
@@ -44,9 +52,10 @@ export class DashboardComponent {
     datasets: [{
       data: [300, 500, 100],
       backgroundColor: [
-        'rgb(255, 99, 132)',
-        'rgb(54, 162, 235)',
-        'rgb(255, 205, 86)'
+        '#5CBD0C',
+        '#F7C217',
+        '#FF5072',
+        '#A7E2FD'
       ],
       borderAlign: 'center',
       borderRadius: 100,
@@ -125,29 +134,65 @@ export class DashboardComponent {
   // Validator functionality
   //-------------------------
 
+  eraProgressChartType: ChartType = 'doughnut';
+
+  public eraProgressData: ChartData<'doughnut', number[], string | string[]> = {
+    labels: ['Past', 'Left'],
+    datasets: [{
+      data: [87, 13],
+      backgroundColor: [
+        '#78023B',
+        '#313035',
+      ],
+      borderAlign: 'center',
+      borderRadius: 5,
+      borderWidth: 0,
+      spacing: 0,
+      
+    }]
+  };
+
+  eraProgressChartOption: any = {
+    cutout: '90%',
+    radius: '80%',
+    circumference: 180,
+    rotation: -90,
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+        position: 'right',
+      },
+    }
+  }
+
+
+
+
   public lineChartData: ChartData<'line', number[], string | string[]> = {
     labels: ['2/22', '2/23', '2/24', '2/25', '2/26', '2/27', '2/28'],
     datasets: [{
-      data: [0, 1823, 3855, 5873, 6880, 7895, 8293, 9281],
+      data: [5000, 5100, 5312, 5681, 5923, 6123, 6421, 6734],
       borderWidth: 2,
-      pointRadius: 1,
+      pointRadius: 2,
       tension: 0.35,
       gradient: {
         backgroundColor: {
           axis: 'y',
           colors: {
-            0: 'rgba(255,255,255,0)',
-            10000: 'rgba(255,255,255,1)'
+            0: 'rgba(230,0,122,.2)',
+            10000: 'rgba(230,0,122,.6)'
           }
         },
         borderColor: {
           axis: 'x',
           colors: {
-            1: 'rgba(255,255,255,1)',
+            1: 'rgba(230,0,122,1)',
           }
         }
       },
-      pointBorderColor: "red",
+      pointBorderColor: "white",
       fill: true,
     }],
     

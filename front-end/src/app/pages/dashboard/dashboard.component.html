@@ -46,7 +46,7 @@
                     </div>
                     <div class="validator mt-3" [ngClass]="{'active' : isActive(2)}" (click)="dashboardService.selectValidator(2)">
                         <div class="logoWrapper">
-                            <img src="assets/logo/dot.png">
+                            <img src="assets/logo/ksm.png">
                         </div>
                         <div class="detailsWrapper">
                             <div>
@@ -58,7 +58,7 @@
                     </div>
                     <div class="validator mt-3" [ngClass]="{'active' : isActive(3)}" (click)="dashboardService.selectValidator(3)">
                         <div class="logoWrapper">
-                            <img src="assets/logo/dot.png">
+                            <img src="assets/logo/astar.png">
                         </div>
                         <div class="detailsWrapper">
                             <div>
@@ -73,7 +73,9 @@
         </aside>
         <section class="col-sm-12 col-md-12 col-lg-7 col-xl-8">
             <div class="container">
-                <ng-container *ngIf="dashboardService.getSelectedValidator() == 0">
+
+                <!-- Dashboard overview container -->
+                <ng-container *ngIf="onOverview()">
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card incomePieContainer">
@@ -83,18 +85,18 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p>{{dashboardService.getTotalCombinedIncome()}}</p>
-                                            <p>All-time Income</p>
+                                            <p>{{dashboardService.getTotalCombinedRewards()}}</p>
+                                            <p>All-time Rewards</p>
                                         </div>
-                                        <canvas class="incomePie" baseChart class="chart" [data]="incomePieData"
+                                        <canvas baseChart class="chart" [data]="incomePieData"
                                             [options]="incomeChartOption" [type]="incomeChartType">
                                         </canvas>
                                     </div>
                                     <div class="legenda">
                                         <ul>
-                                            <li class="red">Amsterdam</li>
-                                            <li class="blue">Dublin</li>
-                                            <li class="yellow">Paris</li>
+                                            <li class="green">Amsterdam</li>
+                                            <li class="red">Paris</li>
+                                            <li class="yellow">Dublin</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -122,6 +124,11 @@
                                             <td>$28.23</td>
                                             <td>3.72%</td>
                                         </tr>
+                                        <tr>
+                                            <td><img src="assets/logo/astar.png"></td>
+                                            <td>$0.086</td>
+                                            <td>-1.13%</td>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
@@ -144,12 +151,44 @@
                         </div>
                     </div>
                 </ng-container>
-                <ng-container *ngIf="dashboardService.getSelectedValidator() != 0">
+
+                <!-- Validator overview container -->
+                <ng-container *ngIf="!onOverview()">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card eraProgressContainer">
+                                <div class="head">
+                                    <p>ERA progress</p>
+                                </div>
+                                <div class="body wrapCenter">
+                                    <div class="pieWrap">
+                                        <div class="pieMeta">
+                                            <p id="eraPercentage">87%</p>
+                                            <p id="eraDescription">ERA progress</p>
+                                        </div>
+                                        <canvas baseChart class="chart eraPie" [data]="eraProgressData"
+                                            [options]="eraProgressChartOption" [type]="eraProgressChartType">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card tokenPriceContainer">
+                                <div class="head">
+                                    <p>Token price</p>
+                                </div>
+                                <div class="body">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row mb-5">
                         <div class="col-12">
                             <div class="card">
                                 <div class="head">
-                                    <p>Daily income</p>
+                                    <p>Stash balance</p>
                                 </div>
                                 <div class="body">
                                     <canvas baseChart class="chart" [data]="lineChartData"

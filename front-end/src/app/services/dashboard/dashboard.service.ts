@@ -19,7 +19,7 @@ export class DashboardService {
     return this.selectedValidator;
   }
 
-  getTotalCombinedIncome() {
+  getTotalCombinedRewards() {
     //dummy
     return "$ 23,482";
   }
