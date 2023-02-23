@@ -32,4 +32,54 @@ body {
     font-family: 'Titlillium';
     background-color: #0B0A10;
     color: white;
+    overflow-y: scroll;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #0B0A10;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #2c283d;
+    border-radius: 100px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #2c283d;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    #left {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        #logo {
+            width: 100px;
+        }
+
+        a {
+            font-weight: 600;
+            margin-left: 50px;
+            color: #4C5370;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        a.active {
+            color: #FFF !important;
+        }
+    }
 }

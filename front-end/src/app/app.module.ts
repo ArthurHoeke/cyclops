@@ -9,14 +9,14 @@ import { LoginComponent } from './pages/login/login.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
-import { GradientChartDirective } from './gradient-chart.directive';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     LoginComponent,
-    GradientChartDirective
+    SettingsComponent
   ],
   imports: [
     BrowserModule,

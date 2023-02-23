@@ -1,0 +1,134 @@
+main {
+    h2 {
+        color: #525978;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    h3 {
+        color: white;
+        font-size: 24px;
+        font-weight: 500;
+
+        span {
+            color: #32E7B1;
+            font-weight: 600;
+        }
+    }
+
+    section .card {
+        background-color: #0D0C12;
+        border: 1px solid #202127;
+
+        .head {
+            padding: 15px;
+            border-bottom: 1px solid #202127;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            p {
+                margin: 0;
+                font-weight: 500;
+            }
+
+            img {
+                border-radius: 100px;
+                width: 25px;
+                height: 25px;
+                margin-left: 5px;
+            }
+        }
+
+        .body {
+            padding: 15px;
+        }
+
+        .body.wrapCenter {
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    section {
+        .tableWrapper table {
+            border-collapse: collapse;
+            width: 100%;
+
+            td,th {
+                padding: 8px;
+                color: #cecece;
+                font-weight: 500;
+            }
+
+            th {
+                padding-top: 6px;
+                padding-bottom: 6px;
+                text-align: left;
+                color: #7A7A7D;
+                font-weight: 500;
+            }
+
+            tr img {
+                border-radius: 100px;
+                width: 30px;
+                height: 30px;
+            }
+
+            tr:nth-child(even) {
+                background-color: #111217;
+            }
+
+            tr td:first-of-type {
+                color: rgb(98 106 116);
+            }
+
+            input {
+                background-color: transparent;
+                box-shadow: none;
+                border: 1px solid white;
+                color: #cecece;
+                border: 1px solid #202127;
+                border-radius: 5px;
+                padding-left: 5px;
+                font-family: 'Titlillium';
+                font-weight: 500;
+            }
+
+            select {
+                background-color: transparent;
+                box-shadow: none;
+                border: 1px solid white;
+                color: #cecece;
+                border: 1px solid #202127;
+                border-radius: 5px;
+                padding-left: 5px;
+                font-family: 'Titlillium';
+                font-weight: 500;
+            }
+
+            button {
+                border-radius: 100px;
+                border: 1px solid #202127;
+                background-color: #111217;
+                color: #cecece;
+                padding: 4px 12px;
+                transition: .3s ease;
+            }
+
+            button:hover {
+                background-color: #23242c;
+            }
+
+            button:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+            svg {
+                width: 15px;
+                height: 15px;
+            }
+        }
+    }
+}

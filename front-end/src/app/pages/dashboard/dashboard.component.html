@@ -1,6 +1,8 @@
 <nav class="container mt-4 mb-4">
-    <div>
-        <a><img src="assets/logo/cyclops.svg" id="logo"></a>
+    <div id="left">
+        <img src="assets/logo/cyclops.svg" id="logo">
+        <a [routerLink]="['/dashboard']" class="active">Dashboard</a>
+        <a [routerLink]="['/settings']">Settings</a>
     </div>
 </nav>
 <main class="container">
@@ -220,6 +222,32 @@
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
                                 <div class="head">
+                                    <p>Validator settings</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Setting</th>
+                                            <th>Option</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Active</b></td>
+                                            <td>-</td>
+                                            <td><button>Delete</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Name</b></td>
+                                            <td><input type="text" value="Amsterdam" placeholder="Name"></td>
+                                            <td><button disabled>Update</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
                                     <p>Critical events</p>
                                 </div>
                                 <div class="body tableWrapper">
@@ -249,16 +277,6 @@
                                                 </svg></td>
                                         </tr>
                                     </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Income report</p>
-                                </div>
-                                <div class="body">
-                                    a
                                 </div>
                             </div>
                         </div>
@@ -367,6 +385,18 @@
                                 <div class="body">
                                     <canvas baseChart class="chart" [data]="eraChartData" [options]="eraChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Income report</p>
+                                </div>
+                                <div class="body">
+                                    a
                                 </div>
                             </div>
                         </div>
