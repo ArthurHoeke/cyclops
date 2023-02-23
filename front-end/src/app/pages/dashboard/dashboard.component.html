@@ -98,7 +98,18 @@
                                             <td>Slash</td>
                                             <td>10/03/2023</td>
                                             <td>11:35 AM</td>
-                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-TrashCan"><path d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z"/><path d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z"/><path d="M2 6h20"/><path d="M10 11v5"/><path d="M14 11v5"/></svg></td>
+                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="ai ai-TrashCan">
+                                                    <path
+                                                        d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
+                                                    <path
+                                                        d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
+                                                    <path d="M2 6h20" />
+                                                    <path d="M10 11v5" />
+                                                    <path d="M14 11v5" />
+                                                </svg></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -207,6 +218,53 @@
                 <ng-container *ngIf="!onOverview()">
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Critical events</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Validator</th>
+                                            <th>Event</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Paris</b></td>
+                                            <td>Slash</td>
+                                            <td>10/03/2023</td>
+                                            <td>11:35 AM</td>
+                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="ai ai-TrashCan">
+                                                    <path
+                                                        d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
+                                                    <path
+                                                        d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
+                                                    <path d="M2 6h20" />
+                                                    <path d="M10 11v5" />
+                                                    <path d="M14 11v5" />
+                                                </svg></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Income report</p>
+                                </div>
+                                <div class="body">
+                                    a
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card eraProgressContainer">
                                 <div class="head">
                                     <p>ERA progress</p>
@@ -257,8 +315,34 @@
                                 <div class="head">
                                     <p>Reward overview</p>
                                 </div>
-                                <div class="body">
-                                    daily, weekly, monthly, yearly reward table
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Rewards</th>
+                                            <th>Monetary value</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Today</b></td>
+                                            <td>4.22 DOT</td>
+                                            <td>$ 39.32</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Week</b></td>
+                                            <td>16.52 DOT</td>
+                                            <td>$ 139.54</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Month</b></td>
+                                            <td>60.32 DOT</td>
+                                            <td>$ 461.72</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>All-time</b></td>
+                                            <td>921.52 DOT</td>
+                                            <td>$ 3062.61</td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -283,28 +367,6 @@
                                 <div class="body">
                                     <canvas baseChart class="chart" [data]="eraChartData" [options]="eraChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Income report</p>
-                                </div>
-                                <div class="body">
-a
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Critical events</p>
-                                </div>
-                                <div class="body">
-b
                                 </div>
                             </div>
                         </div>
