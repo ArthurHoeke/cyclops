@@ -1,9 +1,9 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<img src="https://user-images.githubusercontent.com/34348870/221375647-3924298c-5288-46c6-9940-0f5d80a9fc2c.png">
+<img src="https://user-images.githubusercontent.com/34348870/221376798-866f34c8-5a1e-4194-be8c-b1888ac43f65.png">
 
-  <p align="center">
+  <p align="center" style="margin-top: 30px;">
     Cyclops keeps a watchful eye on your Polkadot validators, giving you a clear vision of their performance and rewards.
     <br />
     <a href="https://cyclops.decentradot.com"><strong>View demo »</strong></a>
