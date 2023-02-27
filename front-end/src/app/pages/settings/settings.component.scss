@@ -129,6 +129,16 @@ main {
                 width: 15px;
                 height: 15px;
             }
+
+            .tokenIcon img {
+                width: 30px;
+                height: 30px;
+                border-radius: 100px;
+            }
+
+            #uploadInput {
+                display: none;
+            }
         }
     }
 }

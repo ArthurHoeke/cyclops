@@ -1,4 +1,4 @@
-<nav class="container mt-4 mb-4">
+<nav class="container mt-4 mb-5">
     <div id="left">
         <img src="assets/logo/cyclops.svg" id="logo">
         <a [routerLink]="['/dashboard']" class="active">Dashboard</a>
@@ -82,7 +82,7 @@
                 <!-- Dashboard overview container -->
                 <ng-container *ngIf="onOverview()">
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-12 mb-3">
                             <div class="card">
                                 <div class="head">
                                     <p>Critical events</p>
@@ -117,35 +117,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Notices</p>
-                                </div>
-                                <div class="body tableWrapper">
-                                    <table>
-                                        <tr>
-                                            <th>Event</th>
-                                            <th>Validator</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
-                                        </tr>
-                                        <tr>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card incomePieContainer">
                                 <div class="head">
-                                    <p>Income pie</p>
+                                    <p>Income distribution</p>
                                 </div>
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
@@ -395,8 +372,46 @@
                                 <div class="head">
                                     <p>Income report</p>
                                 </div>
-                                <div class="body">
-                                    a
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Month</th>
+                                            <th>Tokens</th>
+                                            <th>Monetary value</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <tr>
+                                            <td><select class="select select_up" id="historyMonthSwitch" onchange="switchHistory()">
+                                                <option value="0">Jan</option>
+                                                <option value="1">Feb</option>
+                                                <option value="2">Mar</option>
+                                                <option value="3">Apr</option>
+                                                <option value="4">May</option>
+                                                <option value="5">Jun</option>
+                                                <option value="6">Jul</option>
+                                                <option value="7">Aug</option>
+                                                <option value="8">Sep</option>
+                                                <option value="9">Oct</option>
+                                                <option value="10">Nov</option>
+                                                <option value="11">Dec</option>
+                                            </select></td>
+                                            <td>Slash</td>
+                                            <td>10/03/2023</td>
+                                            <td>11:35 AM</td>
+                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="ai ai-TrashCan">
+                                                    <path
+                                                        d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
+                                                    <path
+                                                        d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
+                                                    <path d="M2 6h20" />
+                                                    <path d="M10 11v5" />
+                                                    <path d="M14 11v5" />
+                                                </svg></td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>

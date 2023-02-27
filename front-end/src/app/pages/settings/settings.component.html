@@ -1,4 +1,4 @@
-<nav class="container mt-4 mb-4">
+<nav class="container mt-4 mb-5">
     <div id="left">
         <img src="assets/logo/cyclops.svg" id="logo">
         <a [routerLink]="['/dashboard']">Dashboard</a>
@@ -10,7 +10,7 @@
         <section class="col-12">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                    <div class="col-md-12 col-lg-12 col-xl-5 mb-3">
                         <div class="card">
                             <div class="head">
                                 <p>API</p>
@@ -46,19 +46,46 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                    <div class="col-md-12 col-lg-12 col-xl-7 mb-3">
                         <div class="card">
                             <div class="head">
                                 <p>Tokens</p>
                             </div>
                             <div class="body">
-                                a
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Icon</th>
+                                            <th>Token</th>
+                                            <th>Ticker</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="tokenIcon"><img src="assets/logo/dot.png"></td>
+                                            <td><input type="text" placeholder="polkadot"></td>
+                                            <td><input type="text" placeholder="dot"></td>
+                                            <td><button class="mr-1" disabled>Update</button><button><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="none" stroke="#545454"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="ai ai-TrashCan">
+                                                        <path
+                                                            d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
+                                                        <path
+                                                            d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
+                                                        <path d="M2 6h20" />
+                                                        <path d="M10 11v5" />
+                                                        <path d="M14 11v5" />
+                                                    </svg></button></td>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                    <div class="col-12 mb-3">
                         <div class="card">
                             <div class="head">
                                 <p>SMTP</p>
@@ -66,43 +93,44 @@
                             <div class="body tableWrapper">
                                 <table>
                                     <tr>
-                                        <th>Validator</th>
-                                        <th>Event</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
+                                        <th>Host</th>
+                                        <th>Port</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Action</th>
                                     </tr>
                                     <tr>
-                                        <td><b>Paris</b></td>
-                                        <td>Slash</td>
-                                        <td>10/03/2023</td>
-                                        <td>11:35 AM</td>
-                                        <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                                stroke-linecap="round" stroke-linejoin="round" class="ai ai-TrashCan">
-                                                <path
-                                                    d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
-                                                <path
-                                                    d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
-                                                <path d="M2 6h20" />
-                                                <path d="M10 11v5" />
-                                                <path d="M14 11v5" />
-                                            </svg></td>
+                                        <td><input type="text" placeholder="SMTP url"></td>
+                                        <td><input type="text" placeholder="SMTP port"></td>
+                                        <td><input type="text" placeholder="Host username"></td>
+                                        <td><input type="password" placeholder="Host password"></td>
+                                        <td><button disabled>Update</button></td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                </div>
+                <!-- <div class="row">
+                    <div class="col-12">
                         <div class="card">
                             <div class="head">
                                 <p>Users</p>
                             </div>
-                            <div class="body">
-                                a
+                            <div class="body tableWrapper">
+                                <table>
+                                    <tr>
+                                        <th>E-mail</th>
+                                        <th>Validators</th>
+                                    </tr>
+                                    <tr>
+
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
     </div>
