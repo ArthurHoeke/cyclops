@@ -166,7 +166,8 @@ main {
             border-collapse: collapse;
             width: 100%;
 
-            td,th {
+            td,
+            th {
                 padding: 8px;
                 color: #cecece;
                 font-weight: 500;
@@ -227,6 +228,21 @@ main {
             svg {
                 width: 15px;
                 height: 15px;
+            }
+
+            .priceChangeWrapper {
+                img {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            .priceChangeWrapper.down {
+                color: #e15241;
+            }
+
+            .priceChangeWrapper.up {
+                color: #8dc647;
             }
         }
     }
@@ -353,4 +369,3 @@ main {
 
 
 //select
-
