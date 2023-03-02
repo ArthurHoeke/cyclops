@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { CoingeckoService } from './coingecko/coingecko.service';
+import { CoingeckoService } from './coingecko.service';
 
 describe('CoingeckoService', () => {
   let service: CoingeckoService;
