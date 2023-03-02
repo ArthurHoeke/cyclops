@@ -9,6 +9,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { NgChartsModule } from 'ng2-charts';
 import { FormsModule } from '@angular/forms';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { SettingsComponent } from './pages/settings/settings.component';
     BrowserModule,
     AppRoutingModule,
     NgChartsModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
