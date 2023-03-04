@@ -1,9 +1,9 @@
 const express = require('express');
-// const checkAuth = require('../Middleware/checkAuth.middleware');
+const isAdmin = require('../Middleware/isAdmin.middleware');
 const networkControllers = require('../Controllers/network.controllers');
 const router = express.Router();
 
-router.post('/create', networkControllers.create);
-router.post('/remove', networkControllers.remove);
+router.post('/create', isAdmin, networkControllers.create);
+router.post('/remove', isAdmin, networkControllers.remove);
 
 module.exports = router

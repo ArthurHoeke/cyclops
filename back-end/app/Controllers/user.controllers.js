@@ -7,13 +7,14 @@ const register = async (req, res) => {
   let password = req.body.password;
 
   if (email != null && password != null) {
-    const accessToken = dataUtil.generateAccessToken();
     password = await bcrypt.hash(password, 10);
+    const accessToken = dataUtil.generateAccessToken(email, password);
 
-    User.create([email, password, 0, accessToken], (err) => {
+    User.create([email, password, 0], (err) => {
       if (err) {
         res.sendStatus(409);
       } else {
+
         res.status(201).json({
           accessToken: accessToken
         });
@@ -37,14 +38,10 @@ const login = async (req, res) => {
 
         bcrypt.compare(password, pwHash, function (err, match) {
           if (match && !err) {
-            const accessToken = dataUtil.generateAccessToken();
+            const accessToken = dataUtil.generateAccessToken(email, pwHash);
 
-            User.updateAccessToken([accessToken, email], (err) => {
-              if(!err) {
-                res.status(200).json({
-                  accessToken: accessToken
-                });
-              }
+            res.status(200).json({
+              accessToken: accessToken
             });
           } else {
             res.sendStatus(401);

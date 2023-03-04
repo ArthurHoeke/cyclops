@@ -6,8 +6,7 @@ const createUserTable = () => {
         id integer PRIMARY KEY AUTOINCREMENT,
         email varchar UNIQUE,
         password varchar,
-        role integer,
-        accessToken varchar)`;
+        role integer)`;
 
     return config.database.run(sqlQuery);
 }
@@ -15,7 +14,7 @@ const createUserTable = () => {
 createUserTable();
 
 const create = (data, cb) => {
-    return config.database.run('INSERT INTO user (email, password, role, accessToken) VALUES (?,?,?,?)', data, (err) => {
+    return config.database.run('INSERT INTO user (email, password, role) VALUES (?,?,?)', data, (err) => {
         cb(err)
     });
 }
@@ -26,14 +25,7 @@ const getPasswordByEmail = (data, cb) => {
     });
 }
 
-const updateAccessToken = (data, cb) => {
-    return config.database.run('UPDATE user SET accessToken = ? WHERE email = ?', data, (err) => {
-        cb(err)
-    });
-}
-
 module.exports = {
     create,
-    getPasswordByEmail,
-    updateAccessToken
+    getPasswordByEmail
 };

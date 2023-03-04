@@ -1,4 +1,6 @@
 const CryptoJS = require("crypto-js");
+const config = require("../Config/config");
+const jwt = require("jsonwebtoken");
 
 async function getData(url = '') {
     const response = await fetch(url, {
@@ -31,8 +33,17 @@ async function getDataByKey(url = '', apikey) {
     return response.json();
 }
 
-function generateAccessToken() {
-    return CryptoJS.lib.WordArray.random(16).toString();
+function generateAccessToken(email, password) {
+    return accessToken = jwt.sign(
+        {
+            email: email,
+            password: password
+        },
+        config.JWT_SECRET,
+        {
+            expiresIn: "7d",
+        }
+    );
 }
 
 
