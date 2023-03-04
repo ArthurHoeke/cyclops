@@ -1,8 +1,11 @@
 const express = require('express');
-// const checkAuth = require('../Middleware/checkAuth.middleware');
+
+const isLoggedIn = require('../Middleware/isLoggedIn.middleware');
+
 const validatorController = require('../Controllers/validator.controllers');
 const router = express.Router();
 
-// router.post('/ping', userControllers.ping);
+router.post('/add', isLoggedIn, validatorController.add);
+router.get('/list', isLoggedIn, validatorController.getList);
 
 module.exports = router

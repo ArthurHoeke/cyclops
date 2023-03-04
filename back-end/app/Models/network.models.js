@@ -25,7 +25,14 @@ const remove = (data, cb) => {
     });
 }
 
+const getList = (cb) => {
+    return config.database.all('SELECT * FROM network', (err, data) => {
+        cb(err, data)
+    });
+}
+
 module.exports = {
     create,
-    remove
+    remove,
+    getList
 };

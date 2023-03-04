@@ -7,7 +7,8 @@ const createEventTable = () => {
         validatorId integer,
         eventType varchar,
         description varchar,
-        timestamp datetime)`;
+        timestamp datetime,
+        FOREIGN KEY(validatorId) REFERENCES validator(id))`;
 
     return config.database.run(sqlQuery);
 }

@@ -34,7 +34,20 @@ const remove = async (req, res) => {
     }
 };
 
+const list = async (req, res) => {
+    network.getList((err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
 module.exports = {
     create,
-    remove
+    remove,
+    list
 };  

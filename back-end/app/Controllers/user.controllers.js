@@ -20,10 +20,12 @@ const register = async (req, res) => {
         if (err) {
           res.sendStatus(409);
         } else {
-          const accessToken = dataUtil.generateAccessToken(email, password, role);
+          User.getUserIdByEmail([email],(err, row) => {
+            const accessToken = dataUtil.generateAccessToken(row.id, email, password, role);
   
-          res.status(201).json({
-            accessToken: accessToken
+            res.status(201).json({
+              accessToken: accessToken
+            });
           });
         }
       });
@@ -38,16 +40,17 @@ const login = async (req, res) => {
   let password = req.body.password;
 
   if (email != null && password != null) {
-    User.getPasswordAndRoleByEmail([email], (err, row) => {
+    User.getUserDataByEmail([email], (err, row) => {
       if (err || row == undefined) {
         res.sendStatus(404);
       } else {
+        const id = row.id;
         const pwHash = row.password;
         const role = row.role;
 
         bcrypt.compare(password, pwHash, function (err, match) {
           if (match && !err) {
-            const accessToken = dataUtil.generateAccessToken(email, pwHash, role);
+            const accessToken = dataUtil.generateAccessToken(id, email, pwHash, role);
 
             res.status(200).json({
               accessToken: accessToken

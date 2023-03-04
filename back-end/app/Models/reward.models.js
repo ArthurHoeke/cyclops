@@ -7,7 +7,8 @@ const createRewardTable = () => {
         validatorId integer,
         amount integer,
         timestamp datetime,
-        hash varchar)`;
+        hash varchar,
+        FOREIGN KEY(validatorId) REFERENCES validator(id))`;
 
     return config.database.run(sqlQuery);
 }
