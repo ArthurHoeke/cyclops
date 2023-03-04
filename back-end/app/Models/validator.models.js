@@ -21,6 +21,12 @@ const add = (data, cb) => {
     });
 }
 
+const remove = (data, cb) => {
+    return config.database.run('DELETE FROM validator WHERE id = ? AND userId = ?', data, (err) => {
+        cb(err)
+    });
+}
+
 const getList = (data, cb) => {
     return config.database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
         cb(err, row)
@@ -29,5 +35,6 @@ const getList = (data, cb) => {
 
 module.exports = {
     add,
+    remove,
     getList
 };

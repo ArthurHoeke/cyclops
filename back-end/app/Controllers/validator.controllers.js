@@ -16,6 +16,21 @@ const add = async (req, res) => {
     }
 };
 
+const remove = async (req, res) => {
+    const id = req.body.validatorId;
+    const userId = req.user.id;
+
+    if (id != null) {
+        validator.remove([id, userId], (err, data) => {
+            if (err) {
+                res.sendStatus(500);
+            } else {
+                res.sendStatus(200);
+            }
+        });
+    }
+};
+
 const getList = async (req, res) => {
     const userId = req.user.id;
     
@@ -30,5 +45,6 @@ const getList = async (req, res) => {
 
 module.exports = {
     add,
+    remove,
     getList
 };  
