@@ -1,3 +1,5 @@
+const CryptoJS = require("crypto-js");
+
 async function getData(url = '') {
     const response = await fetch(url, {
         method: 'GET',
@@ -29,8 +31,13 @@ async function getDataByKey(url = '', apikey) {
     return response.json();
 }
 
+function generateAccessToken() {
+    return CryptoJS.lib.WordArray.random(16).toString();
+}
+
 
 module.exports = {
-    getDataKey,
-    getDataByKey
+    getData,
+    getDataByKey,
+    generateAccessToken
 };

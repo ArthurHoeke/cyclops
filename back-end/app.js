@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser')
 
 var config = require('./app/Config/config');
 
@@ -10,6 +11,9 @@ var validatorRouter = require('./app/Routes/validator.routes');
 
 const app = express()
 const port = 3000;
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use('/validator', validatorRouter);
 app.use('/user', userRouter);
