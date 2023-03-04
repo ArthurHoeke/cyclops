@@ -32,14 +32,15 @@ Contains all end-points implementing controller functionality.
 | Function   | Method     | URI                               | Parameters                                               |
 |------------|------------|-----------------------------------|----------------------------------------------------------|
 | `Create`   | `POST`     | `network/create`                  | `name (string)` `ticker (string)` `icon (base64 string)` |
-| `Remove`   | `POST`     | `network/remove`                  | `networkId (integer)`                                           |
+| `Remove`   | `POST`     | `network/remove`                  | `id (integer)`                                           |
 | `getList`  | `GET`      | `network/list`                    |                                                          |
 
 #### Validator
 
 | Function   | Method     | URI                               | Parameters                                               |
 |------------|------------|-----------------------------------|----------------------------------------------------------|
-| `Add`      | `POST`     | `validator/add`                   | `address (string)` `networkId (integer)`                 |
+| `Add`      | `POST`     | `validator/add`                   | `address (string)` `id (integer)`                        |
+| `Remove`   | `POST`     | `validator/remove`                | `id (integer)`                                           |
 | `getList`  | `GET`      | `validator/list`                  |                                                          |
 
 ### Utils
