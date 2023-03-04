@@ -22,17 +22,25 @@ Contains all end-points implementing controller functionality.
 
 #### User
 
-| Action     | Method     | URI                               | Parameters                                 |
+| Function   | Method     | URI                               | Parameters                                 |
 |------------|------------|-----------------------------------|--------------------------------------------|
 | `Register` | `POST`     | `users/register`                  | `email (string)` `password (string)`       |
 | `Login`    | `POST`     | `users/login`                     | `email (string)` `password (string)`       |
 
 #### Network
 
-| Action     | Method     | URI                               | Parameters                                               |
+| Function   | Method     | URI                               | Parameters                                               |
 |------------|------------|-----------------------------------|----------------------------------------------------------|
 | `Create`   | `POST`     | `network/create`                  | `name (string)` `ticker (string)` `icon (base64 string)` |
 | `Remove`   | `POST`     | `network/remove`                  | `id (integer)`                                           |
+| `getList`  | `GET`      | `network/list`                    |                                                          |
+
+#### Validator
+
+| Function   | Method     | URI                               | Parameters                                               |
+|------------|------------|-----------------------------------|----------------------------------------------------------|
+| `Add`      | `POST`     | `validator/add`                   | `address (string)` `networkId (integer)`                 |
+| `getList`  | `GET`      | `validator/list`                  |                                                          |
 
 ### Utils
 Contains common re-used functions as well as third-party API logic.
