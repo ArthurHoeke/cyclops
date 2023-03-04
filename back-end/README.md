@@ -22,26 +22,33 @@ Contains all end-points implementing controller functionality.
 
 #### User
 
-| Function   | Method     | URI                               | Parameters                                 |
-|------------|------------|-----------------------------------|--------------------------------------------|
-| `Register` | `POST`     | `users/register`                  | `email (string)` `password (string)`       |
-| `Login`    | `POST`     | `users/login`                     | `email (string)` `password (string)`       |
+| Function                          | Method     | URI                                      | Parameters                                                       |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
+| `register`                        | `POST`     | `users/register`                         | `email (string)` `password (string)`                             |
+| `login`                           | `POST`     | `users/login`                            | `email (string)` `password (string)`                             |
 
 #### Network
 
-| Function   | Method     | URI                               | Parameters                                               |
-|------------|------------|-----------------------------------|----------------------------------------------------------|
-| `Create`   | `POST`     | `network/create`                  | `name (string)` `ticker (string)` `icon (base64 string)` |
-| `Remove`   | `POST`     | `network/remove`                  | `id (integer)`                                           |
-| `getList`  | `GET`      | `network/list`                    |                                                          |
+| Function                          | Method     | URI                                      | Parameters                                                       |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
+| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         |
+| `remove`                          | `POST`     | `network/remove`                         | `id (integer)`                                                   |
+| `getList`                         | `GET`      | `network/list`                           |                                                                  |
 
 #### Validator
 
-| Function   | Method     | URI                               | Parameters                                               |
-|------------|------------|-----------------------------------|----------------------------------------------------------|
-| `Add`      | `POST`     | `validator/add`                   | `address (string)` `id (integer)`                        |
-| `Remove`   | `POST`     | `validator/remove`                | `id (integer)`                                           |
-| `getList`  | `GET`      | `validator/list`                  |                                                          |
+| Function                          | Method     | URI                                      | Parameters                                                       |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
+| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (integer)`                                |
+| `remove`                          | `POST`     | `validator/remove`                       | `id (integer)`                                                   |
+| `getList`                         | `GET`      | `validator/list`                         |                                                                  |
+
+#### Reward
+
+| Function                          | Method     | URI                                      | Parameters                                                       |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
+| `getAllRewardsFromValidator`      | `POST`     | `reward/getAllRewardsFromValidator`      | `id (integer)`                                                   |
+| `getRewardsFromValidatorInPeriod` | `POST`     | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |                     
 
 ### Utils
 Contains common re-used functions as well as third-party API logic.
