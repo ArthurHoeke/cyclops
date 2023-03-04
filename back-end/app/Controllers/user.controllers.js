@@ -14,7 +14,7 @@ const register = async (req, res) => {
       if (err) {
         res.sendStatus(409);
       } else {
-        res.status(200).json({
+        res.status(201).json({
           accessToken: accessToken
         });
       }
