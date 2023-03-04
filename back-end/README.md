@@ -2,6 +2,10 @@
 
 The cyclops back-end server runs on [expressjs.com](https://expressjs.com/) version 4.18.2.
 
+## Run server
+
+Run `node app.js` to start the server. Navigate to `http://localhost:3000/`.
+
 ## Source structure
 
 ### Controllers
@@ -16,12 +20,15 @@ Contains database logic and functionality.
 ### Routes
 Contains all end-points implementing controller functionality.
 
+#### User
+
+| Action     | Method     | URI                               | Parameters                                 |
+|------------|------------|-----------------------------------|--------------------------------------------|
+| `Register` | `POST`     | `users/register`                  | `email (string)` `password (string)`       |
+| `Login`    | `POST`     | `users/login`                     | `email (string)` `password (string)`       |
+
 ### Utils
 Contains common re-used functions as well as third-party API logic.
 
 ### Config
 Contains configuration variables for third-party API keys as well as SMTP.
-
-## Run server
-
-Run `node app.js` to start the server. Navigate to `http://localhost:3000/`.
