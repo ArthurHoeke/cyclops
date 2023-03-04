@@ -27,6 +27,13 @@ Contains all end-points implementing controller functionality.
 | `Register` | `POST`     | `users/register`                  | `email (string)` `password (string)`       |
 | `Login`    | `POST`     | `users/login`                     | `email (string)` `password (string)`       |
 
+#### Network
+
+| Action     | Method     | URI                               | Parameters                                               |
+|------------|------------|-----------------------------------|----------------------------------------------------------|
+| `Create`   | `POST`     | `network/create`                  | `name (string)` `ticker (string)` `icon (base64 string)` |
+| `Remove`   | `POST`     | `network/remove`                  | `id (integer)`                                           |
+
 ### Utils
 Contains common re-used functions as well as third-party API logic.
 
