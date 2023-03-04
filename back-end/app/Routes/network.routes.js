@@ -3,6 +3,7 @@ const express = require('express');
 const networkControllers = require('../Controllers/network.controllers');
 const router = express.Router();
 
-// router.post('/ping', userControllers.ping);
+router.post('/create', networkControllers.create);
+router.post('/remove', networkControllers.remove);
 
 module.exports = router

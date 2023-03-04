@@ -12,3 +12,9 @@ const createValidatorTable = () => {
 }
 
 createValidatorTable();
+
+const create = (data, cb) => {
+    return database.run('INSERT INTO validator (address, networkId, userId) VALUES (?,?,?)', data, (err) => {
+        cb(err)
+    });
+}
