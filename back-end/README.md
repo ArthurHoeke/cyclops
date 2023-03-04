@@ -48,7 +48,13 @@ Contains all end-points implementing controller functionality.
 | Function                          | Method     | URI                                      | Parameters                                                       |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
 | `getAllRewardsFromValidator`      | `POST`     | `reward/getAllRewardsFromValidator`      | `id (integer)`                                                   |
-| `getRewardsFromValidatorInPeriod` | `POST`     | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |                     
+| `getRewardsFromValidatorInPeriod` | `POST`     | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |       
+
+#### Event
+
+#### Subscan
+
+#### SMTP
 
 ### Utils
 Contains common re-used functions as well as third-party API logic.
