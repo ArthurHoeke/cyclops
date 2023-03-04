@@ -19,13 +19,20 @@ const create = (data, cb) => {
     });
 }
 
-const getPasswordByEmail = (data, cb) => {
-    return config.database.get('SELECT password FROM user WHERE email = ?', data, (err, row) => {
+const getUserCount = (cb) => {
+    return config.database.get('SELECT COUNT(*) AS userCount FROM user', (err, row) => {
+        cb(err, row)
+    });
+}
+
+const getPasswordAndRoleByEmail = (data, cb) => {
+    return config.database.get('SELECT password, role FROM user WHERE email = ?', data, (err, row) => {
         cb(err, row)
     });
 }
 
 module.exports = {
     create,
-    getPasswordByEmail
+    getPasswordAndRoleByEmail,
+    getUserCount
 };

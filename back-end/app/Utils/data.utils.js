@@ -33,11 +33,12 @@ async function getDataByKey(url = '', apikey) {
     return response.json();
 }
 
-function generateAccessToken(email, password) {
+function generateAccessToken(email, password, role) {
     return accessToken = jwt.sign(
         {
             email: email,
-            password: password
+            password: password,
+            role: role
         },
         config.JWT_SECRET,
         {

@@ -8,17 +8,25 @@ const register = async (req, res) => {
 
   if (email != null && password != null) {
     password = await bcrypt.hash(password, 10);
-    const accessToken = dataUtil.generateAccessToken(email, password);
+    let role = 0;
 
-    User.create([email, password, 0], (err) => {
-      if (err) {
-        res.sendStatus(409);
-      } else {
-
-        res.status(201).json({
-          accessToken: accessToken
-        });
+    //First account to be registered is admin / role 1
+    User.getUserCount((err, row) => {
+      if (row.userCount == 0) {
+        role = 1;
       }
+
+      User.create([email, password, role], (err) => {
+        if (err) {
+          res.sendStatus(409);
+        } else {
+          const accessToken = dataUtil.generateAccessToken(email, password, role);
+  
+          res.status(201).json({
+            accessToken: accessToken
+          });
+        }
+      });
     });
   } else {
     res.sendStatus(400);
@@ -30,15 +38,16 @@ const login = async (req, res) => {
   let password = req.body.password;
 
   if (email != null && password != null) {
-    User.getPasswordByEmail([email], (err, row) => {
+    User.getPasswordAndRoleByEmail([email], (err, row) => {
       if (err || row == undefined) {
         res.sendStatus(404);
       } else {
         const pwHash = row.password;
+        const role = row.role;
 
         bcrypt.compare(password, pwHash, function (err, match) {
           if (match && !err) {
-            const accessToken = dataUtil.generateAccessToken(email, pwHash);
+            const accessToken = dataUtil.generateAccessToken(email, pwHash, role);
 
             res.status(200).json({
               accessToken: accessToken
