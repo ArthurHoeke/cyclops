@@ -16,6 +16,8 @@
   </p>
 </div>
 
+<img style="width: 100%; height: 200px;" src="https://raw.githubusercontent.com/w3f/Grants-Program/00855ef70bc503433dc9fccc057c2f66a426a82b/static/img/badge_black.svg">
+
 
 <!-- ABOUT THE PROJECT -->
 ## About Cyclops
