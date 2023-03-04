@@ -47,8 +47,8 @@ Contains all end-points implementing controller functionality.
 
 | Function                          | Method     | URI                                      | Parameters                                                       |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
-| `getAllRewardsFromValidator`      | `POST`     | `reward/getAllRewardsFromValidator`      | `id (integer)`                                                   |
-| `getRewardsFromValidatorInPeriod` | `POST`     | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |       
+| `getAllRewardsFromValidator`      | `GET`      | `reward/getAllRewardsFromValidator`      | `id (integer)`                                                   |
+| `getRewardsFromValidatorInPeriod` | `GET`      | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |       
 
 #### Event
 
