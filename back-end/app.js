@@ -26,14 +26,14 @@ SMTP_USERNAME = null;
 SMTP_PASSWORD = null;
 
 //setup routes for Express
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use('/validator', validatorRouter);
 app.use('/user', userRouter);
 app.use('/reward', rewardRouter);
 app.use('/network', networkRouter);
 app.use('/event', eventRouter);
 app.use('/config', configRouter);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

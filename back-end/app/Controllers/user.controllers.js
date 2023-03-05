@@ -3,10 +3,11 @@ const User = require("../Models/user.models");
 const bcrypt = require('bcryptjs');
 
 const register = async (req, res) => {
-  const email = (req.body.email).toLowerCase();
+  let email = req.body.email;
   let password = req.body.password;
 
   if (email != null && password != null) {
+    email = email.toLowerCase();
     password = await bcrypt.hash(password, 10);
     let role = 0;
 
@@ -36,10 +37,12 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const email = (req.body.email).toLowerCase();
+  let email = req.body.email;
   let password = req.body.password;
 
   if (email != null && password != null) {
+    email = email.toLowerCase();
+
     User.getUserDataByEmail([email], (err, row) => {
       if (err || row == undefined) {
         res.sendStatus(404);
