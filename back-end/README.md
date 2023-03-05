@@ -22,39 +22,48 @@ Contains all end-points implementing controller functionality.
 
 #### User
 
-| Function                          | Method     | URI                                      | Parameters                                                       |
-|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
-| `register`                        | `POST`     | `users/register`                         | `email (string)` `password (string)`                             |
-| `login`                           | `POST`     | `users/login`                            | `email (string)` `password (string)`                             |
+| Function      | Method     | URI              | Parameters                                                       | Role  |
+|---------------|------------|------------------|------------------------------------------------------------------|-------|
+| `register`    | `POST`     | `users/register` | `email (string)` `password (string)`                             | `0`   |
+| `login`       | `POST`     | `users/login`    | `email (string)` `password (string)`                             | `0`   |
 
 #### Network
 
-| Function                          | Method     | URI                                      | Parameters                                                       |
-|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
-| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         |
-| `remove`                          | `POST`     | `network/remove`                         | `id (integer)`                                                   |
-| `getList`                         | `GET`      | `network/list`                           |                                                                  |
+| Function                          | Method     | URI                                      | Parameters                                                       | Role  |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
+| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         | `0`   |
+| `remove`                          | `POST`     | `network/remove`                         | `id (network ID integer)`                                        | `0`   |
+| `getList`                         | `GET`      | `network/list`                           |                                                                  | `0`   |
 
 #### Validator
 
-| Function                          | Method     | URI                                      | Parameters                                                       |
-|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
-| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (integer)`                                |
-| `remove`                          | `POST`     | `validator/remove`                       | `id (integer)`                                                   |
-| `getList`                         | `GET`      | `validator/list`                         |                                                                  |
+| Function                          | Method     | URI                                      | Parameters                                                       | Role  |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
+| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (network ID integer)`                     | `0`   |
+| `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `0`   |
+| `getList`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
 
 #### Reward
 
-| Function                          | Method     | URI                                      | Parameters                                                       |
-|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|
-| `getAllRewardsFromValidator`      | `GET`      | `reward/getAllRewardsFromValidator`      | `id (integer)`                                                   |
-| `getRewardsFromValidatorInPeriod` | `GET`      | `reward/getRewardsFromValidatorInPeriod` | `id (integer)` `start (unixtime string)` `end (unixtime string)` |       
+| Function                          | Method     | URI                                      | Parameters                                                       | Role  |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
+| `getAllRewardsFromValidator`      | `GET`      | `reward/getAllRewardsFromValidator`      | `id (validator ID integer)`                                      | `0`   |
+| `getRewardsFromValidatorInPeriod` | `GET`      | `reward/getRewardsFromValidatorInPeriod` | `id (validator ID integer)` `start (unixtime string)` `end (unixtime string)` | `0`   |
 
 #### Event
 
-#### Subscan
+| Function                          | Method     | URI                                      | Parameters                                                       | Role  |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
+| `get`                             | `GET`      | `event/get`                              | `id (validator ID integer)`                                      | `0`   |
+| `remove`                          | `POST`     | `event/remove`                           | `id (event ID integer)` `validatorId (validator ID integer)`     | `0`   |
 
-#### SMTP
+#### Config
+
+| Function                          | Method     | URI                                      | Parameters                                                       | Role  |
+|-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
+| `setSMTP`                         | `POST`     | `config/setSMTP`                         | `smtpHost (string)` `smtpPort (integer)` `smtpUsername (string)` `smtpPassword (string)` | `1`   |
+| `setSubscanApiKey`                | `POST`      | `config/setSubscanApiKey`               | `subscanApiKey (string)` | `1`   |
+| `list`                | `GET`      | `config/list`               |  | `1`   |
 
 ### Utils
 Contains common re-used functions as well as third-party API logic.
