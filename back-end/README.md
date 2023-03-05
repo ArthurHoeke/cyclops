@@ -68,5 +68,5 @@ Contains all end-points implementing controller functionality.
 ### Utils
 Contains common re-used functions as well as third-party API logic.
 
-### Config
-Contains configuration variables for third-party API keys as well as SMTP.
+### Services
+Contains logic for timed functionality such as validator reward syncing et cetera.
