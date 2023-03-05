@@ -1,6 +1,23 @@
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
 
+async function postData(url = '', data = {}, apikey) {
+    const response = await fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-API-Key': apikey
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer',
+        body: JSON.stringify(data)
+    });
+    return response.json();
+}
+
 async function getData(url = '') {
     const response = await fetch(url, {
         method: 'GET',
@@ -56,5 +73,6 @@ module.exports = {
     getData,
     getDataByKey,
     generateAccessToken,
-    generateRandomHash
+    generateRandomHash,
+    postData
 };
