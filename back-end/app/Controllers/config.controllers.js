@@ -40,7 +40,20 @@ const setSubscanApiKey = async (req, res) => {
     }
 };
 
+const getVariableList = async (req, res) => {
+    config.getVariableList((err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            })
+        }
+    });
+};
+
 module.exports = {
     setSMTP,
-    setSubscanApiKey
+    setSubscanApiKey,
+    getVariableList
 };

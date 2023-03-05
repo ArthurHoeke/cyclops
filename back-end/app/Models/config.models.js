@@ -35,9 +35,16 @@ const getConfig = (cb) => {
     });
 }
 
+const getVariableList = (cb) => {
+    return database.get('SELECT subscanApiKey, smtpHost, smtpPort, smtpUsername, smtpPassword FROM config', (err, row) => {
+        cb(err, row)
+    });
+}
+
 module.exports = {
     setSMTP,
     setSubscanApiKey,
     getConfig,
-    setupConfigRow
+    setupConfigRow,
+    getVariableList
 };

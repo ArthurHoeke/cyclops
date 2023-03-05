@@ -10,9 +10,9 @@ function add(validatorId, eventType, description, timestamp) {
     });
 };
 
-const getEvents = async (req, res) => {
+const get = async (req, res) => {
     const validatorId = req.body.validatorId;
-    event.getEvents([validatorId], (err, data) => {
+    event.get([validatorId], (err, data) => {
         if (err) {
             res.sendStatus(500);
         } else {
@@ -37,6 +37,6 @@ const remove = async (req, res) => {
 
 module.exports = {
     add,
-    getEvents,
+    get,
     remove
 };

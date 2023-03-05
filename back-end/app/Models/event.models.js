@@ -21,7 +21,7 @@ const add = (data, cb) => {
     });
 }
 
-const getEvents = (data, cb) => {
+const get = (data, cb) => {
     return database.all('SELECT * FROM event WHERE validatorId = ?', data, (err, row) => {
         cb(err, row)
     });
@@ -35,6 +35,6 @@ const remove = (data, cb) => {
 
 module.exports = {
     add,
-    getEvents,
+    get,
     remove
 };
