@@ -98,5 +98,3 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 [Expressjs-url]: https://expressjs.com/
 [Sass-lang.com]:https://img.shields.io/badge/sass-bf4080?style=for-the-badge&logo=sass&logoColor=white
 [Sass-url]: https://sass-lang.com/
-
-https://img.shields.io/badge/sass-bf4080?style=for-the-badge&logo=sass&logoColor=white
