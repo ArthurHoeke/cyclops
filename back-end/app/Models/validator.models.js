@@ -1,5 +1,3 @@
-const config = require("../config/config");
-
 const createValidatorTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS validator (
@@ -10,25 +8,25 @@ const createValidatorTable = () => {
         FOREIGN KEY(userId) REFERENCES user(id),
         FOREIGN KEY(networkId) REFERENCES network(id))`;
 
-    return config.database.run(sqlQuery);
+    return database.run(sqlQuery);
 }
 
 createValidatorTable();
 
 const add = (data, cb) => {
-    return config.database.run('INSERT INTO validator (address, networkId, userId) VALUES (?,?,?)', data, (err) => {
+    return database.run('INSERT INTO validator (address, networkId, userId) VALUES (?,?,?)', data, (err) => {
         cb(err)
     });
 }
 
 const remove = (data, cb) => {
-    return config.database.run('DELETE FROM validator WHERE id = ? AND userId = ?', data, (err) => {
+    return database.run('DELETE FROM validator WHERE id = ? AND userId = ?', data, (err) => {
         cb(err)
     });
 }
 
 const getList = (data, cb) => {
-    return config.database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
+    return database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
         cb(err, row)
     });
 }

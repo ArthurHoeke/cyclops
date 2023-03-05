@@ -1,5 +1,3 @@
-const config = require("../config/config");
-
 const createNetworkTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS network (
@@ -8,25 +6,25 @@ const createNetworkTable = () => {
         ticker varchar UNIQUE,
         icon varchar)`;
 
-    return config.database.run(sqlQuery);
+    return database.run(sqlQuery);
 }
 
 createNetworkTable();
 
 const create = (data, cb) => {
-    return config.database.run('INSERT INTO network (name, ticker, icon) VALUES (?,?,?)', data, (err) => {
+    return database.run('INSERT INTO network (name, ticker, icon) VALUES (?,?,?)', data, (err) => {
         cb(err)
     });
 }
 
 const remove = (data, cb) => {
-    return config.database.run('DELETE FROM network WHERE id = ?', data, (err) => {
+    return database.run('DELETE FROM network WHERE id = ?', data, (err) => {
         cb(err)
     });
 }
 
 const getList = (cb) => {
-    return config.database.all('SELECT * FROM network', (err, data) => {
+    return database.all('SELECT * FROM network', (err, data) => {
         cb(err, data)
     });
 }

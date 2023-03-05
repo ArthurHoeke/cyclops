@@ -1,17 +1,11 @@
-//create reward
-
-//get all rewards from validator
-
-//get all rewards from validator between two timestamps
-
 const reward = require("../Models/reward.models");
 
 function add(validatorId, amount, timestamp, hash) {
     reward.add([validatorId, amount, timestamp, hash], (err, data) => {
         if (err) {
-            res.sendStatus(500);
+            return false;
         } else {
-            res.sendStatus(201);
+            return data;
         }
     });
 };
@@ -49,4 +43,3 @@ module.exports = {
     getAllRewardsFromValidator,
     getRewardsFromValidatorInPeriod
 };
-  

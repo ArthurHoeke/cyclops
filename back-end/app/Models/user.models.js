@@ -1,5 +1,3 @@
-const config = require("../config/config");
-
 const createUserTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS user (
@@ -8,31 +6,31 @@ const createUserTable = () => {
         password varchar,
         role integer)`;
 
-    return config.database.run(sqlQuery);
+    return database.run(sqlQuery);
 }
 
 createUserTable();
 
 const create = (data, cb) => {
-    return config.database.run('INSERT INTO user (email, password, role) VALUES (?,?,?)', data, (err) => {
+    return database.run('INSERT INTO user (email, password, role) VALUES (?,?,?)', data, (err) => {
         cb(err)
     });
 }
 
 const getUserCount = (cb) => {
-    return config.database.get('SELECT COUNT(*) AS userCount FROM user', (err, row) => {
+    return database.get('SELECT COUNT(*) AS userCount FROM user', (err, row) => {
         cb(err, row)
     });
 }
 
 const getUserIdByEmail = (data, cb) => {
-    return config.database.get('SELECT id FROM user WHERE email = ?', data, (err, row) => {
+    return database.get('SELECT id FROM user WHERE email = ?', data, (err, row) => {
         cb(err, row)
     });
 }
 
 const getUserDataByEmail = (data, cb) => {
-    return config.database.get('SELECT id, password, role FROM user WHERE email = ?', data, (err, row) => {
+    return database.get('SELECT id, password, role FROM user WHERE email = ?', data, (err, row) => {
         cb(err, row)
     });
 }
