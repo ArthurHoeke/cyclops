@@ -70,3 +70,6 @@ Contains common re-used functions as well as third-party API logic.
 
 ### Services
 Contains logic for timed functionality such as validator reward syncing et cetera.
+
+## Database
+<img src="https://raw.githubusercontent.com/ArthurHoeke/cyclops/development/back-end/assets/database_diagram.png">
