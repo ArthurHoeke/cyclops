@@ -14,6 +14,8 @@ var configRouter = require('./app/Routes/config.routes');
 
 var dataUtils = require('./app/Utils/data.utils');
 
+var validatorService = require('./app/Services/validator.services');
+
 const app = express()
 const port = 3000;
 
@@ -86,4 +88,6 @@ app.listen(port, () => {
   ⠀⠀⠀⠀⠀⠀⠉⠉⠉⠀⠀⠀⠀⠀⠀⠈⠓⣖⡒⠂⠠⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠒⠦⠭⠭⠭⠤⠵⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`);
   console.log(`\nCyclops listening on port ${port}`);
-})
+});
+
+validatorService.performRewardSync(1);

@@ -1,5 +1,3 @@
-
-
 const createEventTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS event (

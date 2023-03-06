@@ -46,8 +46,17 @@ const list = async (req, res) => {
     });
 };
 
+async function getNetworkFromId(networkId) {
+    return new Promise((resolve) => {
+        network.getNetworkFromId([networkId], async (err, data) => {
+            resolve(data);
+        });
+    });
+}
+
 module.exports = {
     create,
     remove,
-    list
+    list,
+    getNetworkFromId
 };  

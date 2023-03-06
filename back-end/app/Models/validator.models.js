@@ -31,8 +31,15 @@ const getList = (data, cb) => {
     });
 }
 
+const getValidatorById = (data, cb) => {
+    return database.get('SELECT * FROM validator WHERE id = ?', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 module.exports = {
     add,
     remove,
-    getList
+    getList,
+    getValidatorById
 };

@@ -29,8 +29,15 @@ const getList = (cb) => {
     });
 }
 
+const getNetworkFromId = (data, cb) => {
+    return database.get('SELECT * FROM network WHERE id = ?', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 module.exports = {
     create,
     remove,
-    getList
+    getList,
+    getNetworkFromId
 };

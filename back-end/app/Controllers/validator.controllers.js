@@ -33,18 +33,27 @@ const remove = async (req, res) => {
 
 const getList = async (req, res) => {
     const userId = req.user.id;
-    
+
     validator.getList([userId], (err, data) => {
         if (err) {
             res.sendStatus(500);
         } else {
-            res.status(200).json({data: data});
+            res.status(200).json({ data: data });
         }
     });
 };
 
+async function getValidatorById(validatorId) {
+    return new Promise((resolve) => {
+        validator.getValidatorById([validatorId], async (err, data) => {
+            resolve(data);
+        });
+    });
+}
+
 module.exports = {
     add,
     remove,
-    getList
+    getList,
+    getValidatorById
 };  

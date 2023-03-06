@@ -1,5 +1,6 @@
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const fetch = require('node-fetch');
 
 async function postData(url = '', data = {}, apikey) {
     const response = await fetch(url, {

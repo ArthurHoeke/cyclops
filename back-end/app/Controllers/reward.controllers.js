@@ -1,12 +1,10 @@
 const reward = require("../Models/reward.models");
 
-function add(validatorId, amount, timestamp, hash) {
-    reward.add([validatorId, amount, timestamp, hash], (err, data) => {
-        if (err) {
-            return false;
-        } else {
-            return data;
-        }
+async function add(validatorId, amount, timestamp, hash) {
+    return new Promise((resolve) => {
+        reward.add([validatorId, amount, timestamp, hash], async (err, data) => {
+            resolve(data);
+        });
     });
 };
 
@@ -38,8 +36,17 @@ const getRewardsFromValidatorInPeriod = async (req, res) => {
     });
 };
 
+async function getAllRewardsFromValidatorAsync(validatorId) {
+    return new Promise((resolve) => {
+        reward.getAllRewardsFromValidator([validatorId], async (err, data) => {
+            resolve(data);
+        });
+    });
+}
+
 module.exports = {
     add,
     getAllRewardsFromValidator,
-    getRewardsFromValidatorInPeriod
+    getRewardsFromValidatorInPeriod,
+    getAllRewardsFromValidatorAsync
 };
