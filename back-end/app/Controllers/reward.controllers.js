@@ -25,11 +25,81 @@ const getAllRewardsFromValidator = async (req, res) => {
     });
 };
 
+const getWeeklyRewardsFromValidator = async (req, res) => {
+    const validatorId = req.body.validatorId;
+    reward.getWeeklyRewardsFromValidator([validatorId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
+const getMonthlyRewardsFromValidator = async (req, res) => {
+    const validatorId = req.body.validatorId;
+    reward.getMonthlyRewardsFromValidator([validatorId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
+const getYearlyRewardsFromValidator = async (req, res) => {
+    const validatorId = req.body.validatorId;
+    reward.getYearlyRewardsFromValidator([validatorId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
 const getRewardsFromValidatorInPeriod = async (req, res) => {
     const validatorId = req.body.validatorId;
     const start = req.body.start;
     const end = req.body.end;
     reward.getRewardsFromValidatorInPeriod([validatorId, start, end], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
+const getCombinedWeeklyRewards = async (req, res) => {
+    const userId = req.user.id;
+
+    if(userId != null) {
+        reward.getCombinedWeeklyRewards([userId], (err, data) => {
+            if (err) {
+                res.sendStatus(500);
+            } else {
+                res.status(200).json({
+                    data: data
+                });
+            }
+        });
+    } else {
+        res.sendStatus(400);
+    }
+};
+
+const getValidatorRewardOverview = async (req, res) => {
+    const validatorId = req.body.validatorId;
+    reward.getValidatorRewardOverview(validatorId, (err, data) => {
         if (err) {
             res.sendStatus(500);
         } else {
@@ -116,7 +186,7 @@ async function performRewardSync(validatorId) {
             rewardList = eventData['data'].list;
         }
         // Process the reward list and retrieve the new local stored reward count
-        const newLocalStoreCount = await processRewardListSync(validatorId, rewardList, rewardHashCache, locallyStoredRewardCount)
+        const newLocalStoreCount = await processRewardList(validatorId, rewardList, rewardHashCache, locallyStoredRewardCount)
         if (realtimeRewardCount == newLocalStoreCount) {
             // If the real-time and local counts match, there is no need to continue processing, break out of the loop
             break;
@@ -128,7 +198,7 @@ async function performRewardSync(validatorId) {
 }
 
 // This function processes a list of rewards and returns a new count of locally stored rewards
-async function processRewardListSync(validatorId, rewardList, rewardHashCache, locallyStoredRewardCount) {
+async function processRewardList(validatorId, rewardList, rewardHashCache, locallyStoredRewardCount) {
     return new Promise(async (resolve) => {
         for (let i = 0; i < rewardList.length; i++) {
             // Retrieve reward data for each reward in the list
@@ -156,5 +226,10 @@ module.exports = {
     getAllRewardsFromValidator,
     getRewardsFromValidatorInPeriod,
     getAllRewardsFromValidatorAsync,
-    requestSync
+    requestSync,
+    getWeeklyRewardsFromValidator,
+    getMonthlyRewardsFromValidator,
+    getYearlyRewardsFromValidator,
+    getCombinedWeeklyRewards,
+    getValidatorRewardOverview
 };
