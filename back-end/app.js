@@ -89,5 +89,3 @@ app.listen(port, () => {
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠒⠦⠭⠭⠭⠤⠵⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`);
   console.log(`\nCyclops listening on port ${port}`);
 });
-
-validatorService.performRewardSync(1);
