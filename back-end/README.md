@@ -49,6 +49,12 @@ Contains all end-points implementing controller functionality.
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
 | `getAllRewardsFromValidator`      | `GET`      | `reward/getAllRewardsFromValidator`      | `id (validator ID integer)`                                      | `0`   |
 | `getRewardsFromValidatorInPeriod` | `GET`      | `reward/getRewardsFromValidatorInPeriod` | `id (validator ID integer)` `start (unixtime string)` `end (unixtime string)` | `0`   |
+| `sync`                            | `GET`      | `reward/sync`                            | `id (validator ID integer)`                                      | `0`   |
+| `getWeeklyRewardsFromValidator`   | `GET`      | `reward/getWeeklyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
+| `getMonthlyRewardsFromValidator`  | `GET`      | `reward/getMonthlyRewardsFromValidator`  | `id (validator ID integer)`                                      | `0`   |
+| `getYearlyRewardsFromValidator`   | `GET`      | `reward/getYearlyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
+| `getCombinedWeeklyRewards`        | `GET`      | `reward/getCombinedWeeklyRewards`        |                                                                  | `0`   |
+| `getValidatorRewardOverview`      | `GET`      | `reward/getValidatorRewardOverview`      | `id (validator ID integer)`                                      | `0`   |
 
 #### Event
 
