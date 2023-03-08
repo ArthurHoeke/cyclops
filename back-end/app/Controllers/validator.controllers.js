@@ -38,6 +38,7 @@ const getList = async (req, res) => {
         if (err) {
             res.sendStatus(500);
         } else {
+            // validatorService.get
             res.status(200).json({ data: data });
         }
     });

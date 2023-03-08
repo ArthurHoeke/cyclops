@@ -14,7 +14,7 @@ var configRouter = require('./app/Routes/config.routes');
 
 var dataUtils = require('./app/Utils/data.utils');
 
-var validatorService = require('./app/Services/validator.services');
+validatorService = require('./app/Services/validator.services');
 
 const app = express()
 const port = 3000;
@@ -59,6 +59,7 @@ config.getConfig((err, data) => {
       JWT_SECRET = dataUtils.generateRandomHash();
 
       config.setupConfigRow([JWT_SECRET]);
+      config.setupDefaultNetworks();
   } else {
       JWT_SECRET = data.jwtSecret;
       SUBSCAN_APIKEY = data.subscanApiKey;
@@ -69,6 +70,8 @@ config.getConfig((err, data) => {
       SMTP_PASSWORD = data.smtpPassword;
   }
 });
+
+validatorService.periodicNetworkCheck();
 
 app.listen(port, () => {
   console.log(`⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

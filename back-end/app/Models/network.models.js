@@ -35,9 +35,16 @@ const getNetworkFromId = (data, cb) => {
     });
 }
 
+const getTokenNames = (cb) => {
+    return database.all('SELECT name FROM network', (err, data) => {
+        cb(err, data)
+    });
+}
+
 module.exports = {
     create,
     remove,
     getList,
-    getNetworkFromId
+    getNetworkFromId,
+    getTokenNames
 };

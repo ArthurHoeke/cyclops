@@ -15,26 +15,17 @@ async function getActiveValidators(networkName) {
         "key": 20
     }, SUBSCAN_APIKEY)
         .then(data => {
-            // "rank_validator": 0,
-            //     "bonded_nominators": "19893288950583338",
-            //         "bonded_owner": "0",
-            //             "count_nominators": 70,
-            //                 "validator_prefs_value": 1000000000,
-            //                     "latest_mining": 14520122,
-            //                         "reward_point": 6720,
-            //                             "session_key": null,
-            //                                 "stash_account_display": {
-            //     "address": "111B8CxcmnWbuDLyGvgUmRezDCK1brRZmvUuQ6SrFdMyc3S"
-            // },
-            // "controller_account_display": {
-            //     "address": "111B8CxcmnWbuDLyGvgUmRezDCK1brRZmvUuQ6SrFdMyc3S"
-            // },
-            // "node_name": "",
-            //     "reward_account": "",
-            //         "reward_pot_balance": "0",
-            //             "grandpa_vote": 652,
-            //                 "bonded_total": "19893288950583338",
-            //                     "status": ""
+            resolve(data);
+        });
+    });
+}
+
+async function getWaitingValidators(networkName) {
+    return new Promise((resolve) => {
+        dataUtil.postData('https://' + networkName + '.api.subscan.io/api/scan/staking/waiting', {
+        "row": 1
+    }, SUBSCAN_APIKEY)
+        .then(data => {
             resolve(data);
         });
     });
@@ -147,5 +138,6 @@ module.exports = {
     getEra,
     getActiveValidators,
     getValidatorDetails,
-    getValidatorEvents
+    getValidatorEvents,
+    getWaitingValidators
 };

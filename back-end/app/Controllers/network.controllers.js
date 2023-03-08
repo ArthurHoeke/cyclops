@@ -10,6 +10,7 @@ const create = async (req, res) => {
             if (err) {
                 res.sendStatus(500);
             } else {
+                validatorService.updateNetworkList();
                 res.sendStatus(201);
             }
         });
@@ -26,6 +27,7 @@ const remove = async (req, res) => {
             if (err) {
                 res.sendStatus(500);
             } else {
+                validatorService.updateNetworkList();
                 res.sendStatus(200);
             }
         });
@@ -46,6 +48,14 @@ const list = async (req, res) => {
     });
 };
 
+async function getTokenNames() {
+    return new Promise((resolve) => {
+        network.getTokenNames(async (err, data) => {
+            resolve(data);
+        });
+    });
+}
+
 async function getNetworkFromId(networkId) {
     return new Promise((resolve) => {
         network.getNetworkFromId([networkId], async (err, data) => {
@@ -58,5 +68,6 @@ module.exports = {
     create,
     remove,
     list,
-    getNetworkFromId
+    getNetworkFromId,
+    getTokenNames
 };  

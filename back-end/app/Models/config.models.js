@@ -15,6 +15,10 @@ const setupConfigRow = (data) => {
     database.run('INSERT INTO config (jwtSecret) VALUES (?)', data);
 }
 
+function setupDefaultNetworks() {
+    //polkadot, kusama
+}
+
 createConfigTable();
 
 const setSMTP = (data, cb) => {
