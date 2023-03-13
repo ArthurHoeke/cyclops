@@ -4,8 +4,8 @@
   "description": "Restful API developed for the Polkadot validator monitor application Cyclops",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app.js 0",
+    "test": "node app.js 1"
   },
   "repository": {
     "type": "git",

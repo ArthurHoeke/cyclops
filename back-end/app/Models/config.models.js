@@ -1,3 +1,5 @@
+const network = require('../Models/network.models');
+
 const createConfigTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS config (
@@ -13,10 +15,6 @@ const createConfigTable = () => {
 
 const setupConfigRow = (data) => {
     database.run('INSERT INTO config (jwtSecret) VALUES (?)', data);
-}
-
-function setupDefaultNetworks() {
-    //polkadot, kusama
 }
 
 createConfigTable();
@@ -50,5 +48,5 @@ module.exports = {
     setSubscanApiKey,
     getConfig,
     setupConfigRow,
-    getVariableList
+    getVariableList,
 };
