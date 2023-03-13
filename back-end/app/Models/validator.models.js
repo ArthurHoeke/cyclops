@@ -27,6 +27,16 @@ const remove = (data, cb) => {
 
 const getList = (data, cb) => {
     return database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
+        for(let i = 0; i < row.length; i++) {
+            const valData = validatorService.getValidatorStatus(row[i].networkId, row[i].address);
+            row[i].details = (valData);
+        }
+        cb(err, row)
+    });
+}
+
+const getAllValidatorIds = (cb) => {
+    return database.all('SELECT id FROM validator', (err, row) => {
         cb(err, row)
     });
 }
@@ -41,5 +51,6 @@ module.exports = {
     add,
     remove,
     getList,
-    getValidatorById
+    getValidatorById,
+    getAllValidatorIds
 };

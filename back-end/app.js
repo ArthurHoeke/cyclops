@@ -68,10 +68,10 @@ config.getConfig((err, data) => {
       SMTP_PORT = data.smtpPort;
       SMTP_USERNAME = data.smtpUsername;
       SMTP_PASSWORD = data.smtpPassword;
+
+      validatorService.periodicNetworkCheck();
   }
 });
-
-validatorService.periodicNetworkCheck();
 
 app.listen(port, () => {
   console.log(`⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀

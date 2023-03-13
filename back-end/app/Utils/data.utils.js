@@ -3,20 +3,25 @@ const jwt = require("jsonwebtoken");
 const fetch = require('node-fetch');
 
 async function postData(url = '', data = {}, apikey) {
-    const response = await fetch(url, {
-        method: 'POST',
-        mode: 'cors',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-API-Key': apikey
-        },
-        redirect: 'follow',
-        referrerPolicy: 'no-referrer',
-        body: JSON.stringify(data)
-    });
-    return response.json();
+    try {
+        response = await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-API-Key': apikey
+            },
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer',
+            body: JSON.stringify(data)
+        });
+
+        return response.json();
+    } catch (err) {
+        return JSON.stringify(err);
+    }
 }
 
 async function getData(url = '') {
@@ -69,11 +74,44 @@ function generateRandomHash() {
     return CryptoJS.lib.WordArray.random(16).toString();
 }
 
+function getCurrentTimeString() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    return `${hours}:${minutes}:${seconds}`;
+}
+
+function redConsoleLog(str) {
+    return "\x1b[31m" + str + "\x1b[0m";
+}
+
+function greenConsoleLog(str) {
+    return "\x1b[32m" + str + "\x1b[0m";
+}
+
+function yellowConsoleLog(str) {
+    return "\x1b[33m" + str + "\x1b[0m";
+}
+
+function grayConsoleLog(str) {
+    return "\x1b[90m" + str + "\x1b[0m";
+}
+
+function getDividerLogString() {
+    return "----------------------------------------------------------------------";
+}
 
 module.exports = {
     getData,
     getDataByKey,
     generateAccessToken,
     generateRandomHash,
-    postData
+    postData,
+    getCurrentTimeString,
+    redConsoleLog,
+    greenConsoleLog,
+    yellowConsoleLog,
+    grayConsoleLog,
+    getDividerLogString
 };

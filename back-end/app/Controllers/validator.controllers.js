@@ -52,9 +52,18 @@ async function getValidatorById(validatorId) {
     });
 }
 
+async function getAllValidatorIds() {
+    return new Promise((resolve) => {
+        validator.getAllValidatorIds(async (err, data) => {
+            resolve(data);
+        });
+    });
+}
+
 module.exports = {
     add,
     remove,
     getList,
-    getValidatorById
+    getValidatorById,
+    getAllValidatorIds
 };  
