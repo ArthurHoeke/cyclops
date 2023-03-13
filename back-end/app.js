@@ -19,6 +19,8 @@ validatorService = require('./app/Services/validator.services');
 const app = express()
 const port = 3000;
 
+const request = require('supertest');
+
 //global config variables
 JWT_SECRET = null;
 SUBSCAN_APIKEY = null;
@@ -92,3 +94,10 @@ app.listen(port, () => {
   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠒⠦⠭⠭⠭⠤⠵⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`);
   console.log(`\nCyclops listening on port ${port}`);
 });
+
+// request(app)
+//   .get('/')
+//   .expect(404)
+//   .end(function(err, res) {
+//     if (err) throw err;
+//   });

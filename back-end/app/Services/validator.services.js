@@ -20,40 +20,42 @@ async function updateNetworkList() {
     networkList = await network.getTokenNames();
 }
 
+// This async function periodically fetches all the validators of each network, sets the activeNetworkValidators and waitingNetworkValidators variables and starts the syncAllValidatorRewards function.
 async function periodicNetworkCheck() {
     await updateNetworkList()
 
     //fetch all networks
-    getActiveNetworkValidators();
+    getNetworkValidators();
     interval = setInterval(async function () {
         console.clear();
-        getActiveNetworkValidators();
+        getNetworkValidators();
     }, 5 * 60000);
 }
 
+// This function returns the status of a validator given the networkId and address.
 function getValidatorStatus(networkId, address) {
     let selValidator = null;
     let status = "offline";
 
-    for(let i  = 0; i < activeNetworkValidators[networkId-1].length; i++) {
-        if(activeNetworkValidators[networkId-1][i]['stash_account_display']['address'] == address) {
-            selValidator = activeNetworkValidators[networkId-1][i];
+    for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
+        if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+            selValidator = activeNetworkValidators[networkId - 1][i];
             status = "active";
             break;
         }
     }
 
-    if(selValidator == null) {
-        for(let i  = 0; i < waitingNetworkValidators[networkId-1].length; i++) {
-            if(waitingNetworkValidators[networkId-1][i]['stash_account_display']['address'] == address) {
-                selValidator = waitingNetworkValidators[networkId-1][i];
+    if (selValidator == null) {
+        for (let i = 0; i < waitingNetworkValidators[networkId - 1].length; i++) {
+            if (waitingNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                selValidator = waitingNetworkValidators[networkId - 1][i];
                 status = "waiting";
                 break;
             }
         }
     }
 
-    if(selValidator != null) {
+    if (selValidator != null) {
         selValidator.status = status;
         return selValidator;
     } else {
@@ -66,10 +68,10 @@ function getValidatorStatus(networkId, address) {
 function getAverageRewardPoints() {
     avgRewardPoints = [];
 
-    for(let i = 0; i < activeNetworkValidators.length; i++) {
+    for (let i = 0; i < activeNetworkValidators.length; i++) {
         let totalRewardPoints = 0;
         let avg = 0;
-        for(let i2 = 0; i2 < activeNetworkValidators[i].length; i2++) {
+        for (let i2 = 0; i2 < activeNetworkValidators[i].length; i2++) {
             totalRewardPoints += activeNetworkValidators[i][i2]['reward_point'];
         }
         avg = totalRewardPoints / activeNetworkValidators[i].length;
@@ -79,16 +81,22 @@ function getAverageRewardPoints() {
 
 async function syncAllValidatorRewards() {
     const validatorList = await validator.getAllValidatorIds();
-    if(validatorList.length == 0) {
+    if (validatorList.length == 0) {
         console.log("No validators have been added yet.");
     } else {
-        for(let i = 0; i < validatorList.length; i++) {
-            await performRewardSync(validatorList[i].id);
+        for (let i = 0; i < validatorList.length; i++) {
+            const success = await performRewardSync(validatorList[i].id);
+            if(!success) {
+                console.log("🔴" + "Syncing error.");
+            }
         }
     }
 }
 
-async function getActiveNetworkValidators() {
+// This is an asynchronous function that fetches data from subscan API for multiple networks
+// and stores the results in two arrays - newActiveNetworkValidators and newWaitingNetworkValidators.
+// The function also handles rate limiting by adding a delay between each API call.
+async function getNetworkValidators() {
     console.log(data.getDividerLogString());
     console.log("Preparing to fetch network data..");
 
@@ -97,23 +105,31 @@ async function getActiveNetworkValidators() {
 
     let error = false;
 
+    // Loops through the network list array and fetches data for each network
     for (let i = 0; i < networkList.length; i++) {
 
-        //wait to make sure request ratelimit is not hit
+        // Wait for a certain amount of time to make sure the rate limit is not hit before making the API call
         await setTimeout(async function () {
             let res = null;
             let res2 = null;
 
-            if(error == false) {
+            if (error == false) {
+                // Logs a message indicating which network is being fetched
                 console.log(data.getDividerLogString());
                 console.log(data.yellowConsoleLog("Fetching") + " active " + networkList[i].name + " validators..");
+
+                // Fetches the active validators for the current network
                 res = await subscan.getActiveValidators(networkList[i].name);
+
                 console.log(data.greenConsoleLog("Received") + " active validators");
                 console.log(data.yellowConsoleLog("Fetching") + " waiting " + networkList[i].name + " validators..");
+
+                // Fetches the waiting validators for the current network
                 res2 = await subscan.getWaitingValidators(networkList[i].name);
                 console.log(data.greenConsoleLog("Received") + " waiting validators");
             }
 
+            // If any of the API responses contain an error code or are undefined/null, set the error flag to true
             if (res.code == undefined || res2.code == undefined || res.code == null || res2.code == null || res.code != 0 || res2.code != 0) {
                 error = true;
             } else {
@@ -122,15 +138,20 @@ async function getActiveNetworkValidators() {
                 console.log(data.grayConsoleLog("Pushing") + " " + networkList[i].name + " live validator data to cache..");
             }
 
-            if(i == (networkList.length - 1) && error == false) {
+            if (i == (networkList.length - 1) && error == false) {
                 console.log(data.getDividerLogString());
+
                 activeNetworkValidators = newActiveNetworkValidators;
                 waitingNetworkValidators = newWaitingNetworkValidators;
+
                 console.log("🟢" + "Succussfully updated all network data @ " + data.getCurrentTimeString());
+
                 getAverageRewardPoints();
+
                 console.log("Preparing to sync validator rewards..");
+
                 syncAllValidatorRewards();
-            } else if(error == true) {
+            } else if (error == true) {
                 console.log(data.getDividerLogString());
                 console.log("🔴" + "Error occurred fetching network, preserving previous data @ " + data.getCurrentTimeString());
             }
@@ -181,7 +202,7 @@ async function performRewardSync(validatorId) {
 
     // If the counts are the same, there is no need to sync, return true
     if (realtimeRewardCount == locallyStoredRewardCount) {
-        console.log("💤" + "Already synced");
+        console.log("🟢" + "Already synced");
         return true;
     }
 
@@ -220,7 +241,7 @@ async function processRewardList(validatorId, rewardList, rewardHashCache, local
             if (!exists) {
                 await reward.add(validatorId, rewardAmt, timestamp, hash);
                 locallyStoredRewardCount++;
-                console.log(data.greenConsoleLog("🧊 Added") + " | " + hash);
+                console.log(data.greenConsoleLog("Added") + " | " + hash);
             }
         }
 
