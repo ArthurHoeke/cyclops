@@ -6,7 +6,8 @@ const createNetworkTable = () => {
         ticker varchar UNIQUE,
         icon varchar);`;
 
-    return database.run(sqlQuery);
+    database.run(sqlQuery);
+    addDefaultNetwork();
 }
 
 const addDefaultNetwork = () => {
@@ -18,7 +19,6 @@ const addDefaultNetwork = () => {
 }
 
 createNetworkTable();
-addDefaultNetwork();
 
 const create = (data, cb) => {
     return database.run('INSERT INTO network (name, ticker, icon) VALUES (?,?,?)', data, (err) => {
