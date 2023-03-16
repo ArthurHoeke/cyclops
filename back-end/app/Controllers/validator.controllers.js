@@ -13,6 +13,8 @@ const add = async (req, res) => {
                 res.sendStatus(201);
             }
         });
+    } else {
+        res.sendStatus(400);
     }
 };
 
@@ -28,6 +30,8 @@ const remove = async (req, res) => {
                 res.sendStatus(200);
             }
         });
+    } else {
+        res.sendStatus(400);
     }
 };
 

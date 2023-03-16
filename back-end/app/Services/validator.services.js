@@ -37,6 +37,11 @@ function getValidatorStatus(networkId, address) {
     let selValidator = null;
     let status = "offline";
 
+    //cyclops has not yet fetched API data, return null
+    if(activeNetworkValidators[networkId - 1] == undefined || waitingNetworkValidators[networkId - 1] == undefined) {
+        return null;
+    }
+
     for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
         if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
             selValidator = activeNetworkValidators[networkId - 1][i];
@@ -130,7 +135,7 @@ async function getNetworkValidators() {
             }
 
             // If any of the API responses contain an error code or are undefined/null, set the error flag to true
-            if (res.code == undefined || res2.code == undefined || res.code == null || res2.code == null || res.code != 0 || res2.code != 0) {
+            if (res == null || res.code == undefined || res2.code == undefined || res.code == null || res2.code == null || res.code != 0 || res2.code != 0) {
                 error = true;
             } else {
                 newActiveNetworkValidators.push(res['data'].list);
@@ -154,7 +159,7 @@ async function getNetworkValidators() {
             } else if (error == true) {
                 console.log(data.getDividerLogString());
 
-                if(res.code == 20008) {
+                if(res == null || res.code == 20008) {
                     console.log("🟠" + " No subscan API key has been configured yet");
                 } else {
                     console.log("🔴" + "Error occurred fetching network, preserving previous data @ " + data.getCurrentTimeString());

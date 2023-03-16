@@ -13,13 +13,12 @@ var validatorRouter = require('./app/Routes/validator.routes');
 var configRouter = require('./app/Routes/config.routes');
 
 var dataUtils = require('./app/Utils/data.utils');
+const testUtil = require('./app/Utils/test.utils');
 
 validatorService = require('./app/Services/validator.services');
 
-const app = express()
+app = express()
 const port = 3000;
-
-const request = require('supertest');
 
 //global config variables
 JWT_SECRET = null;
@@ -80,9 +79,8 @@ setTimeout(function () {
   app.listen(port, () => {
     const unitTest = parseInt(process.argv.slice(2)[0]);
     if (unitTest === 1) {
-      console.log(dataUtils.getDividerLogString())
-      console.log(dataUtils.yellowConsoleLog("Will begin unit testing in 30 seconds.."))
-      console.log(dataUtils.getDividerLogString())
+      console.log(dataUtils.yellowConsoleLog("Will begin API test in 10 seconds.."))
+      testUtil.scheduleTest();
     } else {
       console.log(`⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣤⣤⣤⣤⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡴⠞⠛⣉⡉⠄⠀⠀⠀⠀⠀⠐⠯⣛⡳⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -100,14 +98,7 @@ setTimeout(function () {
     ⠀⠀⠀⠀⠰⣝⡳⠮⣭⠂⠀⠀⠈⠉⠙⢛⠶⠶⢶⣤⣤⣄⣀⣀⣠⣤⣴⠶⠟⠋⠁⠰⠋⠕⣊⠴⠂⠀⠀⠀⠀⠀
     ⠀⠀⠀⠀⠀⠀⠉⠉⠉⠀⠀⠀⠀⠀⠀⠈⠓⣖⡒⠂⠠⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⠒⠦⠭⠭⠭⠤⠵⠒⠒⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀`);
-    }
     console.log(`\nCyclops listening on port ${port}`);
+    }
   });
-
-  // request(app)
-  //   .get('/')
-  //   .expect(404)
-  //   .end(function(err, res) {
-  //     if (err) throw err;
-  //   });
 }, 500);

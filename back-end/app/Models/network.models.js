@@ -6,8 +6,9 @@ const createNetworkTable = () => {
         ticker varchar UNIQUE,
         icon varchar);`;
 
-    database.run(sqlQuery);
-    addDefaultNetwork();
+    database.run(sqlQuery, (err) => {
+        addDefaultNetwork();
+    });
 }
 
 const addDefaultNetwork = () => {
