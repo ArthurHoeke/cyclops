@@ -82,7 +82,7 @@ function getAverageRewardPoints() {
 async function syncAllValidatorRewards() {
     const validatorList = await validator.getAllValidatorIds();
     if (validatorList.length == 0) {
-        console.log("No validators have been added yet.");
+        console.log("🟠" + "No validators have been added yet");
     } else {
         for (let i = 0; i < validatorList.length; i++) {
             const success = await performRewardSync(validatorList[i].id);
@@ -153,7 +153,12 @@ async function getNetworkValidators() {
                 syncAllValidatorRewards();
             } else if (error == true) {
                 console.log(data.getDividerLogString());
-                console.log("🔴" + "Error occurred fetching network, preserving previous data @ " + data.getCurrentTimeString());
+
+                if(res.code == 20008) {
+                    console.log("🟠" + " No subscan API key has been configured yet");
+                } else {
+                    console.log("🔴" + "Error occurred fetching network, preserving previous data @ " + data.getCurrentTimeString());
+                }
             }
         }, 5000 * i);
     }
