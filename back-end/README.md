@@ -2,15 +2,20 @@
 
 The cyclops back-end server runs on [expressjs.com](https://expressjs.com/) version 4.18.2.
 
+
+## Installation
+
+Run `npm i` to install all packages.
+
 ## Run server
 
 Run `npm start` to start the server. Navigate to `http://localhost:3000/`.
 
-
 ## Run test
 
 Run `npm test` to test the webservice and database functionality.
-*Note: this function will test the API end-points and database functionality using dummy data, make sure that there is no `database.db` file created yet before starting the test. After the test has been completed, `database.db` will be deleted.*
+
+*Note: this function will test the API end-points and database functionality using dummy data, make sure that there is no `database.db` file created yet before starting the test. After the test has been completed, the newly generated `database.db` will be deleted.*
 
 ## Source structure
 
