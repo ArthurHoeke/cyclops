@@ -5,7 +5,10 @@ The cyclops back-end server runs on [expressjs.com](https://expressjs.com/) vers
 
 ## Installation
 
-Run `npm i` to install all packages.
+1. Run `npm i` to install all packages.
+2. Run the server (see instructions below). When you start the server for the first time, Cyclops will automatically generate a fresh database and JWT secret.
+3. Register your account either via the front-end, or calling the end-point `login/register` (provide `email` and `password` variables in the body) manually using for example [postman](https://www.postman.com/). *Note: after signing up you will receive an authentication token. Provide this token for all other requests in the header under the property `auth-token`.*
+4. Set your subscan API key via the settings page on the front-end or by calling the `config/setSubscanApiKey` end-point providing `subscanApiKey (string)` argument in the body.
 
 ## Run server
 
