@@ -33,6 +33,7 @@ Cyclops is a validator dashboard application built using Angular and Node/Expres
 * [![Angular][Angular.io]][Angular-url]
 * [![Typescript][Typescriptlang.org]][Typescript-url]
 * [![Expressjs][Expressjs.com]][Expressjs-url]
+* [![Sqlite][Sqlite.org]][Sqlite-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![Sass][Sass-lang.com]][Sass-url]
 
@@ -98,3 +99,5 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 [Expressjs-url]: https://expressjs.com/
 [Sass-lang.com]:https://img.shields.io/badge/sass-bf4080?style=for-the-badge&logo=sass&logoColor=white
 [Sass-url]: https://sass-lang.com/
+[Sqlite.org]:https://img.shields.io/badge/sqlite-044a64?style=for-the-badge&logo=sqlite&logoColor=white
+[Sqlite-url]: https://sqlite.org/
