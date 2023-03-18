@@ -13,7 +13,7 @@ var validatorRouter = require('./app/Routes/validator.routes');
 var configRouter = require('./app/Routes/config.routes');
 
 var dataUtils = require('./app/Utils/data.utils');
-const testUtil = require('./app/Utils/test.utils');
+const testUtil = require('./app/Services/test.services');
 
 validatorService = require('./app/Services/validator.services');
 
@@ -23,6 +23,7 @@ const port = 3000;
 //global config variables
 JWT_SECRET = null;
 SUBSCAN_APIKEY = null;
+SMTP_EMAIL = null;
 SMTP_HOST = null;
 SMTP_PORT = null;
 SMTP_USERNAME = null;
@@ -71,6 +72,7 @@ setTimeout(function () {
       SMTP_PORT = data.smtpPort;
       SMTP_USERNAME = data.smtpUsername;
       SMTP_PASSWORD = data.smtpPassword;
+      SMTP_EMAIL = data.email;
 
       validatorService.periodicNetworkCheck();
     }

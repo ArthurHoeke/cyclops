@@ -127,7 +127,7 @@ async function getAllRewardsFromValidatorAsync(validatorId) {
     return new Promise((resolve) => {
         reward.getAllRewardsFromValidator([validatorId], (err, data) => {
             if (err) {
-
+                return null;
             } else {
                 resolve(data);
             }
