@@ -29,6 +29,12 @@ const getUserIdByEmail = (data, cb) => {
     });
 }
 
+const getUserEmailById = (data, cb) => {
+    return database.get('SELECT email FROM user WHERE id = ?', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 const getUserDataByEmail = (data, cb) => {
     return database.get('SELECT id, password, role FROM user WHERE email = ?', data, (err, row) => {
         cb(err, row)
@@ -39,5 +45,6 @@ module.exports = {
     create,
     getUserDataByEmail,
     getUserCount,
-    getUserIdByEmail
+    getUserIdByEmail,
+    getUserEmailById
 };

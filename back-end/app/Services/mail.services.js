@@ -1,6 +1,11 @@
 var nodemailer = require('nodemailer');
 
-async function sendEmail(email, subject, message) {
+const dataUtils = require("../Utils/data.utils");
+const user = require('../Controllers/user.controllers');
+
+async function sendEmail(userId, subject, message) {
+    const userData = await user.getUserEmailById(userId);
+
     let transporter = nodemailer.createTransport({
         host: SMTP_HOST,
         port: SMTP_PORT,
@@ -13,14 +18,14 @@ async function sendEmail(email, subject, message) {
 
     let mailOptions = {
         from: '"Cyclops 👁️" <' + SMTP_USERNAME + '>',
-        to: email,
+        to: userData.email,
         subject: subject,
         html: message
     };
 
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error.message);
+            return console.log(dataUtils.redConsoleLog("SMTP ERROR: ") + error.message);
         }
     });
 }

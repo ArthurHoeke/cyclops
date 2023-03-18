@@ -70,6 +70,12 @@ function generateAccessToken(id, email, password, role) {
     );
 }
 
+function compareAndCalculatePercentageDifference(average, value) {
+    const difference = Math.abs(average - value);
+    const percentageDifference = (difference / average) * 100;
+    return percentageDifference;
+}
+
 function generateRandomHash() {
     return CryptoJS.lib.WordArray.random(16).toString();
 }
@@ -113,5 +119,6 @@ module.exports = {
     greenConsoleLog,
     yellowConsoleLog,
     grayConsoleLog,
-    getDividerLogString
+    getDividerLogString,
+    compareAndCalculatePercentageDifference
 };

@@ -2,18 +2,16 @@ const subscan = require("../Utils/subscan.utils");
 const validator = require("../Controllers/validator.controllers");
 const reward = require("../Controllers/reward.controllers");
 const network = require("../Controllers/network.controllers");
+const event = require("../Controllers/event.controllers");
 const data = require("../Utils/data.utils");
-
-const mailService = require("../Services/mail.services");
-
-//network object keeping track of all active validators per network
-//loop through all validators in list, if address matches a tracked validator mark the reward points in temp. array.
-// write function which takes all reward points and returns an average. If monitored validator is heavily under average shoot performance alert
 
 networkList = [];
 
 activeNetworkValidators = [];
 waitingNetworkValidators = [];
+
+rewardPointTracker = {};
+
 avgRewardPoints = [];
 
 let interval;
@@ -47,6 +45,7 @@ function getValidatorStatus(networkId, address) {
     for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
         if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
             selValidator = activeNetworkValidators[networkId - 1][i];
+            selValidator.rewardTracking = rewardPointTracker[address];
             status = "active";
             break;
         }
@@ -57,9 +56,6 @@ function getValidatorStatus(networkId, address) {
             if (waitingNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
                 selValidator = waitingNetworkValidators[networkId - 1][i];
                 status = "waiting";
-
-                //reward point tracking
-                //if reward points is different than last save, create array
                 break;
             }
         }
@@ -89,6 +85,57 @@ function getAverageRewardPoints() {
     }
 }
 
+async function trackValidatorRewardPoints(validatorId) {
+    const val = await validator.getValidatorById(validatorId);
+    
+    const networkId = val.networkId;
+    const address = val.address;
+
+    if(address in rewardPointTracker) {
+        //being tracked
+        let selValidator = null;
+
+        for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
+            if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                selValidator = activeNetworkValidators[networkId - 1][i];
+                break;
+            }
+        }
+
+        if(selValidator != null) {
+            const pointArr = rewardPointTracker[address];
+            if(pointArr[pointArr.length - 1] > selValidator['reward_point']) {
+                //new ERA, reset tracking
+                rewardPointTracker[address] = [selValidator['reward_point']];
+            } else {
+                //add points to tracking
+                rewardPointTracker[address].push(selValidator['reward_point']);
+
+                //if validator reward points differ more than 90% of the average, send warning e-mail
+                if(data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 0) {
+                    event.register(val, "low reward points",  "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                }
+            }
+        } else {
+            delete rewardPointTracker[address];
+        }
+    } else {
+        //not tracked yet
+        let selValidator = null;
+
+        for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
+            if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                selValidator = activeNetworkValidators[networkId - 1][i];
+                break;
+            }
+        }
+
+        if(selValidator != null) {
+            rewardPointTracker[address] = [selValidator['reward_point']];
+        }
+    }
+}
+
 async function syncAllValidatorRewards() {
     const validatorList = await validator.getAllValidatorIds();
     if (validatorList.length == 0) {
@@ -96,8 +143,11 @@ async function syncAllValidatorRewards() {
     } else {
         for (let i = 0; i < validatorList.length; i++) {
             const success = await performRewardSync(validatorList[i].id);
+            
             if(!success) {
                 console.log("🔴" + "Syncing error.");
+            } else {
+                trackValidatorRewardPoints(validatorList[i].id);
             }
         }
     }

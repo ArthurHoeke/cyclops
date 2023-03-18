@@ -69,7 +69,16 @@ const login = async (req, res) => {
   }
 };
 
+async function getUserEmailById() {
+  return new Promise((resolve) => {
+      User.getUserEmailById(async (err, data) => {
+          resolve(data);
+      });
+  });
+}
+
 module.exports = {
   register,
-  login
+  login,
+  getUserEmailById
 };

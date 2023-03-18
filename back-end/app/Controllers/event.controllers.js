@@ -1,14 +1,15 @@
+const mailService = require("../Services/mail.services");
+
 const event = require("../Models/event.models");
 
-function add(validatorId, eventType, description, timestamp) {
-    event.add([validatorId, eventType, description, timestamp], (err, data) => {
-        if (err) {
-            return false;
-        } else {
-            return data;
-        }
+async function register(val, eventType, description) {
+    return new Promise((resolve) => {
+        event.add([val.id, eventType, description, Date.now()], async (err, data) => {
+            mailService.sendEmail(val.userId, "Low reward point warning", "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network. Is everything OK?");
+            resolve(data);
+        });
     });
-};
+}
 
 const get = async (req, res) => {
     const validatorId = req.body.validatorId;
@@ -36,7 +37,7 @@ const remove = async (req, res) => {
 };
 
 module.exports = {
-    add,
+    register,
     get,
     remove
 };
