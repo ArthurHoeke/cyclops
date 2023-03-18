@@ -31,8 +31,15 @@ const remove = (data, cb) => {
     });
 }
 
+const getEventsFromToday = (data, cb) => {
+    return database.all('SELECT * FROM event WHERE validatorId = ? AND datetime(timestamp, "unixepoch", "localtime") >= datetime("now", "-24 hours") AND eventType = ?', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 module.exports = {
     add,
     get,
-    remove
+    remove,
+    getEventsFromToday
 };

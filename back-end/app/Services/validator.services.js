@@ -11,7 +11,6 @@ activeNetworkValidators = [];
 waitingNetworkValidators = [];
 
 rewardPointTracker = {};
-
 avgRewardPoints = [];
 
 let interval;
@@ -38,7 +37,7 @@ function getValidatorStatus(networkId, address) {
     let status = "offline";
 
     //cyclops has not yet fetched API data, return null
-    if(activeNetworkValidators[networkId - 1] == undefined || waitingNetworkValidators[networkId - 1] == undefined) {
+    if (activeNetworkValidators[networkId - 1] == undefined || waitingNetworkValidators[networkId - 1] == undefined) {
         return null;
     }
 
@@ -87,11 +86,11 @@ function getAverageRewardPoints() {
 
 async function trackValidatorRewardPoints(validatorId) {
     const val = await validator.getValidatorById(validatorId);
-    
+
     const networkId = val.networkId;
     const address = val.address;
 
-    if(address in rewardPointTracker) {
+    if (address in rewardPointTracker) {
         //being tracked
         let selValidator = null;
 
@@ -102,9 +101,9 @@ async function trackValidatorRewardPoints(validatorId) {
             }
         }
 
-        if(selValidator != null) {
+        if (selValidator != null) {
             const pointArr = rewardPointTracker[address];
-            if(pointArr[pointArr.length - 1] > selValidator['reward_point']) {
+            if (pointArr[pointArr.length - 1] > selValidator['reward_point']) {
                 //new ERA, reset tracking
                 rewardPointTracker[address] = [selValidator['reward_point']];
             } else {
@@ -112,8 +111,12 @@ async function trackValidatorRewardPoints(validatorId) {
                 rewardPointTracker[address].push(selValidator['reward_point']);
 
                 //if validator reward points differ more than 90% of the average, send warning e-mail
-                if(data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 0) {
-                    event.register(val, "low reward points",  "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
+                    //to prevent event spamming, check if this is the first warning in the past 24hrs
+                    const eventList = await event.getEventsFromToday(validatorId, "low reward points");
+                    if (eventList.length == 0) {
+                        event.register(val, "low reward points", "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                    }
                 }
             }
         } else {
@@ -130,7 +133,7 @@ async function trackValidatorRewardPoints(validatorId) {
             }
         }
 
-        if(selValidator != null) {
+        if (selValidator != null) {
             rewardPointTracker[address] = [selValidator['reward_point']];
         }
     }
@@ -143,8 +146,8 @@ async function syncAllValidatorRewards() {
     } else {
         for (let i = 0; i < validatorList.length; i++) {
             const success = await performRewardSync(validatorList[i].id);
-            
-            if(!success) {
+
+            if (!success) {
                 console.log("🔴" + "Syncing error.");
             } else {
                 trackValidatorRewardPoints(validatorList[i].id);
@@ -214,7 +217,7 @@ async function getNetworkValidators() {
             } else if (error == true) {
                 console.log(data.getDividerLogString());
 
-                if(res == null || res.code == 20008) {
+                if (res == null || res.code == 20008) {
                     console.log("🟠" + " No subscan API key has been configured yet");
                 } else {
                     console.log("🔴" + "Error occurred fetching network, preserving previous data @ " + data.getCurrentTimeString());
