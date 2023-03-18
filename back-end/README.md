@@ -93,4 +93,5 @@ Contains common re-used functions as well as third-party API logic.
 Contains logic for timed functionality such as validator reward syncing et cetera.
 
 ## Database
-<img src="https://raw.githubusercontent.com/ArthurHoeke/cyclops/development/back-end/assets/database_diagram.png">
+<img src="https://user-images.githubusercontent.com/34348870/226100557-7b78db54-8c6a-457b-b755-057afd808ead.png">
+
