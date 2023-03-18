@@ -82,7 +82,7 @@ Contains all end-points implementing controller functionality.
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `setSMTP`                         | `POST`     | `config/setSMTP`                         | `email (string)` `smtpHost (string)` `smtpPort (integer)` `smtpUsername (string)` `smtpPassword (string)` | `1`   |
+| `setSMTP`                         | `POST`     | `config/setSMTP`                         | `smtpHost (string)` `smtpPort (integer)` `smtpUsername (string)` `smtpPassword (string)` | `1`   |
 | `setSubscanApiKey`                | `POST`      | `config/setSubscanApiKey`               | `subscanApiKey (string)` | `1`   |
 | `list`                | `GET`      | `config/list`               |  | `1`   |
 
