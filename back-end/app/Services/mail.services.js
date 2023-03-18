@@ -12,7 +12,7 @@ async function sendEmail(email, subject, message) {
     });
 
     let mailOptions = {
-        from: '"Cyclops 👁️" <' + SMTP_EMAIL + '>',
+        from: '"Cyclops 👁️" <' + SMTP_USERNAME + '>',
         to: email,
         subject: subject,
         html: message
@@ -24,3 +24,7 @@ async function sendEmail(email, subject, message) {
         }
     });
 }
+
+module.exports = {
+    sendEmail
+};

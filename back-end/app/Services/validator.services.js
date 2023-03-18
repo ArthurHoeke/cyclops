@@ -4,6 +4,8 @@ const reward = require("../Controllers/reward.controllers");
 const network = require("../Controllers/network.controllers");
 const data = require("../Utils/data.utils");
 
+const mailService = require("../Services/mail.services");
+
 //network object keeping track of all active validators per network
 //loop through all validators in list, if address matches a tracked validator mark the reward points in temp. array.
 // write function which takes all reward points and returns an average. If monitored validator is heavily under average shoot performance alert
@@ -55,6 +57,9 @@ function getValidatorStatus(networkId, address) {
             if (waitingNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
                 selValidator = waitingNetworkValidators[networkId - 1][i];
                 status = "waiting";
+
+                //reward point tracking
+                //if reward points is different than last save, create array
                 break;
             }
         }

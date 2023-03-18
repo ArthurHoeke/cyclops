@@ -4,7 +4,6 @@ const createConfigTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS config (
         subscanApiKey varchar,
-        email varchar,
         smtpHost varchar,
         smtpPort integer,
         smtpUsername varchar,
@@ -21,7 +20,7 @@ const setupConfigRow = (data) => {
 createConfigTable();
 
 const setSMTP = (data, cb) => {
-    return database.run('UPDATE config SET email = ?, smtpHost = ?, smtpPort = ?, smtpUsername = ?, smtpPassword = ?', data, (err, row) => {
+    return database.run('UPDATE config SET smtpHost = ?, smtpPort = ?, smtpUsername = ?, smtpPassword = ?', data, (err, row) => {
         cb(err, row)
     });
 }
@@ -39,7 +38,7 @@ const getConfig = (cb) => {
 }
 
 const getVariableList = (cb) => {
-    return database.get('SELECT subscanApiKey, email, smtpHost, smtpPort, smtpUsername, smtpPassword FROM config', (err, row) => {
+    return database.get('SELECT subscanApiKey, smtpHost, smtpPort, smtpUsername, smtpPassword FROM config', (err, row) => {
         cb(err, row)
     });
 }
