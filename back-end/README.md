@@ -32,6 +32,8 @@ Contains routing middleware, such as authentication.
 ### Models
 Contains database logic and functionality.
 
+<img src="https://user-images.githubusercontent.com/34348870/226101142-6312125d-de34-4ce8-a115-be73832919fa.png">
+
 ### Routes
 Contains all end-points implementing controller functionality.
 
@@ -91,8 +93,5 @@ Contains common re-used functions as well as third-party API logic.
 
 ### Services
 Contains logic for timed functionality such as validator reward syncing et cetera.
-
-## Database
-<img src="https://user-images.githubusercontent.com/34348870/226101142-6312125d-de34-4ce8-a115-be73832919fa.png">
 
 
