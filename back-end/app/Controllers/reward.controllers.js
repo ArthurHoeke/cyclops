@@ -1,9 +1,5 @@
 const reward = require("../Models/reward.models");
 
-const subscan = require("../Utils/subscan.utils");
-const validator = require("../Controllers/validator.controllers");
-const network = require("../Controllers/network.controllers");
-
 async function add(validatorId, amount, timestamp, hash) {
     return new Promise((resolve) => {
         reward.add([validatorId, amount, timestamp, hash], async (err, data) => {

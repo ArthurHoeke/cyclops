@@ -6,6 +6,7 @@ const event = require("../Controllers/event.controllers");
 const data = require("../Utils/data.utils");
 
 networkList = [];
+networkEraProgress = {};
 
 activeNetworkValidators = [];
 waitingNetworkValidators = [];
@@ -17,6 +18,18 @@ let interval;
 
 async function updateNetworkList() {
     networkList = await network.getTokenNames();
+    await updateEraData();
+}
+
+async function updateEraData() {
+    for (let i = 0; i < networkList.length; i++) {
+        const eraData = await subscan.getEra(networkList[i].name);
+        const eraObj = {
+            eraLength: eraData['data']['eraLength'],
+            eraProcess: eraData['data']['eraProcess']
+        };
+        networkEraProgress[networkList[i].name] = eraObj;
+    }
 }
 
 // This async function periodically fetches all the validators of each network, sets the activeNetworkValidators and waitingNetworkValidators variables and starts the syncAllValidatorRewards function.
@@ -41,6 +54,7 @@ function getValidatorStatus(networkId, address) {
         return null;
     }
 
+    //check if validator is listed in the active list
     for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
         if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
             selValidator = activeNetworkValidators[networkId - 1][i];
@@ -50,6 +64,7 @@ function getValidatorStatus(networkId, address) {
         }
     }
 
+    //if the validator has not been found yet, try again in the waiting list
     if (selValidator == null) {
         for (let i = 0; i < waitingNetworkValidators[networkId - 1].length; i++) {
             if (waitingNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
@@ -60,6 +75,7 @@ function getValidatorStatus(networkId, address) {
         }
     }
 
+    //if the validator has still not been found it is offline, if it has been found return validator details + status
     if (selValidator != null) {
         selValidator.status = status;
         return selValidator;
@@ -70,6 +86,8 @@ function getValidatorStatus(networkId, address) {
     }
 }
 
+//loops over all active validators, combined reward points and calculated the average.
+//used to check performance
 function getAverageRewardPoints() {
     avgRewardPoints = [];
 
@@ -318,9 +336,14 @@ async function processRewardList(validatorId, rewardList, rewardHashCache, local
     });
 }
 
+function getNetworkEraData(name) {
+    return networkEraProgress[name];
+}
+
 module.exports = {
     periodicNetworkCheck,
     updateNetworkList,
     getValidatorStatus,
-    performRewardSync
+    performRewardSync,
+    getNetworkEraData
 };

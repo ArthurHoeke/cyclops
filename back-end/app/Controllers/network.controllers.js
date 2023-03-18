@@ -41,6 +41,9 @@ const list = async (req, res) => {
         if (err) {
             res.sendStatus(500);
         } else {
+            for(let i = 0; i < data.length; i++) {
+                data[i].era = validatorService.getNetworkEraData(data[i].name);
+            }
             res.status(200).json({
                 data: data
             });
