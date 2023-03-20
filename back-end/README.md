@@ -50,7 +50,7 @@ Contains all end-points implementing controller functionality.
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
 | `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         | `1`   |
 | `remove`                          | `POST`     | `network/remove`                         | `id (network ID integer)`                                        | `1`   |
-| `getList`                         | `GET`      | `network/list`                           |                                                                  | `0`   |
+| `list`                         | `GET`      | `network/list`                           |                                                                  | `0`   |
 
 #### Validator
 
@@ -58,7 +58,7 @@ Contains all end-points implementing controller functionality.
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
 | `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (network ID integer)`                     | `1`   |
 | `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
-| `getList`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
+| `list`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
 
 #### Reward
 
