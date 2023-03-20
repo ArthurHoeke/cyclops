@@ -18,7 +18,9 @@ let interval;
 
 async function updateNetworkList() {
     networkList = await network.getTokenNames();
-    await updateEraData();
+    if(SUBSCAN_APIKEY != null) {
+        await updateEraData();
+    }
 }
 
 async function updateEraData() {

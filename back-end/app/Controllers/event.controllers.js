@@ -4,8 +4,6 @@ const event = require("../Models/event.models");
 
 async function register(val, eventType, description) {
     return new Promise((resolve) => {
-        //check if there is no event reported earlier about this val with the same eventType within the last 24hrs
-
         event.add([val.id, eventType, description, Date.now()], async (err, data) => {
             mailService.sendEmail(val.userId, "Low reward point warning", "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network. Is everything OK?");
             resolve(data);

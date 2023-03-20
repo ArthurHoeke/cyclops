@@ -9,7 +9,7 @@ async function add(validatorId, amount, timestamp, hash) {
 };
 
 const getAllRewardsFromValidator = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     reward.getAllRewardsFromValidator([validatorId], (err, data) => {
         if (err) {
             res.sendStatus(500);
@@ -22,7 +22,7 @@ const getAllRewardsFromValidator = async (req, res) => {
 };
 
 const getWeeklyRewardsFromValidator = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     reward.getWeeklyRewardsFromValidator([validatorId], (err, data) => {
         if (err) {
             res.sendStatus(500);
@@ -35,7 +35,7 @@ const getWeeklyRewardsFromValidator = async (req, res) => {
 };
 
 const getMonthlyRewardsFromValidator = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     reward.getMonthlyRewardsFromValidator([validatorId], (err, data) => {
         if (err) {
             res.sendStatus(500);
@@ -48,7 +48,7 @@ const getMonthlyRewardsFromValidator = async (req, res) => {
 };
 
 const getYearlyRewardsFromValidator = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     reward.getYearlyRewardsFromValidator([validatorId], (err, data) => {
         if (err) {
             res.sendStatus(500);
@@ -61,7 +61,7 @@ const getYearlyRewardsFromValidator = async (req, res) => {
 };
 
 const getRewardsFromValidatorInPeriod = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     const start = req.body.start;
     const end = req.body.end;
     reward.getRewardsFromValidatorInPeriod([validatorId, start, end], (err, data) => {
@@ -94,7 +94,7 @@ const getCombinedWeeklyRewards = async (req, res) => {
 };
 
 const getValidatorRewardOverview = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     reward.getValidatorRewardOverview(validatorId, (err, data) => {
         if (err) {
             res.sendStatus(500);
@@ -107,7 +107,7 @@ const getValidatorRewardOverview = async (req, res) => {
 };
 
 const requestSync = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
 
     if (validatorId != undefined) {
         const status = await validatorService.performRewardSync(validatorId);
