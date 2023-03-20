@@ -48,16 +48,16 @@ Contains all end-points implementing controller functionality.
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         | `0`   |
-| `remove`                          | `POST`     | `network/remove`                         | `id (network ID integer)`                                        | `0`   |
+| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         | `1`   |
+| `remove`                          | `POST`     | `network/remove`                         | `id (network ID integer)`                                        | `1`   |
 | `getList`                         | `GET`      | `network/list`                           |                                                                  | `0`   |
 
 #### Validator
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (network ID integer)`                     | `0`   |
-| `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `0`   |
+| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (network ID integer)`                     | `1`   |
+| `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
 | `getList`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
 
 #### Reward
