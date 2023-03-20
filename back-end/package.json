@@ -1,0 +1,40 @@
+{
+  "name": "cyclops",
+  "version": "1.0.0",
+  "description": "Restful API developed for the Polkadot validator monitor application Cyclops",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js 0",
+    "test": "node app.js 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArthurHoeke/cyclops.git"
+  },
+  "keywords": [
+    "blockchain",
+    "polkadot",
+    "w3f",
+    "validator",
+    "express"
+  ],
+  "author": "Arthur Hoeke",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/ArthurHoeke/cyclops/issues"
+  },
+  "homepage": "https://github.com/ArthurHoeke/cyclops#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "crypto-js": "^4.1.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^6.9.1",
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "supertest": "^6.3.3"
+  }
+}

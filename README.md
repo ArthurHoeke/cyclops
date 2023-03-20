@@ -16,6 +16,8 @@
   </p>
 </div>
 
+<img style="width: 100%; height: 200px;" src="https://raw.githubusercontent.com/w3f/Grants-Program/00855ef70bc503433dc9fccc057c2f66a426a82b/static/img/badge_black.svg">
+
 
 <!-- ABOUT THE PROJECT -->
 ## About Cyclops
@@ -31,6 +33,7 @@ Cyclops is a validator dashboard application built using Angular and Node/Expres
 * [![Angular][Angular.io]][Angular-url]
 * [![Typescript][Typescriptlang.org]][Typescript-url]
 * [![Expressjs][Expressjs.com]][Expressjs-url]
+* [![Sqlite][Sqlite.org]][Sqlite-url]
 * [![Bootstrap][Bootstrap.com]][Bootstrap-url]
 * [![Sass][Sass-lang.com]][Sass-url]
 
@@ -65,7 +68,11 @@ The back-end of Cyclops is built using Node/Express. For instructions on how to 
 ## Usage
 
 To use Cyclops, both the front-end and back-end servers need to be running.
+<<<<<<< HEAD
 First, navigate to the front-end folder and run ```npm install``` to install all the necessary dependencies. Then, run ```ng serve``` to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run ```node server.js``` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
+=======
+First, navigate to the front-end folder and run ```npm install``` to install all the necessary dependencies. Then, ```run ng``` serve to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run ```npm start``` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
+>>>>>>> development
 
 _Note that currently only the front-end exists, and the back-end is still under development. Please refer to the individual readme files in each folder for more detailed instructions on how to launch the servers._
 
@@ -96,5 +103,5 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 [Expressjs-url]: https://expressjs.com/
 [Sass-lang.com]:https://img.shields.io/badge/sass-bf4080?style=for-the-badge&logo=sass&logoColor=white
 [Sass-url]: https://sass-lang.com/
-
-https://img.shields.io/badge/sass-bf4080?style=for-the-badge&logo=sass&logoColor=white
+[Sqlite.org]:https://img.shields.io/badge/sqlite-044a64?style=for-the-badge&logo=sqlite&logoColor=white
+[Sqlite-url]: https://sqlite.org/
