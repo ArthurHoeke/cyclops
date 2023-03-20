@@ -68,13 +68,10 @@ The back-end of Cyclops is built using Node/Express. For instructions on how to 
 ## Usage
 
 To use Cyclops, both the front-end and back-end servers need to be running.
-<<<<<<< HEAD
-First, navigate to the front-end folder and run ```npm install``` to install all the necessary dependencies. Then, run ```ng serve``` to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run ```node server.js``` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
-=======
-First, navigate to the front-end folder and run ```npm install``` to install all the necessary dependencies. Then, ```run ng``` serve to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run ```npm start``` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
->>>>>>> development
 
-_Note that currently only the front-end exists, and the back-end is still under development. Please refer to the individual readme files in each folder for more detailed instructions on how to launch the servers._
+First, navigate to the front-end folder and run `npm install` to install all the necessary dependencies. Then, `run ng` serve to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run `npm start` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
+
+*Note that currently only the front-end exists, and the back-end is still under development. Please refer to the individual readme files in each folder for more detailed instructions on how to launch the servers.*
 
 
 <!-- CONTRIBUTING -->
