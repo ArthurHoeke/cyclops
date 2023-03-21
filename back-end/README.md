@@ -32,7 +32,8 @@ Contains routing middleware, such as authentication.
 ### Models
 Contains database logic and functionality.
 
-<img src="https://user-images.githubusercontent.com/34348870/226101142-6312125d-de34-4ce8-a115-be73832919fa.png">
+<img src="https://user-images.githubusercontent.com/34348870/226693199-8ce6c54d-f26f-43a3-8769-a63ad4937029.png">
+
 
 ### Routes
 Contains all end-points implementing controller functionality.
@@ -56,7 +57,7 @@ Contains all end-points implementing controller functionality.
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `add`                             | `POST`     | `validator/add`                          | `address (string)` `id (network ID integer)`                     | `1`   |
+| `add`                             | `POST`     | `validator/add`                          | `name (string)` `address (string)` `id (network ID integer)`                     | `1`   |
 | `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
 | `list`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
 
