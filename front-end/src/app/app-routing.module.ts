@@ -5,10 +5,12 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
+import { AuthenticationGuard } from './services/authentication.guard';
+
 const routes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'settings', component: SettingsComponent }
+  { path: 'dashboard', component: DashboardComponent, canActivate:[AuthenticationGuard] },
+  { path: 'settings', component: SettingsComponent, canActivate:[AuthenticationGuard] }
 ];
 
 @NgModule({

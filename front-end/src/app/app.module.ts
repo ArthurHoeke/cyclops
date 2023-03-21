@@ -11,19 +11,40 @@ import { FormsModule } from '@angular/forms';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { RouterModule } from '@angular/router';
 
+import { HttpClientModule } from '@angular/common/http';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { ToastrModule } from 'ngx-toastr';
+
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function getAccessToken() {
+  return localStorage.getItem("accessToken");
+}
+
 @NgModule({
   declarations: [
     AppComponent,
     DashboardComponent,
     LoginComponent,
-    SettingsComponent
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgChartsModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: getAccessToken,
+        allowedDomains: ["localhost", "cyclops.decentradot.com"]
+      },
+    }),
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent]

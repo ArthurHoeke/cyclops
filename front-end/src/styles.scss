@@ -82,7 +82,16 @@ nav {
             color: #FFF !important;
         }
     }
+
+    #right {
+        #logoutButton {
+            font-weight: 600;
+            color: #ff5072;
+            cursor: pointer;
+        }
+    }
 }
 
-//select
-
+.ngx-toastr {
+    box-shadow: none !important;
+}

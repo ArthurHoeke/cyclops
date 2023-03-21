@@ -5,6 +5,9 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType, ChartOptions, Cha
 import { CoingeckoService } from 'src/app/services/coingecko/coingecko.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { Router } from '@angular/router';
+
 import gradient from 'chartjs-plugin-gradient';
 
 @Component({
@@ -18,7 +21,7 @@ export class DashboardComponent {
   //// ViewChild decorator that assigns BaseChartDirective to chart variable
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService) {
+  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private authenticationService: AuthenticationService, private router: Router) {
     Chart.register(gradient);
   }
 
@@ -347,5 +350,10 @@ export class DashboardComponent {
         }
       }
     } 
+  }
+
+  public logout() {
+    this.authenticationService.clearAccessToken();
+    this.router.navigate(['/']);
   }
 }

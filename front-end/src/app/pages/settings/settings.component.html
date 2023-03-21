@@ -4,6 +4,9 @@
         <a [routerLink]="['/dashboard']">Dashboard</a>
         <a [routerLink]="['/settings']" class="active">Settings</a>
     </div>
+    <div id="right">
+        <a id="logoutButton" (click)="logout()">Logout</a>
+    </div>
 </nav>
 <main class="container">
     <div class="row">
