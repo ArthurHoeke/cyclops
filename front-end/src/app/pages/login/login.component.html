@@ -8,7 +8,7 @@
             </div>
             <div class="form-group">
                 <label for="password">Password *</label>
-                <input type="password" name="password" [(ngModel)]="password" placeholder="Your password" required>
+                <input (keydown.enter)="login()" type="password" name="password" [(ngModel)]="password" placeholder="Your password" required>
             </div>
             <a>Forgot password?</a>
             <button id="login" (click)="login()">Log in</button>
@@ -17,7 +17,7 @@
                 <p>OR</p>
                 <span></span>
             </div>
-            <button id="register">Create new account</button>
+            <button id="register" (click)="register()">Create new account</button>
         </div>
     </main>
     <aside>

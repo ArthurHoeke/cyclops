@@ -86,8 +86,16 @@ nav {
     #right {
         #logoutButton {
             font-weight: 600;
-            color: #ff5072;
             cursor: pointer;
+
+            svg {
+                width: 30px;
+                transition: .3s ease;
+            }
+
+            svg:hover {
+                transform: scale(1.1);
+            }
         }
     }
 }

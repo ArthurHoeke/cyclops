@@ -5,7 +5,13 @@
         <a [routerLink]="['/settings']">Settings</a>
     </div>
     <div id="right">
-        <a id="logoutButton" (click)="logout()">Logout</a>
+        <a id="logoutButton" (click)="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" class="ai ai-SignOut">
+                <path d="M13 12h9m0 0l-3.333-4M22 12l-3.333 4" />
+                <path
+                    d="M14 7V5.174a2 2 0 0 0-2.166-1.993l-8 .666A2 2 0 0 0 2 5.84v12.32a2 2 0 0 0 1.834 1.993l8 .667A2 2 0 0 0 14 18.826V17" />
+            </svg></a>
     </div>
 </nav>
 <main class="container">
@@ -36,44 +42,18 @@
                         </svg>
                         Add validator</button>
                 </div>
-                <div id="validatorList">
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(1)}"
-                        (click)="dashboardService.selectValidator(1)">
+                <div id="validatorList" *ngFor="let validator of dashboardService.validatorList; index as i;">
+                    <div class="validator mt-3" [ngClass]="{'active' : isActive(i+1)}"
+                        (click)="dashboardService.selectValidator(i+1)">
                         <div class="logoWrapper">
-                            <img src="assets/logo/dot.png">
+                            <!-- <img [src]="validator."> -->
                         </div>
                         <div class="detailsWrapper">
                             <div>
-                                <p>Amsterdam</p>
+                                <p>{{validator.name}}</p>
                                 <span class="active">Active</span>
                             </div>
-                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
-                        </div>
-                    </div>
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(2)}"
-                        (click)="dashboardService.selectValidator(2)">
-                        <div class="logoWrapper">
-                            <img src="assets/logo/ksm.png">
-                        </div>
-                        <div class="detailsWrapper">
-                            <div>
-                                <p>Dublin</p>
-                                <span class="waiting">Waiting</span>
-                            </div>
-                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
-                        </div>
-                    </div>
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(3)}"
-                        (click)="dashboardService.selectValidator(3)">
-                        <div class="logoWrapper">
-                            <img src="assets/logo/astar.png">
-                        </div>
-                        <div class="detailsWrapper">
-                            <div>
-                                <p>Paris</p>
-                                <span class="offline">Offline</span>
-                            </div>
-                            <p class="address mt-2">15wznkm7fMaJLFaw7B8KrJWkD3kdI2..</p>
+                            <p class="address mt-2">{{validator.address}}</p>
                         </div>
                     </div>
                 </div>
@@ -162,17 +142,20 @@
                                         <tr>
                                             <td><img src="assets/logo/dot.png"></td>
                                             <td>$8.23</td>
-                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg"> 2.34%</td>
+                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg">
+                                                2.34%</td>
                                         </tr>
                                         <tr>
                                             <td><img src="assets/logo/ksm.png"></td>
                                             <td>$28.23</td>
-                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg"> 3.72%</td>
+                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg">
+                                                3.72%</td>
                                         </tr>
                                         <tr>
                                             <td><img src="assets/logo/astar.png"></td>
                                             <td>$0.086</td>
-                                            <td class="priceChangeWrapper down"><img src="assets/icons/caret_down.svg"> -1.13%</td>
+                                            <td class="priceChangeWrapper down"><img src="assets/icons/caret_down.svg">
+                                                -1.13%</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -384,23 +367,31 @@
                                             <th>Action</th>
                                         </tr>
                                         <tr>
-                                            <td><select class="select select_up" id="historyMonthSwitch" onchange="switchHistory()">
-                                                <option value="0">Jan</option>
-                                                <option value="1">Feb</option>
-                                                <option value="2">Mar</option>
-                                                <option value="3">Apr</option>
-                                                <option value="4">May</option>
-                                                <option value="5">Jun</option>
-                                                <option value="6">Jul</option>
-                                                <option value="7">Aug</option>
-                                                <option value="8">Sep</option>
-                                                <option value="9">Oct</option>
-                                                <option value="10">Nov</option>
-                                                <option value="11">Dec</option>
-                                            </select></td>
+                                            <td><select class="select select_up" id="historyMonthSwitch"
+                                                    onchange="switchHistory()">
+                                                    <option value="0">Jan</option>
+                                                    <option value="1">Feb</option>
+                                                    <option value="2">Mar</option>
+                                                    <option value="3">Apr</option>
+                                                    <option value="4">May</option>
+                                                    <option value="5">Jun</option>
+                                                    <option value="6">Jul</option>
+                                                    <option value="7">Aug</option>
+                                                    <option value="8">Sep</option>
+                                                    <option value="9">Oct</option>
+                                                    <option value="10">Nov</option>
+                                                    <option value="11">Dec</option>
+                                                </select></td>
                                             <td>255.70 DOT</td>
                                             <td>$1656.93</td>
-                                            <td><button><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-Download"><path d="M12 15V3m0 12l-4-4m4 4l4-4"/><path d="M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.439a2 2 0 0 0 1.94-1.515L22 17"/></svg> Income report</button></td>
+                                            <td><button><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                        class="ai ai-Download">
+                                                        <path d="M12 15V3m0 12l-4-4m4 4l4-4" />
+                                                        <path
+                                                            d="M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.439a2 2 0 0 0 1.94-1.515L22 17" />
+                                                    </svg> Income report</button></td>
                                         </tr>
                                     </table>
                                 </div>

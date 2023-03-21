@@ -57,11 +57,44 @@ export class ApiService {
             resolve(res);
           }
         ).catch((err) => {
-          // if(err.status == 200) {
-          //   resolve(err);
-          // } else {
-          //   reject(err);
-          // }
+          console.log(err);
+        });
+    });
+    return promise;
+  }
+
+  getValidators() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "validator/list";
+      this.http.get(apiURL, {
+        headers: new HttpHeaders()
+          .set('auth-token', this.authenticationService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          console.log(err);
+        });
+    });
+    return promise;
+  }
+
+  getNetworks() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "network/list";
+      this.http.get(apiURL, {
+        headers: new HttpHeaders()
+          .set('auth-token', this.authenticationService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
           console.log(err);
         });
     });

@@ -114,6 +114,11 @@ button {
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
+    transition: .3s ease;
+}
+
+button:hover {
+    transform: scale(0.95);
 }
 
 button#register {
@@ -145,20 +150,21 @@ a {
     justify-content: center;
     margin-top: 20px;
     margin-bottom: 20px;
-}
 
-#seperator p {
-    color: #4C5370;
-    font-weight: 600;
-    margin-left: 15px;
-    margin-right: 15px;
-    font-size: 12px;
-}
+    p {
+        color: #4C5370;
+        font-weight: 600;
+        margin-left: 15px;
+        margin-right: 15px;
+        font-size: 12px;
+        margin-bottom: 0;
+    }
 
-#seperator span {
-    width: 40%;
-    background-color: #4C5370;
-    height: 2px;
+    span {
+        width: 40%;
+        background-color: #4C5370;
+        height: 2px;
+    }
 }
 
 @media only screen and (max-width: 1500px) {

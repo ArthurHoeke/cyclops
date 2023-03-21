@@ -16,7 +16,7 @@ export class AuthenticationService {
   }
 
   public getAccessToken() {
-    return localStorage.getItem("accessToken");
+    return String(localStorage.getItem("accessToken"));
   }
 
   public clearAccessToken() {
@@ -24,6 +24,11 @@ export class AuthenticationService {
   }
 
   public isAuthenticated() {
-    return !this.jwtHelper.isTokenExpired(this.getAccessToken());
+    const jwt = this.getAccessToken();
+    if(jwt != "null") {
+      return !this.jwtHelper.isTokenExpired(this.getAccessToken());
+    } else {
+      return false;
+    }
   }
 }

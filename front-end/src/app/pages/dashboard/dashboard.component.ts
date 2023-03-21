@@ -6,6 +6,7 @@ import { CoingeckoService } from 'src/app/services/coingecko/coingecko.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { ApiService } from 'src/app/services/api/api.service';
 import { Router } from '@angular/router';
 
 import gradient from 'chartjs-plugin-gradient';
@@ -18,11 +19,14 @@ import gradient from 'chartjs-plugin-gradient';
 
 export class DashboardComponent {
 
-  //// ViewChild decorator that assigns BaseChartDirective to chart variable
+  // ViewChild decorator that assigns BaseChartDirective to chart variable
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private authenticationService: AuthenticationService, private router: Router) {
+  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private authenticationService: AuthenticationService, private router: Router, private apiService: ApiService) {
     Chart.register(gradient);
+
+    dashboardService.getNetworkList();
+    dashboardService.getValidatorList();
   }
 
   // Function used in HTML to check if 'active' CSS class can be added to panel button

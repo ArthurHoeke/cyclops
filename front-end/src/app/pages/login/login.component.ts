@@ -38,4 +38,20 @@ export class LoginComponent {
       });
     });
   }
+
+  public register() {
+    this.apiService.register(this.email, this.password).then((data: any) => {
+      this.toastr.success('Registered successfully!', "", {
+        positionClass: "toast-top-left"
+      });
+
+      this.authenticationService.setAccessToken(data.accessToken);
+      this.router.navigate(['/dashboard']);
+    }).catch((err) => {
+      console.error(err)
+      this.toastr.error('An account already exists with this e-mail.', "", {
+        positionClass: "toast-top-left"
+      });
+    });
+  }
 }

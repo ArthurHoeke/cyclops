@@ -31,8 +31,6 @@ export class CoingeckoService {
       arr.push(this.randomIntFromInterval(min, max, 2));
     }
 
-    console.log(arr)
-
     return arr;
   }
 
@@ -42,8 +40,6 @@ export class CoingeckoService {
     for(let i = 0; i < size; i++) {
       arr.push("");
     }
-
-    console.log(arr)
 
     return arr;
   }
