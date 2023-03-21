@@ -1,3 +1,4 @@
+var cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser')
 const sqlite3 = require('sqlite3').verbose();
@@ -17,7 +18,8 @@ const testUtil = require('./app/Services/test.services');
 
 validatorService = require('./app/Services/validator.services');
 
-app = express()
+app = express();
+app.use(cors());
 const port = 3000;
 
 //global config variables

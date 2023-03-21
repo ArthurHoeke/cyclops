@@ -2,6 +2,7 @@ const createValidatorTable = () => {
     const sqlQuery = `
         CREATE TABLE IF NOT EXISTS validator (
         id integer PRIMARY KEY AUTOINCREMENT,
+        name varchar,
         address varchar UNIQUE,
         networkId integer,
         userId integer,
@@ -14,7 +15,7 @@ const createValidatorTable = () => {
 createValidatorTable();
 
 const add = (data, cb) => {
-    return database.run('INSERT INTO validator (address, networkId, userId) VALUES (?,?,?)', data, (err) => {
+    return database.run('INSERT INTO validator (name, address, networkId, userId) VALUES (?,?,?)', data, (err) => {
         cb(err)
     });
 }

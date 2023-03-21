@@ -1,12 +1,13 @@
 const validator = require("../Models/validator.models");
 
 const add = async (req, res) => {
+    const name = req.body.name;
     const address = req.body.address;
     const networkId = req.body.networkId;
     const userId = req.user.id;
 
-    if (address != null && networkId != null) {
-        validator.add([address, networkId, userId], (err, data) => {
+    if (name != null || address != null && networkId != null) {
+        validator.add([name, address, networkId, userId], (err, data) => {
             if (err) {
                 res.sendStatus(500);
             } else {
