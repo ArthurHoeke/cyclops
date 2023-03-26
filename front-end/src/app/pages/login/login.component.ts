@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api/api.service';
 import { ToastrService } from 'ngx-toastr';
 
 import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 
 import { Router } from '@angular/router';
 
@@ -14,9 +15,15 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  constructor(private apiService: ApiService, private toastr: ToastrService, private authenticationService: AuthenticationService, private router: Router) {
-    if(authenticationService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+  constructor(private apiService: ApiService, private toastr: ToastrService, private authenticationService: AuthenticationService, private storageService: StorageService, private router: Router) {
+    if (storageService.getAccessToken() !== String(null)) {
+      authenticationService.verifyJWT().then((data: any) => {
+        if (data.role != null) {
+          this.authenticationService.setRole(data.role);
+          this.authenticationService.setAuthenticationStatus(true);
+          this.router.navigate(['/dashboard']);
+        }
+      })
     }
   }
 
@@ -29,7 +36,8 @@ export class LoginComponent {
         positionClass: "toast-top-left"
       });
 
-      this.authenticationService.setAccessToken(data.accessToken);
+      this.storageService.setAccessToken(data.accessToken);
+      this.authenticationService.setAuthenticationStatus(true);
       this.router.navigate(['/dashboard']);
     }).catch((err) => {
       console.error(err)
@@ -45,7 +53,7 @@ export class LoginComponent {
         positionClass: "toast-top-left"
       });
 
-      this.authenticationService.setAccessToken(data.accessToken);
+      this.storageService.setAccessToken(data.accessToken);
       this.router.navigate(['/dashboard']);
     }).catch((err) => {
       console.error(err)

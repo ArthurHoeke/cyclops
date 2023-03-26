@@ -5,7 +5,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 
-import { AuthenticationGuard } from './services/authentication.guard';
+import { AuthenticationGuard } from './guards/authentication.guard';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },

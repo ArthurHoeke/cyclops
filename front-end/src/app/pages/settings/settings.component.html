@@ -34,9 +34,9 @@
                                     <tr>
                                         <td><b>Subscan API Key</b></td>
                                         <td>
-                                            <input type="text" placeholder="Enter API key">
+                                            <input type="text" placeholder="Enter API key" [(ngModel)]="subscanApiKey">
                                         </td>
-                                        <td><button disabled>Update</button></td>
+                                        <td><button (click)="updateApiKey()" [disabled]="subscanApiKey.length == 0">Update</button></td>
                                     </tr>
                                     <tr>
                                         <td><b>Data update rate</b></td>

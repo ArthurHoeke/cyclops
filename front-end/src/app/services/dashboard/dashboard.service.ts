@@ -9,22 +9,38 @@ export class DashboardService {
   // Number variable that keeps track of the selected validator and used for panel switching
   // index 0 = overview
   private selectedValidator: Number = 0;
+  private syncing: Boolean = false;
 
   public validatorList: any = [];
   public networkList: any = [];
 
+  public pastEraPercentage = 50;
+  public leftEraPercentage = 50;
+
   constructor(private apiService: ApiService) { }
 
-  public getValidatorList() {
-    this.apiService.getValidators().then((res: any) => {
+  public updateDashboardData() {
+    this.updateNetworkList();
+    this.updateValidatorList();
+  }
+
+  public toggleSyncing() {
+    this.syncing = !this.syncing
+  }
+
+  public isSyncing() {
+    return this.syncing;
+  }
+
+  public async updateValidatorList() {
+    await this.apiService.getValidators().then((res: any) => {
       this.validatorList = res['data'];
-      console.log(this.validatorList)
     }).catch((err) => {
       console.log(err);
     })
   }
 
-  public getNetworkList() {
+  public updateNetworkList() {
     this.apiService.getNetworks().then((res: any) => {
       this.networkList = res['data'];
     }).catch((err) => {
@@ -32,7 +48,11 @@ export class DashboardService {
     })
   }
 
+  private getSelectedValidatorData(valIndex: Number) {
+  }
+
   public selectValidator(index: Number) {
+    this.getSelectedValidatorData(index);
     this.selectedValidator = index;
   }
 

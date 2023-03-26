@@ -5,9 +5,12 @@ import { ChartConfiguration, ChartData, ChartEvent, ChartType, ChartOptions, Cha
 import { CoingeckoService } from 'src/app/services/coingecko/coingecko.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
 
-import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { StorageService } from 'src/app/services/storage/storage.service';
 import { ApiService } from 'src/app/services/api/api.service';
 import { Router } from '@angular/router';
+
+import { AuthenticationService } from 'src/app/services/authentication/authentication.service';
+import { ToastrService } from 'ngx-toastr';
 
 import gradient from 'chartjs-plugin-gradient';
 
@@ -22,24 +25,78 @@ export class DashboardComponent {
   // ViewChild decorator that assigns BaseChartDirective to chart variable
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
-  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private authenticationService: AuthenticationService, private router: Router, private apiService: ApiService) {
+  constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private storageService: StorageService, private router: Router, private authenticationService: AuthenticationService, private apiService: ApiService, private toastr: ToastrService) {
     Chart.register(gradient);
 
-    dashboardService.getNetworkList();
-    dashboardService.getValidatorList();
+    dashboardService.updateDashboardData();
+  }
+
+  public truncateString(str: string, num: number) {
+    if (str.length <= num) {
+      return str
+    }
+    return str.slice(0, num) + '...'
+  }
+
+  public toggleModal(modal: HTMLDivElement) {
+    if (modal.classList.contains("showModal")) {
+      modal.classList.remove("showModal");
+    } else {
+      modal.classList.add("showModal");
+    }
+  }
+
+  public async submitValidator(name: string, address: string, network: any, modal: HTMLDivElement) {
+    if(name != "" && address != "" && network != "") {
+      this.apiService.addValidator(name, address, network).then(async (data) => {
+        this.toastr.warning("This may take a couple minutes", "Starting to sync..", {
+          positionClass: "toast-top-left"
+        });
+
+        //update validator list
+        await this.dashboardService.updateValidatorList();
+
+        this.dashboardService.toggleSyncing();
+
+        await this.apiService.syncValidator(this.dashboardService.validatorList[this.dashboardService.validatorList.length-1].id).then((data) => {
+          this.toastr.success('Validator synced!', "", {
+            positionClass: "toast-top-left"
+          });
+        }).catch((err) => {
+          this.toastr.error('Unable to sync validator.', "", {
+            positionClass: "toast-top-left"
+          });
+        });
+
+        this.toggleModal(modal);
+        this.dashboardService.toggleSyncing();
+      }).catch((err) => {
+        this.toastr.error('Something went wrong.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    } else {
+      this.toastr.error('Fill in all fields.', "", {
+        positionClass: "toast-top-left"
+      });
+    }
   }
 
   // Function used in HTML to check if 'active' CSS class can be added to panel button
   isActive(index: Number) {
-    if(this.dashboardService.getSelectedValidator() == index) {
+    if (this.dashboardService.getSelectedValidator() == index) {
       return true;
     } else {
       return false;
     }
   }
 
+  isAdmin() {
+    return this.authenticationService.isAdmin();
+  }
+
   onOverview() {
-    if(this.isActive(0)) {
+    if (this.isActive(0)) {
       return true;
     } else {
       return false;
@@ -146,7 +203,7 @@ export class DashboardComponent {
   public eraProgressData: ChartData<'doughnut', number[], string | string[]> = {
     labels: ['Past', 'Left'],
     datasets: [{
-      data: [87, 13],
+      data: [this.dashboardService.pastEraPercentage, this.dashboardService.leftEraPercentage],
       backgroundColor: [
         '#78023B',
         '#313035',
@@ -155,7 +212,7 @@ export class DashboardComponent {
       borderRadius: 5,
       borderWidth: 0,
       spacing: 0,
-      
+
     }]
   };
 
@@ -202,7 +259,7 @@ export class DashboardComponent {
       pointBorderColor: "white",
       fill: true,
     }],
-    
+
   };
 
   lineChartOptions: any = {
@@ -233,7 +290,7 @@ export class DashboardComponent {
           display: false
         }
       }
-    } 
+    }
   }
 
 
@@ -294,7 +351,7 @@ export class DashboardComponent {
           display: false
         }
       }
-    } 
+    }
   }
 
 
@@ -353,11 +410,11 @@ export class DashboardComponent {
           display: false
         }
       }
-    } 
+    }
   }
 
   public logout() {
-    this.authenticationService.clearAccessToken();
+    this.storageService.clearAccessToken();
     this.router.navigate(['/']);
   }
 }

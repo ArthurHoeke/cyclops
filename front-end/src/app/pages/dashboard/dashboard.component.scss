@@ -367,5 +367,64 @@ main {
     }
 }
 
+.modal {
+    background-color: rgba(0, 0, 0, .5);
+    --bs-modal-header-border-color: #202127;
+    --bs-modal-footer-border-color: #202127;
+    --bs-form-control-bg: #202127;
+    --bs-border-color: #202127;
+    --bs-body-color: white;
+}
 
-//select
+
+.showModal {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    color: black;
+}
+
+.modal-content {
+    background-color: #111217;
+    border: 1px solid #202127;
+    color: white;
+    width: 500px;
+}
+
+.modal-footer button {
+    color: white;
+}
+
+.form-control::placeholder {
+    color: gray;
+}
+
+#syncButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed
+}
+
+#syncButton svg {
+    margin-right: 10px;
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .modal-content {
+        width: 325px;
+    }
+}

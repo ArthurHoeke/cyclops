@@ -2,7 +2,7 @@
     <div id="left">
         <img src="assets/logo/cyclops.svg" id="logo">
         <a [routerLink]="['/dashboard']" class="active">Dashboard</a>
-        <a [routerLink]="['/settings']">Settings</a>
+        <a [routerLink]="['/settings']" *ngIf="isAdmin()">Settings</a>
     </div>
     <div id="right">
         <a id="logoutButton" (click)="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
@@ -36,7 +36,8 @@
                                 d="M11.3888 7.72223H8.33328C7.99577 7.72223 7.72217 7.99583 7.72217 8.33334V11.3889C7.72217 11.7264 7.99577 12 8.33328 12H11.3888C11.7263 12 11.9999 11.7264 11.9999 11.3889V8.33334C11.9999 7.99583 11.7263 7.72223 11.3888 7.72223Z"
                                 stroke-linecap="round" stroke-linejoin="round" />
                         </svg>Overview</button>
-                    <button><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
+                    <button (click)="toggleModal(addValidatorModal)" data-toggle="modal" data-target="#exampleModal"
+                        data-whatever="@mdo"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
                             xmlns="http://www.w3.org/2000/svg">
                             <path d="M6 11V6M6 6V1M6 6H11M6 6H1" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
@@ -46,14 +47,14 @@
                     <div class="validator mt-3" [ngClass]="{'active' : isActive(i+1)}"
                         (click)="dashboardService.selectValidator(i+1)">
                         <div class="logoWrapper">
-                            <!-- <img [src]="validator."> -->
+                            <img [src]="dashboardService.networkList[validator.networkId-1]['icon']">
                         </div>
                         <div class="detailsWrapper">
                             <div>
                                 <p>{{validator.name}}</p>
                                 <span class="active">Active</span>
                             </div>
-                            <p class="address mt-2">{{validator.address}}</p>
+                            <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
                         </div>
                     </div>
                 </div>
@@ -139,23 +140,11 @@
                                             <th>Price</th>
                                             <th>Change</th>
                                         </tr>
-                                        <tr>
-                                            <td><img src="assets/logo/dot.png"></td>
+                                        <tr *ngFor="let network of dashboardService.networkList">
+                                            <td><img [src]="network.icon"></td>
                                             <td>$8.23</td>
                                             <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg">
                                                 2.34%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="assets/logo/ksm.png"></td>
-                                            <td>$28.23</td>
-                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg">
-                                                3.72%</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="assets/logo/astar.png"></td>
-                                            <td>$0.086</td>
-                                            <td class="priceChangeWrapper down"><img src="assets/icons/caret_down.svg">
-                                                -1.13%</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -403,3 +392,49 @@
         </section>
     </div>
 </main>
+
+
+<div class="modal fade" #addValidatorModal tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new validator</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Network:</label>
+                        <select class="form-control" #addValNetwork>
+                            <option *ngFor="let network of dashboardService.networkList;" [value]="network.id">
+                                {{network.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Validator name:</label>
+                        <input class="form-control" type="text" placeholder="Amsterdam" #addValName>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Address:</label>
+                        <input class="form-control" type="text" placeholder="15wznkm7fMaJLFaw7B8K.." #addValAddress>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal" *ngIf="!dashboardService.isSyncing()"
+                    (click)="toggleModal(addValidatorModal)">Cancel</button>
+
+                <button type="button" class="btn btn-dark" *ngIf="!dashboardService.isSyncing()"
+                    (click)="submitValidator(addValName.value, addValAddress.value, addValNetwork.value, addValidatorModal)">Submit
+                    validator</button>
+                <button type="button" class="btn btn-dark" *ngIf="dashboardService.isSyncing()" id="syncButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round" class="ai ai-ArrowCycle">
+                    <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
+                    <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
+                    <path d="M7 17l-4-1-1 4" />
+                    <path d="M17 7l4 1 1-4" />
+                </svg>Syncing..</button>
+            </div>
+        </div>
+    </div>
+</div>
