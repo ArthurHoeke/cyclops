@@ -57,7 +57,7 @@ Contains all end-points implementing controller functionality.
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `add`                             | `POST`     | `validator/add`                          | `name (string)` `address (string)` `id (network ID integer)`                     | `1`   |
+| `add`                             | `POST`     | `validator/add`                          | `name (string)` `address (string)` `networkId (network ID integer)`                     | `1`   |
 | `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
 | `list`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
 
