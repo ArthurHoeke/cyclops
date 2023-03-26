@@ -1,6 +1,7 @@
 const dataUtil = require("../Utils/data.utils");
 const User = require("../Models/user.models");
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
   let email = req.body.email;
@@ -69,6 +70,23 @@ const login = async (req, res) => {
   }
 };
 
+const verify = async (req, res) => {
+  const token = req.header("auth-token");
+
+  if (token) {
+    try {
+      const verified = jwt.verify(token, JWT_SECRET);
+      res.status(200).json({
+        role: verified.role
+      });
+    } catch (err) {
+      res.status(401).send({ error: "Authentication failed, something went wrong." });
+    }
+  } else {
+    res.sendStatus(400);
+  }
+};
+
 async function getUserEmailById() {
   return new Promise((resolve) => {
       User.getUserEmailById(async (err, data) => {
@@ -80,5 +98,6 @@ async function getUserEmailById() {
 module.exports = {
   register,
   login,
-  getUserEmailById
+  getUserEmailById,
+  verify
 };

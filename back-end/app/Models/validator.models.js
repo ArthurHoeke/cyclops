@@ -15,7 +15,7 @@ const createValidatorTable = () => {
 createValidatorTable();
 
 const add = (data, cb) => {
-    return database.run('INSERT INTO validator (name, address, networkId, userId) VALUES (?,?,?)', data, (err) => {
+    return database.run('INSERT INTO validator (name, address, networkId, userId) VALUES (?,?,?,?)', data, (err) => {
         cb(err)
     });
 }
