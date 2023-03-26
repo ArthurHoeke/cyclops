@@ -52,7 +52,7 @@
                         <div class="detailsWrapper">
                             <div>
                                 <p>{{validator.name}}</p>
-                                <span class="active">Active</span>
+                                <span class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
                             </div>
                             <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
                         </div>
@@ -114,7 +114,7 @@
                                             <p>{{dashboardService.getTotalCombinedRewards()}}</p>
                                             <p>All-time Rewards</p>
                                         </div>
-                                        <canvas baseChart class="chart" [data]="incomePieData"
+                                        <canvas baseChart class="chart" [data]="dashboardService.incomePieData"
                                             [options]="incomeChartOption" [type]="incomeChartType">
                                         </canvas>
                                     </div>
@@ -158,7 +158,7 @@
                                     <p>Combined daily rewards</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dailyIncomeData"
+                                    <canvas baseChart class="chart" [data]="dashboardService.dailyIncomeData"
                                         [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
                                         style="max-height: 300px;">
                                     </canvas>
@@ -259,7 +259,7 @@
                                     <p>$ 7.58 per <img src="assets/logo/dot.png"></p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="tokenChartData"
+                                    <canvas baseChart class="chart" [data]="dashboardService.tokenChartData"
                                         [options]="tokenChartOptions" [type]="lineChartType"
                                         style="width: 100%; height: 200px;"></canvas>
                                 </div>
@@ -273,7 +273,7 @@
                                     <p>Weekly overview</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dailyIncomeData"
+                                    <canvas baseChart class="chart" [data]="dashboardService.dailyIncomeData"
                                         [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
                                         style="max-height: 300px;">
                                     </canvas>
@@ -324,18 +324,18 @@
                                     <p>Stash balance</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="lineChartData" [options]="lineChartOptions"
+                                    <canvas baseChart class="chart" [data]="dashboardService.lineChartData" [options]="lineChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3" *ngIf="dashboardService.isActive()">
                             <div class="card">
                                 <div class="head">
                                     <p>ERA points</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="eraChartData" [options]="eraChartOptions"
+                                    <canvas baseChart class="chart" [data]="dashboardService.eraChartData" [options]="eraChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
