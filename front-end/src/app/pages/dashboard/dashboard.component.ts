@@ -1,6 +1,6 @@
 import { Component, ViewChild, Directive, Input, Output, EventEmitter } from '@angular/core';
 import { BaseChartDirective } from 'ng2-charts';
-import { ChartConfiguration, ChartData, ChartEvent, ChartType, ChartOptions, Chart } from 'chart.js';
+import { ChartData, ChartType, Chart } from 'chart.js';
 
 import { CoingeckoService } from 'src/app/services/coingecko/coingecko.service';
 import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
@@ -47,7 +47,7 @@ export class DashboardComponent {
   }
 
   public async submitValidator(name: string, address: string, network: any, modal: HTMLDivElement) {
-    if(name != "" && address != "" && network != "") {
+    if (name != "" && address != "" && network != "") {
       this.apiService.addValidator(name, address, network).then(async (data) => {
         this.toastr.warning("This may take a couple minutes", "Starting to sync..", {
           positionClass: "toast-top-left"
@@ -58,7 +58,7 @@ export class DashboardComponent {
 
         this.dashboardService.toggleSyncing();
 
-        await this.apiService.syncValidator(this.dashboardService.validatorList[this.dashboardService.validatorList.length-1].id).then((data) => {
+        await this.apiService.syncValidator(this.dashboardService.validatorList[this.dashboardService.validatorList.length - 1].id).then((data) => {
           this.toastr.success('Validator synced!', "", {
             positionClass: "toast-top-left"
           });
@@ -193,28 +193,11 @@ export class DashboardComponent {
     }
   }
 
-
   //-------------------------
   // Validator functionality
   //-------------------------
 
   eraProgressChartType: ChartType = 'doughnut';
-
-  public eraProgressData: ChartData<'doughnut', number[], string | string[]> = {
-    labels: ['Past', 'Left'],
-    datasets: [{
-      data: [this.dashboardService.pastEraPercentage, this.dashboardService.leftEraPercentage],
-      backgroundColor: [
-        '#78023B',
-        '#313035',
-      ],
-      borderAlign: 'center',
-      borderRadius: 5,
-      borderWidth: 0,
-      spacing: 0,
-
-    }]
-  };
 
   eraProgressChartOption: any = {
     cutout: '90%',
@@ -411,6 +394,10 @@ export class DashboardComponent {
         }
       }
     }
+  }
+
+  public round(percentage: number) {
+    return Math.round(percentage);
   }
 
   public logout() {

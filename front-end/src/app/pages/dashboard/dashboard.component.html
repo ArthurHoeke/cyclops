@@ -242,10 +242,10 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p id="eraPercentage">87%</p>
+                                            <p id="eraPercentage">{{round(dashboardService.pastEraPercentage)}} %</p>
                                             <p id="eraDescription">ERA progress</p>
                                         </div>
-                                        <canvas baseChart class="chart eraPie" [data]="eraProgressData"
+                                        <canvas baseChart class="chart eraPie" [data]="dashboardService.eraProgressData"
                                             [options]="eraProgressChartOption" [type]="eraProgressChartType">
                                         </canvas>
                                     </div>
