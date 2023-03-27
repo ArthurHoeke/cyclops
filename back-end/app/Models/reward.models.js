@@ -67,6 +67,11 @@ const getCombinedWeeklyRewards = (data, cb) => {
     });
 }
 
+const getIncomeDistribution = (data, cb) => {
+    return database.all(`SELECT validatorId, validator.networkId, SUM(amount) AS totalEarned FROM reward JOIN validator ON validatorId = validator.id WHERE userId = ? GROUP BY validatorId`, data, (err, row) => {
+        cb(err, row)
+    });
+}
 
 module.exports = {
     add,
@@ -76,5 +81,6 @@ module.exports = {
     getMonthlyRewardsFromValidator,
     getYearlyRewardsFromValidator,
     getCombinedWeeklyRewards,
-    getValidatorRewardOverview
+    getValidatorRewardOverview,
+    getIncomeDistribution
 };

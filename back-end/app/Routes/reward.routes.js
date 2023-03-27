@@ -13,4 +13,5 @@ router.get('/getMonthlyRewardsFromValidator', isLoggedIn, rewardControllers.getM
 router.get('/getYearlyRewardsFromValidator', isLoggedIn, rewardControllers.getYearlyRewardsFromValidator);
 router.get('/getCombinedWeeklyRewards', isLoggedIn, rewardControllers.getCombinedWeeklyRewards);
 router.get('/getValidatorRewardOverview', isLoggedIn, rewardControllers.getValidatorRewardOverview);
+router.get('/getIncomeDistribution', isLoggedIn, rewardControllers.getIncomeDistribution);
 module.exports = router

@@ -4,9 +4,10 @@ const create = async (req, res) => {
     const name = req.body.name;
     const ticker = req.body.ticker;
     const icon = req.body.icon;
+    const decimals = req.body.decimals
 
     if (name != null && ticker != null && icon != null) {
-        network.create([name.toLowerCase(), ticker.toLowerCase(), icon], (err) => {
+        network.create([name.toLowerCase(), ticker.toLowerCase(), icon, decimals], (err) => {
             if (err) {
                 res.sendStatus(500);
             } else {

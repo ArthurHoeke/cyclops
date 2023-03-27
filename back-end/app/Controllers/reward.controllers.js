@@ -106,6 +106,19 @@ const getValidatorRewardOverview = async (req, res) => {
     });
 };
 
+const getIncomeDistribution = async (req, res) => {
+    const userId = req.user.id;
+    reward.getIncomeDistribution([userId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
 const requestSync = async (req, res) => {
     const validatorId = req.body.id;
 
@@ -142,5 +155,6 @@ module.exports = {
     getMonthlyRewardsFromValidator,
     getYearlyRewardsFromValidator,
     getCombinedWeeklyRewards,
-    getValidatorRewardOverview
+    getValidatorRewardOverview,
+    getIncomeDistribution
 };
