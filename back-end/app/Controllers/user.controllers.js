@@ -80,7 +80,7 @@ const verify = async (req, res) => {
         role: verified.role
       });
     } catch (err) {
-      res.status(401).send({ error: "Authentication failed, something went wrong." });
+      res.status(401).json({ error: "Authentication failed, something went wrong." });
     }
   } else {
     res.sendStatus(400);
