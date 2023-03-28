@@ -19,6 +19,7 @@ main {
     section .card {
         background-color: #0D0C12;
         border: 1px solid #202127;
+        transition: .3s ease;
 
         .head {
             padding: 15px;
@@ -416,6 +417,12 @@ main {
 #syncButton svg {
     margin-right: 10px;
     animation: rotate 1s linear infinite;
+}
+
+.disabled {
+    opacity: 0.5;
+    filter: blur(3px);
+    pointer-events: none;
 }
 
 @keyframes rotate {

@@ -331,8 +331,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3" *ngIf="dashboardService.isActive()">
-                            <div class="card">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
                                     <p>ERA points</p>
                                 </div>
