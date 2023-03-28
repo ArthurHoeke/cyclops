@@ -42,7 +42,8 @@ async function periodicNetworkCheck() {
     getNetworkValidators();
     interval = setInterval(async function () {
         console.clear();
-        getNetworkValidators();
+        await getNetworkValidators();
+        await updateEraData();
     }, 5 * 60000);
 }
 

@@ -55,7 +55,7 @@ const getValidatorRewardOverview = (validatorId, cb) => {
     return database.all(`SELECT v.id AS validatorId, 'daily' AS period, strftime('%Y-%m-%d', r.timestamp, 'unixepoch') AS date, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} AND r.timestamp >= strftime('%s', 'now', 'start of day') GROUP BY v.id, date UNION 
     SELECT v.id AS validatorId, 'weekly' AS period, strftime('%Y-%W', r.timestamp, 'unixepoch') AS week, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} AND r.timestamp >= strftime('%s', 'now', 'weekday 0', '-7 days') AND r.timestamp < strftime('%s', 'now', 'weekday 0') GROUP BY v.id, week  UNION 
     SELECT v.id AS validatorId, 'monthly' AS period, strftime('%Y-%m', r.timestamp, 'unixepoch') AS month, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} AND r.timestamp >= strftime('%s', 'now', 'start of month') AND r.timestamp < strftime('%s', 'now', 'start of month', '+1 month') GROUP BY v.id, month UNION 
-    SELECT v.id AS validatorId, 'all-time' AS period, '' AS time, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} GROUP BY v.id, time;`, (err, row) => {
+    SELECT v.id AS validatorId, 'allTime' AS period, '' AS time, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} GROUP BY v.id, time;`, (err, row) => {
         cb(err, row)
     });
 }
