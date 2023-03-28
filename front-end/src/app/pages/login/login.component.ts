@@ -23,7 +23,7 @@ export class LoginComponent {
           this.authenticationService.setAuthenticationStatus(true);
           this.router.navigate(['/dashboard']);
         }
-      })
+      });
     }
   }
 

@@ -51,6 +51,24 @@ main {
     }
 
     section {
+        button {
+            border-radius: 100px;
+            border: 1px solid #202127;
+            background-color: #111217;
+            color: #cecece;
+            padding: 4px 12px;
+            transition: .3s ease;
+        }
+
+        button:hover {
+            background-color: #23242c;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
         .tableWrapper table {
             border-collapse: collapse;
             width: 100%;
@@ -142,3 +160,82 @@ main {
         }
     }
 }
+
+.modal {
+    background-color: rgba(0, 0, 0, .5);
+    --bs-modal-header-border-color: #202127;
+    --bs-modal-footer-border-color: #202127;
+    --bs-form-control-bg: #202127;
+    --bs-border-color: #202127;
+    --bs-body-color: white;
+}
+
+
+.showModal {
+    display: flex;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    color: black;
+}
+
+.modal-content {
+    background-color: #111217;
+    border: 1px solid #202127;
+    color: white;
+    width: 500px;
+}
+
+.modal-footer button {
+    color: white;
+}
+
+.form-control::placeholder {
+    color: gray;
+}
+
+#syncButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: not-allowed
+}
+
+#syncButton svg {
+    margin-right: 10px;
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media only screen and (max-width: 900px) {
+
+    .modal-content {
+        width: 325px;
+    }
+}
+
+#base64Preview {
+    width: 25px;
+    border-radius: 100px;
+    position: absolute;
+    right: 0;
+    margin-right: 24px;
+    margin-top: 45px;
+}
+
+input[type=file]::file-selector-button {
+    background-color: #212529;
+}
+
+input[type=file]::file-selector-button:hover {
+    background-color: #212529;
+  }

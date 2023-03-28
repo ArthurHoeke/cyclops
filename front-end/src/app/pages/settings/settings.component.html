@@ -58,7 +58,8 @@
                     <div class="col-md-12 col-lg-12 col-xl-7 mb-3">
                         <div class="card">
                             <div class="head">
-                                <p>Tokens</p>
+                                <p>Networks</p>
+                                <button (click)="toggleModal(addNetworkModal)">Create network</button>
                             </div>
                             <div class="body tableWrapper">
                                 <table>
@@ -142,3 +143,42 @@
         </section>
     </div>
 </main>
+
+<div class="modal fade" #addNetworkModal tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new network</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Network name:</label>
+                        <input class="form-control" type="text" placeholder="Kusama" #addNetworkName>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Ticker:</label>
+                        <input class="form-control" type="text" placeholder="KSM" #addNetworkTicker>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Icon:</label>
+                        <img [src]="base64Preview" id="base64Preview">
+                        <input class="form-control" type="file" accept="image/png, image/jpeg" #base64Upload (change)="encodeImageFileAsURL(base64Upload)" placeholder="KSM" #addNetworkIcon>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Decimals:</label>
+                        <input class="form-control" type="number" placeholder="10" #addNetworkDecimals>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal"
+                    (click)="toggleModal(addNetworkModal)">Cancel</button>
+
+                <button type="button" class="btn btn-dark"
+                    (click)="submitNetwork(addNetworkName.value, addNetworkTicker.value, base64Preview, addNetworkDecimals.value, addNetworkModal)">Submit
+                    validator</button>
+            </div>
+        </div>
+    </div>
+</div>

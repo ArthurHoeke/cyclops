@@ -311,20 +311,20 @@ main {
             top: 5px;
         }
 
-        li.blue:before {
-            background-color: #A7E2FD;
+        li:nth-of-type(1)::before {
+            background-color: #5CBD0C;
         }
 
-        li.red:before {
+        li:nth-of-type(2)::before {
+            background-color: #F7C217;
+        }
+        
+        li:nth-of-type(3)::before {
             background-color: #FF5072;
         }
 
-        li.yellow:before {
-            background-color: #F7C217;
-        }
-
-        li.green:before {
-            background-color: #5CBD0C;
+        li:nth-of-type(4)::before {
+            background-color: #A7E2FD;
         }
     }
 }

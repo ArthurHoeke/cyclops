@@ -86,6 +86,48 @@ export class ApiService {
     return promise;
   }
 
+  getIncomeDistribution() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/getIncomeDistribution";
+      this.http.get(apiURL, {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  getWeeklyRewardsFromValidator(validatorId: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/getWeeklyRewardsFromValidator";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   syncValidator(validatorId: string) {
     const body = new HttpParams()
       .set('id', validatorId)
@@ -154,6 +196,32 @@ export class ApiService {
       .set('networkId', networkId)
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "validator/add";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  addNetwork(name: string, ticker: string, icon: string, decimals: string) {
+    const body = new HttpParams()
+      .set('name', name)
+      .set('ticker', ticker)
+      .set('icon', icon)
+      .set('decimals', decimals)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "network/create";
       this.http.post(apiURL, body.toString(), {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')

@@ -111,18 +111,16 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p>{{dashboardService.getTotalCombinedRewards()}}</p>
+                                            <p>{{dashboardService.addThousandSeperator(dashboardService.getTotalCombinedRewards())}}</p>
                                             <p>All-time Rewards</p>
                                         </div>
-                                        <canvas baseChart class="chart" [data]="dashboardService.incomePieData"
+                                        <canvas id="incomePieChart" baseChart class="chart" [data]="dashboardService.incomePieData"
                                             [options]="incomeChartOption" [type]="incomeChartType">
                                         </canvas>
                                     </div>
                                     <div class="legenda">
                                         <ul>
-                                            <li class="green">Amsterdam</li>
-                                            <li class="red">Paris</li>
-                                            <li class="yellow">Dublin</li>
+                                            <li *ngFor="let validator of dashboardService.validatorList">{{validator.name}}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -142,9 +140,11 @@
                                         </tr>
                                         <tr *ngFor="let network of dashboardService.networkList">
                                             <td><img [src]="network.icon"></td>
-                                            <td>$8.23</td>
-                                            <td class="priceChangeWrapper up"><img src="assets/icons/caret_up.svg">
-                                                2.34%</td>
+                                            <td>${{roundTwoDigits(network.price)}}</td>
+                                            <td class="priceChangeWrapper" [ngClass]="{'down' : !isPositive(network.change), 'up' : isPositive(network.change)}">
+                                                <img src="assets/icons/caret_up.svg" *ngIf="isPositive(network.change)">
+                                                <img src="assets/icons/caret_down.svg" *ngIf="!isPositive(network.change)">
+                                                {{roundTwoDigits(network.change)}}%</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -156,9 +156,10 @@
                             <div class="card">
                                 <div class="head">
                                     <p>Combined daily rewards</p>
+                                    <p>in USD</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dashboardService.dailyIncomeData"
+                                    <canvas id="combinedDailyRewardChart" baseChart class="chart" [data]="dashboardService.dailyIncomeData"
                                         [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
                                         style="max-height: 300px;">
                                     </canvas>
@@ -242,10 +243,10 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p id="eraPercentage">{{round(dashboardService.pastEraPercentage)}} %</p>
+                                            <p id="eraPercentage">{{dashboardService.round(dashboardService.pastEraPercentage)}} %</p>
                                             <p id="eraDescription">ERA progress</p>
                                         </div>
-                                        <canvas baseChart class="chart eraPie" [data]="dashboardService.eraProgressData"
+                                        <canvas id="eraPieChart" baseChart class="chart eraPie" [data]="dashboardService.eraProgressData"
                                             [options]="eraProgressChartOption" [type]="eraProgressChartType">
                                         </canvas>
                                     </div>
@@ -255,11 +256,11 @@
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card tokenPriceContainer">
                                 <div class="head">
-                                    <p>30d price change</p>
-                                    <p>$ 7.58 per <img src="assets/logo/dot.png"></p>
+                                    <p>7d price change</p>
+                                    <p>{{dashboardService.getValidatorNetworkTokenPrice()}} per <img [src]="dashboardService.getValidatorNetworkIcon()"></p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dashboardService.tokenChartData"
+                                    <canvas id="sparklineChart" baseChart class="chart" [data]="dashboardService.tokenChartData"
                                         [options]="tokenChartOptions" [type]="lineChartType"
                                         style="width: 100%; height: 200px;"></canvas>
                                 </div>
@@ -271,9 +272,10 @@
                             <div class="card">
                                 <div class="head">
                                     <p>Weekly overview</p>
+                                    <p>in USD</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dashboardService.dailyIncomeData"
+                                    <canvas id="weeklyOverviewChart" baseChart class="chart" [data]="dashboardService.dailyIncomeData"
                                         [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
                                         style="max-height: 300px;">
                                     </canvas>
@@ -335,7 +337,7 @@
                                     <p>ERA points</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dashboardService.eraChartData" [options]="eraChartOptions"
+                                    <canvas id="eraPointChart" baseChart class="chart" [data]="dashboardService.eraChartData" [options]="eraChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
@@ -392,7 +394,6 @@
         </section>
     </div>
 </main>
-
 
 <div class="modal fade" #addValidatorModal tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">

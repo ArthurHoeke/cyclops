@@ -262,8 +262,20 @@ export class DashboardComponent {
     }
   }
 
-  public round(percentage: number) {
-    return Math.round(percentage);
+  public roundTwoDigits(percentage: number) {
+    if(percentage != undefined) {
+      return percentage.toFixed(2);
+    } else {
+      return;
+    }
+  }
+
+  isPositive(number: number) {
+    if(number > 0.0) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public logout() {

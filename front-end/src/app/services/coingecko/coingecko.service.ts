@@ -9,10 +9,9 @@ export class CoingeckoService {
 
   // function used to fetch X token price and 24hr price change
   // eg. getTokenData("polkadot", "usd");
-  public getTokenData(token: String, currency: String) {
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=' + token + '&vs_currencies=' + currency + '&include_24hr_change=true&precision=3')
-  .then((response) => response.json())
-  .then((data) => console.log(data));
+  public async getTokenData(token: String, currency: String) {
+    const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=' + currency + '&ids=' + token + '&per_page=100&page=1&sparkline=true&price_change_percentage=1d');
+    return response.json();
   }
 
 
