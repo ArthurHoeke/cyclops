@@ -20,6 +20,8 @@ export class DashboardService {
   public validatorList: any = [];
   public networkList: any = [];
 
+  public validatorRewardOverview: any;
+
   public pastEraPercentage = 50;
   public leftEraPercentage = 50;
 
@@ -103,7 +105,7 @@ export class DashboardService {
     return input / parseInt(divide);
   }
 
-  private getSelectedValidatorData(valIndex: number) {
+  private async getSelectedValidatorData(valIndex: number) {
     const selVal = this.validatorList[valIndex - 1];
     const selNetwork = this.networkList[selVal.networkId - 1];
 
@@ -123,6 +125,34 @@ export class DashboardService {
     this.updateSparkline(selNetwork['sparkline'], selNetwork['change']);
 
     this.updateWeeklyRewardList(selVal['weeklyRewardList'], selNetwork['price'], selNetwork['decimals']);
+
+    await this.apiService.getValidatorRewardOverview(selVal.id).then((data: any) => {
+      data = data['data'];
+      this.validatorRewardOverview = {
+        ticker: selNetwork['ticker'],
+        allTime: {
+          reward: 0,
+          monetaryValue: 0
+        },
+        daily: {
+          reward: 0,
+          monetaryValue: 0
+        },
+        monthly: {
+          reward: 0,
+          monetaryValue: 0
+        },
+        weekly: {
+          reward: 0,
+          monetaryValue: 0
+        }
+      };
+
+      for(let i = 0; i < data.length; i++) {
+        this.validatorRewardOverview[data[i]['period']]['reward'] = this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']).toFixed(2);
+        this.validatorRewardOverview[data[i]['period']]['monetaryValue'] = selNetwork['price'] * this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']);
+      }
+    });
   }
 
   private async getDashboardData() {
@@ -174,7 +204,11 @@ export class DashboardService {
     });
 
     Chart.getChart("combinedDailyRewardChart")?.update("normal");
-    this.totalRewardsToday = combinedDailyRewards[new Date().getDay()];
+    let dayNumber = new Date().getDay()-1;
+    if(dayNumber < 0) {
+      dayNumber++;
+    }
+    this.totalRewardsToday = combinedDailyRewards[dayNumber];
 
     this.toastr.clear();
   }
@@ -189,7 +223,7 @@ export class DashboardService {
     if (index == 0) {
       await this.getDashboardData();
     } else {
-      this.getSelectedValidatorData(index);
+      await this.getSelectedValidatorData(index);
     }
     this.selectedValidator = index;
   }
@@ -315,7 +349,7 @@ export class DashboardService {
       data: this.eraRewardPoints,
       borderWidth: 2,
       pointRadius: 2,
-      tension: 0.35,
+      tension: 0,
       gradient: {
         backgroundColor: {
           axis: 'y',
@@ -340,9 +374,9 @@ export class DashboardService {
     labels: [],
     datasets: [{
       data: [],
-      borderWidth: 3,
+      borderWidth: 2,
       pointRadius: 0,
-      tension: 0.25,
+      tension: 0.15,
       gradient: {
         backgroundColor: {
           axis: 'y',
@@ -364,9 +398,9 @@ export class DashboardService {
   };
 
   public lineChartData: ChartData<'line', number[], string | string[]> = {
-    labels: ['2/22', '2/23', '2/24', '2/25', '2/26', '2/27', '2/28'],
+    labels: [],
     datasets: [{
-      data: [5000, 5100, 5312, 5681, 5923, 6123, 6421, 6734],
+      data: [],
       borderWidth: 2,
       pointRadius: 2,
       tension: 0.35,

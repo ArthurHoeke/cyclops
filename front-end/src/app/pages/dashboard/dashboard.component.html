@@ -296,23 +296,23 @@
                                         </tr>
                                         <tr>
                                             <td><b>Today</b></td>
-                                            <td>4.22 DOT</td>
-                                            <td>$ 39.32</td>
+                                            <td>{{dashboardService.validatorRewardOverview['daily']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['daily']['monetaryValue'].toFixed(2))}}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Week</b></td>
-                                            <td>16.52 DOT</td>
-                                            <td>$ 139.54</td>
+                                            <td>{{dashboardService.validatorRewardOverview['weekly']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['weekly']['monetaryValue'].toFixed(2))}}</td>
                                         </tr>
                                         <tr>
                                             <td><b>Month</b></td>
-                                            <td>60.32 DOT</td>
-                                            <td>$ 461.72</td>
+                                            <td>{{dashboardService.validatorRewardOverview['monthly']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['monthly']['monetaryValue'].toFixed(2))}}</td>
                                         </tr>
                                         <tr>
                                             <td><b>All-time</b></td>
-                                            <td>921.52 DOT</td>
-                                            <td>$ 3062.61</td>
+                                            <td>{{dashboardService.validatorRewardOverview['allTime']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['allTime']['monetaryValue'].toFixed(2))}}</td>
                                         </tr>
                                     </table>
                                 </div>
