@@ -87,11 +87,13 @@ const verify = async (req, res) => {
   }
 };
 
-async function getUserEmailById() {
+async function getUserEmailById(userId) {
   return new Promise((resolve) => {
-      User.getUserEmailById(async (err, data) => {
+      User.getUserEmailById([userId], async (err, data) => {
           resolve(data);
       });
+  }).catch((err) => {
+    console.log(err);
   });
 }
 

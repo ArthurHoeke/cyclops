@@ -33,7 +33,7 @@ const getRewardsFromValidatorInPeriod = (data, cb) => {
 }
 
 const getWeeklyRewardsFromValidator = (data, cb) => {
-    return database.all(`SELECT amount, timestamp, hash FROM reward WHERE timestamp >= strftime('%s', 'now', 'weekday 0', '-7 days') AND timestamp < strftime('%s', 'now', 'weekday 0')  AND validatorId = ?`, data, (err, row) => {
+    return database.all(`SELECT timestamp, strftime('%w', datetime(timestamp, 'unixepoch', 'localtime')) as weekday, sum(amount) as reward_sum FROM reward WHERE validatorId = ? AND timestamp >= strftime('%s', 'now', 'weekday 0', '-7 days') GROUP BY weekday ORDER BY weekday ASC`, data, (err, row) => {
         cb(err, row)
     });
 }
