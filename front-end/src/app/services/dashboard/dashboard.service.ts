@@ -112,7 +112,7 @@ export class DashboardService {
     })
   }
 
-  private calculateDecimals(input: any, decimals: any) {
+  public calculateDecimals(input: any, decimals: any) {
     let divide = "1";
     for (let i = 0; i < decimals; i++) {
       divide = divide + "0";

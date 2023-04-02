@@ -383,6 +383,15 @@ main {
     }
 }
 
+.select {
+    border-radius: 100px;
+    border: 1px solid #202127;
+    background-color: #111217;
+    color: #cecece;
+    padding: 4px 12px;
+    transition: 0.3s ease;
+}
+
 .modal {
     background-color: rgba(0, 0, 0, .5);
     --bs-modal-header-border-color: #202127;

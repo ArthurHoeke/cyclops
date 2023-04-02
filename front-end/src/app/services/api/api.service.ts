@@ -128,6 +128,29 @@ export class ApiService {
     return promise;
   }
 
+  getMonthlyRewardReportFromValidator(validatorId: string, timestamp: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+      .set('timestamp', timestamp)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/getMonthlyRewardReportFromValidator";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   getWeeklyRewardsFromValidator(validatorId: string) {
     const body = new HttpParams()
       .set('id', validatorId)
