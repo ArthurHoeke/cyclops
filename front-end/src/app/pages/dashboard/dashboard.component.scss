@@ -76,11 +76,16 @@ main {
                 padding: 12px 18px;
                 font-size: 14px;
                 width: 45%;
+                transition: .3s ease;
 
                 svg {
                     stroke: #5A5A5A;
                     margin-right: 8px;
                 }
+            }
+
+            button:hover {
+                background-color: #101117;
             }
 
             button.active {
@@ -103,6 +108,7 @@ main {
                 display: flex;
                 padding: 16px;
                 cursor: pointer;
+                transition: .3s ease;
 
                 .logoWrapper img {
                     width: 40px;
@@ -155,6 +161,10 @@ main {
                         background-color: #DB4F4F;
                     }
                 }
+            }
+
+            .validator:hover {
+                background-color: #101117;
             }
 
             .validator.active {
@@ -423,6 +433,18 @@ main {
     opacity: 0.5;
     filter: blur(3px);
     pointer-events: none;
+}
+
+.nominatorStatus {
+    background-color: #FFD88D;
+    color: black;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-weight: 600;
+}
+
+.ai-TrashCan {
+    cursor: pointer;
 }
 
 @keyframes rotate {

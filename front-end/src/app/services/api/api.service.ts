@@ -106,6 +106,28 @@ export class ApiService {
     return promise;
   }
 
+  getAllRewardsFromValidator(validatorId: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/getAllRewardsFromValidator";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   getWeeklyRewardsFromValidator(validatorId: string) {
     const body = new HttpParams()
       .set('id', validatorId)
@@ -155,6 +177,49 @@ export class ApiService {
       .set('id', validatorId)
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "reward/sync";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  getAllEvents() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "event/all";
+      this.http.get(apiURL, {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  deleteEvent(eventId: string) {
+    const body = new HttpParams()
+      .set('id', eventId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "event/remove";
       this.http.post(apiURL, body.toString(), {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')

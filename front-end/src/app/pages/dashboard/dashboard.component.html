@@ -52,7 +52,8 @@
                         <div class="detailsWrapper">
                             <div>
                                 <p>{{validator.name}}</p>
-                                <span class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
+                                <span
+                                    class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
                             </div>
                             <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
                         </div>
@@ -74,17 +75,23 @@
                                 <div class="body tableWrapper">
                                     <table>
                                         <tr>
-                                            <th>Validator</th>
-                                            <th>Event</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
+                                            <th style="width: 10%;">Validator</th>
+                                            <th style="width: 20%;">Event</th>
+                                            <th style="width: 20%;">Date</th>
+                                            <th style="width: 50%;">Description</th>
                                         </tr>
-                                        <tr>
-                                            <td><b>Paris</b></td>
-                                            <td>Slash</td>
-                                            <td>10/03/2023</td>
-                                            <td>11:35 AM</td>
-                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                        <tr *ngIf="dashboardService.eventList.length == 0">
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr *ngFor="let event of dashboardService.eventList">
+                                            <td><b>{{event.name}}</b></td>
+                                            <td>{{event.eventType}}</td>
+                                            <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
+                                            <td>{{event.description}}</td>
+                                            <td (click)="dashboardService.removeEvent(event.eventId)"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                     class="ai ai-TrashCan">
@@ -111,16 +118,19 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p>{{dashboardService.addThousandSeperator(dashboardService.getTotalCombinedRewards())}}</p>
+                                            <p>{{dashboardService.addThousandSeperator(dashboardService.getTotalCombinedRewards())}}
+                                            </p>
                                             <p>All-time Rewards</p>
                                         </div>
-                                        <canvas id="incomePieChart" baseChart class="chart" [data]="dashboardService.incomePieData"
-                                            [options]="incomeChartOption" [type]="incomeChartType">
+                                        <canvas id="incomePieChart" baseChart class="chart"
+                                            [data]="dashboardService.incomePieData" [options]="incomeChartOption"
+                                            [type]="incomeChartType">
                                         </canvas>
                                     </div>
                                     <div class="legenda">
                                         <ul>
-                                            <li *ngFor="let validator of dashboardService.validatorList">{{validator.name}}</li>
+                                            <li *ngFor="let validator of dashboardService.validatorList">
+                                                {{validator.name}}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -141,10 +151,13 @@
                                         <tr *ngFor="let network of dashboardService.networkList">
                                             <td><img [src]="network.icon"></td>
                                             <td>${{roundTwoDigits(network.price)}}</td>
-                                            <td class="priceChangeWrapper" [ngClass]="{'down' : !isPositive(network.change), 'up' : isPositive(network.change)}">
+                                            <td class="priceChangeWrapper"
+                                                [ngClass]="{'down' : !isPositive(network.change), 'up' : isPositive(network.change)}">
                                                 <img src="assets/icons/caret_up.svg" *ngIf="isPositive(network.change)">
-                                                <img src="assets/icons/caret_down.svg" *ngIf="!isPositive(network.change)">
-                                                {{roundTwoDigits(network.change)}}%</td>
+                                                <img src="assets/icons/caret_down.svg"
+                                                    *ngIf="!isPositive(network.change)">
+                                                {{roundTwoDigits(network.change)}}%
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -159,9 +172,9 @@
                                     <p>in USD</p>
                                 </div>
                                 <div class="body">
-                                    <canvas id="combinedDailyRewardChart" baseChart class="chart" [data]="dashboardService.dailyIncomeData"
-                                        [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
-                                        style="max-height: 300px;">
+                                    <canvas id="combinedDailyRewardChart" baseChart class="chart"
+                                        [data]="dashboardService.dailyIncomeData" [options]="dailyIncomeChartOption"
+                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
                                     </canvas>
                                 </div>
                             </div>
@@ -171,6 +184,23 @@
 
                 <!-- Validator overview container -->
                 <ng-container *ngIf="!onOverview()">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Stash balance</p>
+                                    <ng-container *ngIf="!dashboardService.isActive()">
+                                        <span class="nominatorStatus">{{dashboardService.getNominatorCount()}} nominators</span>
+                                    </ng-container>
+                                </div>
+                                <div class="body">
+                                    <canvas id="stashBalanceChart" baseChart class="chart"
+                                        [data]="dashboardService.lineChartData" [options]="lineChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
@@ -206,28 +236,19 @@
                                 <div class="body tableWrapper">
                                     <table>
                                         <tr>
-                                            <th>Validator</th>
-                                            <th>Event</th>
-                                            <th>Date</th>
-                                            <th>Time</th>
+                                            <th style="width: 33%">Validator</th>
+                                            <th style="width: 33%">Event</th>
+                                            <th style="width: 33%">Date</th>
                                         </tr>
-                                        <tr>
-                                            <td><b>Paris</b></td>
-                                            <td>Slash</td>
-                                            <td>10/03/2023</td>
-                                            <td>11:35 AM</td>
-                                            <td><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                    class="ai ai-TrashCan">
-                                                    <path
-                                                        d="M4 6h16l-1.58 14.22A2 2 0 0 1 16.432 22H7.568a2 2 0 0 1-1.988-1.78L4 6z" />
-                                                    <path
-                                                        d="M7.345 3.147A2 2 0 0 1 9.154 2h5.692a2 2 0 0 1 1.81 1.147L18 6H6l1.345-2.853z" />
-                                                    <path d="M2 6h20" />
-                                                    <path d="M10 11v5" />
-                                                    <path d="M14 11v5" />
-                                                </svg></td>
+                                        <tr *ngIf="dashboardService.eventList.length == 0">
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr *ngFor="let event of dashboardService.selectValEventList">
+                                            <td><b>{{event.name}}</b></td>
+                                            <td>{{event.eventType}}</td>
+                                            <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -243,11 +264,13 @@
                                 <div class="body wrapCenter">
                                     <div class="pieWrap">
                                         <div class="pieMeta">
-                                            <p id="eraPercentage">{{dashboardService.round(dashboardService.pastEraPercentage)}} %</p>
+                                            <p id="eraPercentage">
+                                                {{dashboardService.round(dashboardService.pastEraPercentage)}} %</p>
                                             <p id="eraDescription">ERA progress</p>
                                         </div>
-                                        <canvas id="eraPieChart" baseChart class="chart eraPie" [data]="dashboardService.eraProgressData"
-                                            [options]="eraProgressChartOption" [type]="eraProgressChartType">
+                                        <canvas id="eraPieChart" baseChart class="chart eraPie"
+                                            [data]="dashboardService.eraProgressData" [options]="eraProgressChartOption"
+                                            [type]="eraProgressChartType">
                                         </canvas>
                                     </div>
                                 </div>
@@ -257,12 +280,13 @@
                             <div class="card tokenPriceContainer">
                                 <div class="head">
                                     <p>7d price change</p>
-                                    <p>{{dashboardService.getValidatorNetworkTokenPrice()}} per <img [src]="dashboardService.getValidatorNetworkIcon()"></p>
+                                    <p>{{dashboardService.getValidatorNetworkTokenPrice()}} per <img
+                                            [src]="dashboardService.getValidatorNetworkIcon()"></p>
                                 </div>
                                 <div class="body">
-                                    <canvas id="sparklineChart" baseChart class="chart" [data]="dashboardService.tokenChartData"
-                                        [options]="tokenChartOptions" [type]="lineChartType"
-                                        style="width: 100%; height: 200px;"></canvas>
+                                    <canvas id="sparklineChart" baseChart class="chart"
+                                        [data]="dashboardService.tokenChartData" [options]="tokenChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 200px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -275,9 +299,9 @@
                                     <p>in USD</p>
                                 </div>
                                 <div class="body">
-                                    <canvas id="weeklyOverviewChart" baseChart class="chart" [data]="dashboardService.dailyIncomeData"
-                                        [options]="dailyIncomeChartOption" [type]="dailyIncomeChartType"
-                                        style="max-height: 300px;">
+                                    <canvas id="weeklyOverviewChart" baseChart class="chart"
+                                        [data]="dashboardService.dailyIncomeData" [options]="dailyIncomeChartOption"
+                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
                                     </canvas>
                                 </div>
                             </div>
@@ -296,23 +320,35 @@
                                         </tr>
                                         <tr>
                                             <td><b>Today</b></td>
-                                            <td>{{dashboardService.validatorRewardOverview['daily']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
-                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['daily']['monetaryValue'].toFixed(2))}}</td>
+                                            <td>{{dashboardService.validatorRewardOverview['daily']['reward']}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$
+                                                {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['daily']['monetaryValue'].toFixed(2))}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td><b>Week</b></td>
-                                            <td>{{dashboardService.validatorRewardOverview['weekly']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
-                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['weekly']['monetaryValue'].toFixed(2))}}</td>
+                                            <td>{{dashboardService.validatorRewardOverview['weekly']['reward']}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$
+                                                {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['weekly']['monetaryValue'].toFixed(2))}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td><b>Month</b></td>
-                                            <td>{{dashboardService.validatorRewardOverview['monthly']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
-                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['monthly']['monetaryValue'].toFixed(2))}}</td>
+                                            <td>{{dashboardService.validatorRewardOverview['monthly']['reward']}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$
+                                                {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['monthly']['monetaryValue'].toFixed(2))}}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td><b>All-time</b></td>
-                                            <td>{{dashboardService.validatorRewardOverview['allTime']['reward']}} {{dashboardService.validatorRewardOverview['ticker']}}</td>
-                                            <td>$ {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['allTime']['monetaryValue'].toFixed(2))}}</td>
+                                            <td>{{dashboardService.validatorRewardOverview['allTime']['reward']}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                            <td>$
+                                                {{dashboardService.addThousandSeperator(dashboardService.validatorRewardOverview['allTime']['monetaryValue'].toFixed(2))}}
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -320,13 +356,14 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
+                        <div class="col mb-3">
+                            <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
-                                    <p>Stash balance</p>
+                                    <p>ERA points</p>
                                 </div>
                                 <div class="body">
-                                    <canvas baseChart class="chart" [data]="dashboardService.lineChartData" [options]="lineChartOptions"
+                                    <canvas id="eraPointChart" baseChart class="chart"
+                                        [data]="dashboardService.eraChartData" [options]="eraChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
@@ -334,11 +371,36 @@
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
-                                    <p>ERA points</p>
+                                    <p>Bond overview</p>
                                 </div>
-                                <div class="body">
-                                    <canvas id="eraPointChart" baseChart class="chart" [data]="dashboardService.eraChartData" [options]="eraChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Active nominators</b></td>
+                                            <td><span
+                                                    class="nominatorStatus">{{dashboardService.getNominatorCount()}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Validator bond</b></td>
+                                            <td>{{dashboardService.addThousandSeperator(dashboardService.getBondedOwner())}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nominator bond</b></td>
+                                            <td>{{dashboardService.addThousandSeperator(dashboardService.getBondedNominators())}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Total bonded</b></td>
+                                            <td>{{dashboardService.addThousandSeperator(dashboardService.getBondedTotal())}}
+                                                {{dashboardService.validatorRewardOverview['ticker']}}</td>
+                                        </tr>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -427,14 +489,15 @@
                 <button type="button" class="btn btn-dark" *ngIf="!dashboardService.isSyncing()"
                     (click)="submitValidator(addValName.value, addValAddress.value, addValNetwork.value, addValidatorModal)">Submit
                     validator</button>
-                <button type="button" class="btn btn-dark" *ngIf="dashboardService.isSyncing()" id="syncButton"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round" class="ai ai-ArrowCycle">
-                    <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
-                    <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
-                    <path d="M7 17l-4-1-1 4" />
-                    <path d="M17 7l4 1 1-4" />
-                </svg>Syncing..</button>
+                <button type="button" class="btn btn-dark" *ngIf="dashboardService.isSyncing()" id="syncButton"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="ai ai-ArrowCycle">
+                        <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
+                        <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
+                        <path d="M7 17l-4-1-1 4" />
+                        <path d="M17 7l4 1 1-4" />
+                    </svg>Syncing..</button>
             </div>
         </div>
     </div>

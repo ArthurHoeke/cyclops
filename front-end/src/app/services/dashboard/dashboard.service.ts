@@ -13,12 +13,15 @@ export class DashboardService {
 
   // Number variable that keeps track of the selected validator and used for panel switching
   // index 0 = overview
-  private selectedValidator: Number = 0;
+  private selectedValidator: number = 0;
   private selectedValidatorActive = false;
   private syncing: Boolean = false;
 
   public validatorList: any = [];
   public networkList: any = [];
+
+  public eventList: any = [];
+  public selectValEventList: any = [];
 
   public validatorRewardOverview: any;
 
@@ -32,6 +35,12 @@ export class DashboardService {
   public validatorNetworkIcon = "";
 
   private totalRewardsToday = 0;
+
+  private bonded_total: any = 0;
+  private bonded_owner: any = 0;
+  private bonded_nominators: any = 0;
+
+  private count_nominators: any = 0;
 
   constructor(private apiService: ApiService, private coingeckoService: CoingeckoService, private toastr: ToastrService) { }
 
@@ -53,6 +62,12 @@ export class DashboardService {
     return this.selectedValidatorActive;
   }
 
+  public async removeEvent(eventId: string) {
+    await this.apiService.deleteEvent(eventId);
+
+    this.updateEventList();
+  }
+
   public async updateValidatorList() {
     this.toastr.clear();
     this.toastr.info('Fetching validators..', "Cyclops API", {
@@ -63,7 +78,7 @@ export class DashboardService {
     await this.apiService.getValidators().then(async (res: any) => {
       this.validatorList = res['data'];
 
-      for(let i = 0; i < this.validatorList.length; i++) {
+      for (let i = 0; i < this.validatorList.length; i++) {
         await this.apiService.getWeeklyRewardsFromValidator(this.validatorList[i].id).then((data: any) => {
           this.validatorList[i].weeklyRewardList = data['data'];
         });
@@ -112,9 +127,15 @@ export class DashboardService {
     if (selVal['details']['status'] == "active") {
       this.selectedValidatorActive = true;
       this.updateEraRewardPoints(selVal['details']['rewardTracking']);
+
+      this.bonded_total = this.calculateDecimals(selVal['details']['bonded_total'], selNetwork['decimals']).toFixed(2);
+      this.bonded_owner = this.calculateDecimals(selVal['details']['bonded_owner'], selNetwork['decimals']).toFixed(2);
+      this.bonded_nominators = this.calculateDecimals(selVal['details']['bonded_nominators'], selNetwork['decimals']).toFixed(2);
     } else {
       this.selectedValidatorActive = false;
     }
+
+    this.count_nominators = selVal['details']['count_nominators'];
 
     const past = (selNetwork['era']['eraProcess'] / selNetwork['era']['eraLength']) * 100;
     this.updateEraProgress(past, 100 - past);
@@ -148,11 +169,23 @@ export class DashboardService {
         }
       };
 
-      for(let i = 0; i < data.length; i++) {
+      for (let i = 0; i < data.length; i++) {
         this.validatorRewardOverview[data[i]['period']]['reward'] = this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']).toFixed(2);
         this.validatorRewardOverview[data[i]['period']]['monetaryValue'] = selNetwork['price'] * this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']);
       }
     });
+
+    await this.apiService.getAllRewardsFromValidator(selVal.id).then((data: any) => {
+      this.updateStashChart(data['data'], selNetwork['decimals']);
+    });
+
+    this.selectValEventList = [];
+
+    for(let i = 0; i < this.eventList.length; i++) {
+      if(this.eventList[i]['validatorId'] == selVal['id']) {
+        this.selectValEventList.push(this.eventList[i]);
+      }
+    }
   }
 
   private async getDashboardData() {
@@ -160,7 +193,9 @@ export class DashboardService {
     this.toastr.info('Fetching dashboard data..', "Cyclops API", {
       positionClass: "toast-top-left"
     });
+
     let incomePerValidator: any = await this.apiService.getIncomeDistribution();
+
     incomePerValidator = incomePerValidator['data'];
 
     let totalEarned = 0;
@@ -184,17 +219,16 @@ export class DashboardService {
 
     Chart.getChart("incomePieChart")?.update("normal");
 
-
     //calculate combined rewards
-    let combinedDailyRewards = [0,0,0,0,0,0,0];
-    for(let i = 0; i < this.validatorList.length; i++) {
+    let combinedDailyRewards = [0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < this.validatorList.length; i++) {
       const val = this.validatorList[i];
       const net = this.networkList[val.networkId - 1];
-      for(let i2 = 0; i2 < val['weeklyRewardList'].length; i2++) {
+      for (let i2 = 0; i2 < val['weeklyRewardList'].length; i2++) {
         const rewardObj = val['weeklyRewardList'][i2];
 
         const dayIndex = this.getWeekdayIndexFromUnixTimestamp(rewardObj['timestamp']);
-        
+
         combinedDailyRewards[dayIndex] += net['price'] * this.calculateDecimals(rewardObj['reward_sum'], net['decimals'])
       }
     }
@@ -204,19 +238,45 @@ export class DashboardService {
     });
 
     Chart.getChart("combinedDailyRewardChart")?.update("normal");
-    let dayNumber = new Date().getDay()-1;
-    if(dayNumber < 0) {
+    let dayNumber = new Date().getDay() - 1;
+    if (dayNumber < 0) {
       dayNumber++;
     }
     this.totalRewardsToday = combinedDailyRewards[dayNumber];
 
+    await this.updateEventList();
+
     this.toastr.clear();
+  }
+
+  private async updateEventList() {
+    const eventList: any = await this.apiService.getAllEvents();
+    this.eventList = eventList['data'];
+  }
+
+  private updateStashChart(data: any, decimals: any) {
+    data = data.reverse();
+    let total: number = 0;
+
+    let rewardArr: any = [];
+    for (let i = 0; i < data.length; i++) {
+      const amt = this.calculateDecimals(data[i]['amount'], decimals);
+      rewardArr.push(amt + total);
+      total += amt;
+    }
+
+    this.lineChartData.labels = this.createEmptyLabelList(rewardArr);
+    this.lineChartData.datasets.forEach((dataset) => {
+      dataset.data = rewardArr;
+    });
+
+    Chart.getChart("stashBalanceChart")?.update("normal");
   }
 
   private getWeekdayIndexFromUnixTimestamp(unixTimestamp: any) {
     const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
     const weekdayIndex = date.getDay() - 1; // Sunday is 0, subtract 1 to make Monday 0
-    return weekdayIndex < 0 ? 6 : weekdayIndex; // Convert negative values to Sunday (6)
+    return weekdayIndex; // Convert negative values to Sunday (6)
   }
 
   public async selectValidator(index: number) {
@@ -245,15 +305,31 @@ export class DashboardService {
     return this.validatorNetworkIcon;
   }
 
+  public getBondedTotal() {
+    return this.bonded_total;
+  }
+
+  public getBondedOwner() {
+    return this.bonded_owner;
+  }
+
+  public getBondedNominators() {
+    return this.bonded_nominators;
+  }
+
+  public getNominatorCount() {
+    return this.count_nominators;
+  }
+
   public getTotalRewardsToday() {
     //dummy
     return "$ " + this.addThousandSeperator((this.totalRewardsToday).toFixed(2));
   }
-  
-  private updateWeeklyRewardList(data: any, tokenPrice: any, decimals: any) {
-    const weeklyRewardList = [0,0,0,0,0,0,0];
 
-    for(let i = 0; i < data.length; i++) {
+  private updateWeeklyRewardList(data: any, tokenPrice: any, decimals: any) {
+    const weeklyRewardList = [0, 0, 0, 0, 0, 0, 0];
+
+    for (let i = 0; i < data.length; i++) {
       const dayIndex = this.getWeekdayIndexFromUnixTimestamp(data[i]['timestamp']);
       weeklyRewardList[dayIndex] = tokenPrice * this.calculateDecimals(data[i].reward_sum, decimals);
     }
@@ -280,7 +356,7 @@ export class DashboardService {
     this.tokenChartData.labels = this.createEmptyLabelList(sparkline);
     let chartColorRGB = "";
 
-    if(change <= 0) {
+    if (change <= 0) {
       chartColorRGB = "211,38,38";
     } else {
       chartColorRGB = "93,212,37";
@@ -402,8 +478,8 @@ export class DashboardService {
     datasets: [{
       data: [],
       borderWidth: 2,
-      pointRadius: 2,
-      tension: 0.35,
+      pointRadius: 0.2,
+      tension: 0,
       gradient: {
         backgroundColor: {
           axis: 'y',
@@ -478,5 +554,11 @@ export class DashboardService {
     const parts = number.toString().split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return parts.join('.');
+  }
+
+  formatUnixTimestamp(timestamp: any) {
+    const date = new Date(timestamp * 1000);
+    const options: any = { month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return date.toLocaleString('en-US', options);
   }
 }
