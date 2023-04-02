@@ -20,7 +20,7 @@ const add = (data, cb) => {
 }
 
 const getAllRewardsFromValidator = (data, cb) => {
-    return database.all('SELECT * FROM reward WHERE validatorId = ?', data, (err, row) => {
+    return database.all('SELECT amount, timestamp, hash, id FROM reward WHERE validatorId = ? ORDER BY timestamp DESC', data, (err, row) => {
         cb(err, row)
     });
 }

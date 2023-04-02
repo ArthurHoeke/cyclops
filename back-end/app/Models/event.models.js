@@ -25,8 +25,14 @@ const get = (data, cb) => {
     });
 }
 
+const all = (data, cb) => {
+    return database.all('SELECT event.id AS eventId, validatorId, name, eventType, description, timestamp FROM event JOIN validator ON event.validatorId = validator.id WHERE validator.userId = ?', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 const remove = (data, cb) => {
-    return database.run('DELETE FROM event WHERE id = ? AND validatorId = ?', data, (err) => {
+    return database.run('DELETE FROM event WHERE id = ?', data, (err) => {
         cb(err)
     });
 }
@@ -40,6 +46,7 @@ const getEventsFromToday = (data, cb) => {
 module.exports = {
     add,
     get,
+    all,
     remove,
     getEventsFromToday
 };

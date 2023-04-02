@@ -14,6 +14,8 @@ waitingNetworkValidators = [];
 rewardPointTracker = {};
 avgRewardPoints = [];
 
+isSyncing = false;
+
 let interval;
 
 async function updateNetworkList() {
@@ -41,9 +43,11 @@ async function periodicNetworkCheck() {
     //fetch all networks
     getNetworkValidators();
     interval = setInterval(async function () {
-        console.clear();
-        await getNetworkValidators();
-        await updateEraData();
+        if(isSyncing == false) {
+            console.clear();
+            await getNetworkValidators();
+            await updateEraData();
+        }
     }, 5 * 60000);
 }
 
@@ -136,7 +140,7 @@ async function trackValidatorRewardPoints(validatorId) {
                     //to prevent event spamming, check if this is the first warning in the past 24hrs
                     const eventList = await event.getEventsFromToday(validatorId, "low reward points");
                     if (eventList.length == 0) {
-                        event.register(val, "low reward points", "Validator " + val.address + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                        event.register(val, "low reward points", val.name + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
                     }
                 }
             }
@@ -147,15 +151,17 @@ async function trackValidatorRewardPoints(validatorId) {
         //not tracked yet
         let selValidator = null;
 
-        for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
-            if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
-                selValidator = activeNetworkValidators[networkId - 1][i];
-                break;
+        if(activeNetworkValidators[networkId - 1] != undefined) {
+            for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
+                if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                    selValidator = activeNetworkValidators[networkId - 1][i];
+                    break;
+                }
             }
-        }
 
-        if (selValidator != null) {
-            rewardPointTracker[address] = [selValidator['reward_point']];
+            if (selValidator != null) {
+                rewardPointTracker[address] = [selValidator['reward_point']];
+            }
         }
     }
 }
@@ -250,11 +256,14 @@ async function getNetworkValidators() {
 
 // This function performs a sync between local rewards data and Subscan's API data for a given validator ID
 async function performRewardSync(validatorId) {
+    isSyncing = true;
+
     // First, retrieve validator data using its ID
     const validatorData = await validator.getValidatorById(validatorId);
 
     // If the validator data is undefined, exit the function and return false
     if (validatorData == undefined) {
+        isSyncing = false;
         return false;
     }
 
@@ -265,7 +274,7 @@ async function performRewardSync(validatorId) {
     const rewardData = await reward.getAllRewardsFromValidatorAsync(validatorId);
     var rewardHashCache = {};
     rewardData.forEach(function (reward) {
-        rewardHashCache[reward.hash] = reward.id
+        rewardHashCache[reward.hash] = reward.id;
     });
 
     // Get the network data for this validator
@@ -276,6 +285,7 @@ async function performRewardSync(validatorId) {
 
     // If there was an error retrieving events, return false
     if (eventData.code != 0) {
+        isSyncing = false;
         return false;
     } else {
         // Otherwise, store the event data
@@ -292,6 +302,7 @@ async function performRewardSync(validatorId) {
     // If the counts are the same, there is no need to sync, return true
     if (realtimeRewardCount == locallyStoredRewardCount) {
         console.log("🟢" + "Already synced");
+        isSyncing = false;
         return true;
     }
 
@@ -311,7 +322,9 @@ async function performRewardSync(validatorId) {
         }
     }
 
-    // Return true to indicate the sync was successful
+    isSyncing = false;
+
+    // Return true to indicate the sync was successfu
     return true;
 }
 
@@ -322,7 +335,7 @@ async function processRewardList(validatorId, rewardList, rewardHashCache, local
             // Retrieve reward data for each reward in the list
             const rewardAmt = rewardList[i].amount;
             const timestamp = rewardList[i].block_timestamp;
-            const hash = rewardList[i].extrinsic_index;
+            const hash = rewardList[i].event_index;
 
             // Check if the reward already exists in the cache, if not add it to the local store and update the count
             const exists = rewardHashCache[hash];

@@ -20,8 +20,21 @@ async function getEventsFromToday(valId, eventType) {
 }
 
 const get = async (req, res) => {
-    const validatorId = req.body.validatorId;
+    const validatorId = req.body.id;
     event.get([validatorId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
+const all = async (req, res) => {
+    const userId = req.user.id;
+    event.all([userId], (err, data) => {
         if (err) {
             res.sendStatus(500);
         } else {
@@ -34,8 +47,7 @@ const get = async (req, res) => {
 
 const remove = async (req, res) => {
     const eventId = req.body.id;
-    const valId = req.body.validatorId;
-    event.remove([eventId, valId], (err, data) => {
+    event.remove([eventId], (err, data) => {
         if (err) {
             res.sendStatus(500);
         } else {
@@ -48,5 +60,6 @@ module.exports = {
     register,
     get,
     remove,
-    getEventsFromToday
+    getEventsFromToday,
+    all
 };
