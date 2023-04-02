@@ -50,6 +50,12 @@ const getYearlyRewardsFromValidator = (data, cb) => {
     });
 }
 
+const getMonthlyRewardReportFromValidator = (data, cb) => {
+    return database.all(`SELECT amount, timestamp, hash FROM reward WHERE validatorId = ? AND strftime('%Y-%m', datetime(timestamp, 'unixepoch', 'localtime')) = ? ORDER BY timestamp ASC`, data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 //get daily, weekly, monthly and all-time validator income via function
 const getValidatorRewardOverview = (validatorId, cb) => {
     return database.all(`SELECT v.id AS validatorId, 'daily' AS period, strftime('%Y-%m-%d', r.timestamp, 'unixepoch') AS date, SUM(r.amount) AS rewards FROM validator v JOIN reward r ON r.validatorId = v.id WHERE v.id = ${validatorId} AND r.timestamp >= strftime('%s', 'now', 'start of day') GROUP BY v.id, date UNION 
@@ -82,5 +88,6 @@ module.exports = {
     getYearlyRewardsFromValidator,
     getCombinedWeeklyRewards,
     getValidatorRewardOverview,
-    getIncomeDistribution
+    getIncomeDistribution,
+    getMonthlyRewardReportFromValidator
 };

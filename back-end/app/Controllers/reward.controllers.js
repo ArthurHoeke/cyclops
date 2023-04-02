@@ -60,6 +60,20 @@ const getYearlyRewardsFromValidator = async (req, res) => {
     });
 };
 
+const getMonthlyRewardReportFromValidator = async (req, res) => {
+    const validatorId = req.body.id;
+    const timestamp = req.body.timestamp;
+    reward.getMonthlyRewardReportFromValidator([validatorId, timestamp], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.status(200).json({
+                data: data
+            });
+        }
+    });
+};
+
 const getRewardsFromValidatorInPeriod = async (req, res) => {
     const validatorId = req.body.id;
     const start = req.body.start;
@@ -156,5 +170,6 @@ module.exports = {
     getYearlyRewardsFromValidator,
     getCombinedWeeklyRewards,
     getValidatorRewardOverview,
-    getIncomeDistribution
+    getIncomeDistribution,
+    getMonthlyRewardReportFromValidator
 };

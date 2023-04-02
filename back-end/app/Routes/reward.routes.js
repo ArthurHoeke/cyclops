@@ -8,6 +8,7 @@ const router = express.Router();
 router.post('/sync', isLoggedIn, rewardControllers.requestSync);
 router.post('/getWeeklyRewardsFromValidator', isLoggedIn, rewardControllers.getWeeklyRewardsFromValidator);
 router.post('/getAllRewardsFromValidator', isLoggedIn, rewardControllers.getAllRewardsFromValidator);
+router.post('/getMonthlyRewardReportFromValidator', isLoggedIn, rewardControllers.getMonthlyRewardReportFromValidator);
 router.get('/getRewardsFromValidatorInPeriod', isLoggedIn, rewardControllers.getRewardsFromValidatorInPeriod);
 router.get('/getMonthlyRewardsFromValidator', isLoggedIn, rewardControllers.getMonthlyRewardsFromValidator);
 router.get('/getYearlyRewardsFromValidator', isLoggedIn, rewardControllers.getYearlyRewardsFromValidator);

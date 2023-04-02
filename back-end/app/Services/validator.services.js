@@ -28,11 +28,14 @@ async function updateNetworkList() {
 async function updateEraData() {
     for (let i = 0; i < networkList.length; i++) {
         const eraData = await subscan.getEra(networkList[i].name);
-        const eraObj = {
-            eraLength: eraData['data']['eraLength'],
-            eraProcess: eraData['data']['eraProcess']
-        };
-        networkEraProgress[networkList[i].name] = eraObj;
+
+        if(eraData['data']['eraLength'] != undefined) {
+            const eraObj = {
+                eraLength: eraData['data']['eraLength'],
+                eraProcess: eraData['data']['eraProcess']
+            };
+            networkEraProgress[networkList[i].name] = eraObj;
+        }
     }
 }
 
