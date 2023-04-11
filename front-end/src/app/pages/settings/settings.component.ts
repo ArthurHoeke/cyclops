@@ -18,7 +18,7 @@ export class SettingsComponent {
   public base64Preview: any = "";
 
   public networkList: any = null;
-  
+
   constructor(private storageService: StorageService, private router: Router, private apiService: ApiService, private toastr: ToastrService, private dashboardService: DashboardService) {
     this.fetchNetworkList();
   }
@@ -63,11 +63,29 @@ export class SettingsComponent {
     }
   }
 
+  public setSMTP(smtpURL: any, smtpPort: any, smtpUsername: any, smtpPassword: any) {
+    if (smtpURL != "" && smtpPort != "" && smtpUsername != "" && smtpPassword != "") {
+      this.apiService.setSMTPDetails(smtpURL, smtpPort, smtpUsername, smtpPassword).then(async (data) => {
+        this.toastr.success("SMTP details updated.", "", {
+          positionClass: "toast-top-left"
+        });
+      }).catch((err) => {
+        this.toastr.error('Something went wrong.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    } else {
+      this.toastr.error('Fill in all fields.', "", {
+        positionClass: "toast-top-left"
+      });
+    }
+  }
+
   encodeImageFileAsURL(element: any) {
     const self = this;
     var file = element.files[0];
     var reader = new FileReader();
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       self.base64Preview = reader.result;
     }
     reader.readAsDataURL(file);

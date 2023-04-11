@@ -50,7 +50,7 @@ async function periodicNetworkCheck() {
 
     //fetch all networks
     getNetworkValidators();
-    interval = setInterval(async function () {
+    this.interval = setInterval(async function () {
         if(isSyncing == false) {
             console.clear();
             await getNetworkValidators();
@@ -398,7 +398,7 @@ async function findValidatorNameByAddress(network, address) {
         }
     }
 
-    if(networkId != null) {
+    if(networkId != null && activeNetworkValidators.length != 0 && waitingNetworkValidators.length != 0) {
         for(let i = 0; i < activeNetworkValidators[networkId].length; i++) {
             if(activeNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
                 if(activeNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
@@ -411,12 +411,14 @@ async function findValidatorNameByAddress(network, address) {
         }
         if(name == null) {
             for(let i = 0; i < waitingNetworkValidators[networkId].length; i++) {
-                if(waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] != null) {
-                    name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
-                } else if(waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
-                    name = waitingNetworkValidators[networkId][i]['stash_account_display']['display'];
+                if(waitingNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
+                    if(waitingNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
+                        name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
+                    } else if(waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
+                        name = waitingNetworkValidators[networkId][i]['stash_account_display']['display'];
+                    }
+                    break;
                 }
-                break;
             }
         }
 

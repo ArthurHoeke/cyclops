@@ -444,6 +444,32 @@ export class ApiService {
     return promise;
   }
 
+  setSMTPDetails(smtpURL: any, smtpPort: any, smtpUsername: any, smtpPassword: any) {
+    const body = new HttpParams()
+      .set('smtpHost', smtpURL)
+      .set('smtpPort', smtpPort)
+      .set('smtpUsername', smtpUsername)
+      .set('smtpPassword', smtpPassword)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "config/setSMTP";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   getNetworks() {
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "network/list";

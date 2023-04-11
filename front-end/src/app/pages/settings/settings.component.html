@@ -36,7 +36,8 @@
                                         <td>
                                             <input type="text" placeholder="Enter API key" [(ngModel)]="subscanApiKey">
                                         </td>
-                                        <td><button (click)="updateApiKey()" [disabled]="subscanApiKey.length == 0">Update</button></td>
+                                        <td><button (click)="updateApiKey()"
+                                                [disabled]="subscanApiKey.length == 0">Update</button></td>
                                     </tr>
                                     <!-- <tr>
                                         <td><b>Data update rate</b></td>
@@ -67,13 +68,13 @@
                                         <th>Icon</th>
                                         <th>Token</th>
                                         <th>Ticker</th>
-                                        <th>Action</th>
+                                        <!-- <th>Action</th> -->
                                     </tr>
                                     <tr *ngFor="let network of networkList">
                                         <td class="tokenIcon"><img [src]="network.icon"></td>
                                         <td>{{network.name}}</td>
                                         <td>{{network.ticker}}</td>
-                                        <td><button *ngIf="network.name != 'polkadot'"><svg
+                                        <!-- <td><button *ngIf="network.name != 'polkadot'"><svg
                                                     xmlns="http://www.w3.org/2000/svg" width="36" height="36"
                                                     viewBox="0 0 24 24" fill="none" stroke="#545454" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round"
@@ -85,7 +86,7 @@
                                                     <path d="M2 6h20" />
                                                     <path d="M10 11v5" />
                                                     <path d="M14 11v5" />
-                                                </svg></button></td>
+                                                </svg></button></td> -->
                                     </tr>
                                 </table>
                             </div>
@@ -108,11 +109,13 @@
                                         <th>Action</th>
                                     </tr>
                                     <tr>
-                                        <td><input type="text" placeholder="SMTP url"></td>
-                                        <td><input type="text" placeholder="SMTP port"></td>
-                                        <td><input type="text" placeholder="Host username"></td>
-                                        <td><input type="password" placeholder="Host password"></td>
-                                        <td><button disabled>Update</button></td>
+                                        <td><input type="text" placeholder="SMTP url" #smtpURL></td>
+                                        <td><input type="text" placeholder="SMTP port" #smtpPort></td>
+                                        <td><input type="text" placeholder="Host username" #smtpUsername></td>
+                                        <td><input type="password" placeholder="Host password" #smtpPassword></td>
+                                        <td><button
+                                                (click)="setSMTP(smtpURL.value, smtpPort.value, smtpUsername.value, smtpPassword.value)">Update</button>
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
@@ -163,7 +166,8 @@
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Icon:</label>
                         <img [src]="base64Preview" id="base64Preview">
-                        <input class="form-control" type="file" accept="image/png, image/jpeg" #base64Upload (change)="encodeImageFileAsURL(base64Upload)" placeholder="KSM" #addNetworkIcon>
+                        <input class="form-control" type="file" accept="image/png, image/jpeg" #base64Upload
+                            (change)="encodeImageFileAsURL(base64Upload)" placeholder="KSM" #addNetworkIcon>
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Decimals:</label>

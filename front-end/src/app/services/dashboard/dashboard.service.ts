@@ -126,6 +126,7 @@ export class DashboardService {
 
     if (selVal['details']['status'] == "active") {
       this.selectedValidatorActive = true;
+
       this.updateEraRewardPoints(selVal['details']['rewardTracking']);
 
       this.bonded_total = this.calculateDecimals(selVal['details']['bonded_total'], selNetwork['decimals']).toFixed(2);
@@ -385,14 +386,16 @@ export class DashboardService {
   }
 
   private updateEraRewardPoints(data: any) {
-    this.eraRewardPoints = data;
+    if(data != null) {
+      this.eraRewardPoints = data;
 
-    this.eraChartData.labels = this.createEmptyLabelList(data);
-    this.eraChartData.datasets.forEach((dataset) => {
-      dataset.data = data;
-    });
-
-    Chart.getChart("eraPointChart")?.update("normal");
+      this.eraChartData.labels = this.createEmptyLabelList(data);
+      this.eraChartData.datasets.forEach((dataset) => {
+        dataset.data = data;
+      });
+  
+      Chart.getChart("eraPointChart")?.update("normal");
+    }
   }
 
   private createEmptyLabelList(input: any) {

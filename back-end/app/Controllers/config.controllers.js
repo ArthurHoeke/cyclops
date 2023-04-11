@@ -8,6 +8,8 @@ const setSMTP = async (req, res) => {
     const smtpPassword = req.body.smtpPassword;
 
     if(smtpHost == null || smtpPort == null || smtpUsername == null || smtpPassword == null) {
+        res.sendStatus(400);
+    } else {
         config.setSMTP([smtpHost, smtpPort, smtpUsername, smtpPassword], (err, data) => {
             if (err) {
                 res.sendStatus(500);
@@ -20,8 +22,6 @@ const setSMTP = async (req, res) => {
                 res.sendStatus(200);
             }
         });
-    } else {
-        res.sendStatus(400);
     }
 };
 
