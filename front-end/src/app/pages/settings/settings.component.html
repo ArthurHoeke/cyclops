@@ -38,7 +38,7 @@
                                         </td>
                                         <td><button (click)="updateApiKey()" [disabled]="subscanApiKey.length == 0">Update</button></td>
                                     </tr>
-                                    <tr>
+                                    <!-- <tr>
                                         <td><b>Data update rate</b></td>
                                         <td><select>
                                                 <option>every 1 minute</option>
@@ -50,7 +50,7 @@
                                             </select>
                                         </td>
                                         <td><button disabled>Update</button></td>
-                                    </tr>
+                                    </tr> -->
                                 </table>
                             </div>
                         </div>
@@ -69,11 +69,11 @@
                                         <th>Ticker</th>
                                         <th>Action</th>
                                     </tr>
-                                    <tr>
-                                        <td class="tokenIcon"><img src="assets/logo/dot.png"></td>
-                                        <td><input type="text" placeholder="polkadot"></td>
-                                        <td><input type="text" placeholder="dot"></td>
-                                        <td><button class="mr-1" disabled>Update</button><button><svg
+                                    <tr *ngFor="let network of networkList">
+                                        <td class="tokenIcon"><img [src]="network.icon"></td>
+                                        <td>{{network.name}}</td>
+                                        <td>{{network.ticker}}</td>
+                                        <td><button *ngIf="network.name != 'polkadot'"><svg
                                                     xmlns="http://www.w3.org/2000/svg" width="36" height="36"
                                                     viewBox="0 0 24 24" fill="none" stroke="#545454" stroke-width="2"
                                                     stroke-linecap="round" stroke-linejoin="round"

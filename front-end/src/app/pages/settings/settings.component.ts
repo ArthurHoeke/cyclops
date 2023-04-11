@@ -16,8 +16,18 @@ import { ToastrService } from 'ngx-toastr';
 export class SettingsComponent {
   subscanApiKey = "";
   public base64Preview: any = "";
+
+  public networkList: any = null;
   
-  constructor(private storageService: StorageService, private router: Router, private apiService: ApiService, private toastr: ToastrService, private dashboardService: DashboardService) {}
+  constructor(private storageService: StorageService, private router: Router, private apiService: ApiService, private toastr: ToastrService, private dashboardService: DashboardService) {
+    this.fetchNetworkList();
+  }
+
+  async fetchNetworkList() {
+    await this.apiService.getNetworks().then((data: any) => {
+      this.networkList = data['data'];
+    });
+  }
 
   updateApiKey() {
     this.apiService.setSubscanApiKey(this.subscanApiKey).then((data) => {

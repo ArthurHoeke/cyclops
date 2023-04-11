@@ -261,6 +261,100 @@ export class ApiService {
     return promise;
   }
 
+  updateValidatorName(validatorId: string, name: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+      .set('name', name)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "validator/updateName";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  deleteValidator(validatorId: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "validator/delete";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  deleteAllRewards(validatorId: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/deleteAllFromValidator";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  findValidatorNameByAddress(network: string, address: string) {
+    const body = new HttpParams()
+      .set('network', network)
+      .set('address', address)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "validator/findValidatorNameByAddress";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   verifyJWT() {
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "user/verify";

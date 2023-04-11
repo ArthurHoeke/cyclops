@@ -8,6 +8,8 @@ import { StorageService } from 'src/app/services/storage/storage.service';
 
 import { Router } from '@angular/router';
 
+import { DashboardService } from 'src/app/services/dashboard/dashboard.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -15,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent {
 
-  constructor(private apiService: ApiService, private toastr: ToastrService, private authenticationService: AuthenticationService, private storageService: StorageService, private router: Router) {
+  constructor(private apiService: ApiService, private toastr: ToastrService, private authenticationService: AuthenticationService, private storageService: StorageService, private router: Router, private dashboardService: DashboardService) {
     if (storageService.getAccessToken() !== String(null)) {
       authenticationService.verifyJWT().then((data: any) => {
         if (data.role != null) {
@@ -31,35 +33,47 @@ export class LoginComponent {
   public password: string = "";
 
   public login() {
-    this.apiService.login(this.email, this.password).then((data: any) => {
-      this.toastr.success('Welcome back!', "", {
+    if(this.email != "" && this.password != "") {
+      this.apiService.login(this.email, this.password).then((data: any) => {
+        this.toastr.success('Welcome back!', "", {
+          positionClass: "toast-top-left"
+        });
+  
+        this.storageService.setAccessToken(data.accessToken);
+        this.authenticationService.setAuthenticationStatus(true);
+        this.router.navigate(['/dashboard']);
+      }).catch((err) => {
+        console.error(err)
+        this.toastr.error('Incorrect login credentials.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    } else {
+      this.toastr.warning('Please fill in all fields.', "", {
         positionClass: "toast-top-left"
       });
-
-      this.storageService.setAccessToken(data.accessToken);
-      this.authenticationService.setAuthenticationStatus(true);
-      this.router.navigate(['/dashboard']);
-    }).catch((err) => {
-      console.error(err)
-      this.toastr.error('Incorrect login credentials.', "", {
-        positionClass: "toast-top-left"
-      });
-    });
+    }
   }
 
   public register() {
-    this.apiService.register(this.email, this.password).then((data: any) => {
-      this.toastr.success('Registered successfully!', "", {
+    if(this.email != "" && this.password != "") {
+      this.apiService.register(this.email, this.password).then((data: any) => {
+        this.toastr.success('Registered successfully!', "", {
+          positionClass: "toast-top-left"
+        });
+  
+        this.storageService.setAccessToken(data.accessToken);
+        this.router.navigate(['/dashboard']);
+      }).catch((err) => {
+        console.error(err)
+        this.toastr.error('An account already exists with this e-mail.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    } else {
+      this.toastr.warning('Please fill in all fields.', "", {
         positionClass: "toast-top-left"
       });
-
-      this.storageService.setAccessToken(data.accessToken);
-      this.router.navigate(['/dashboard']);
-    }).catch((err) => {
-      console.error(err)
-      this.toastr.error('An account already exists with this e-mail.', "", {
-        positionClass: "toast-top-left"
-      });
-    });
+    }
   }
 }

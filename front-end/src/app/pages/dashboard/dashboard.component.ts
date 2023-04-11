@@ -35,10 +35,54 @@ export class DashboardComponent {
   incomeReportTokens: any = 0;
   incomeReportMonetary: any = 0;
 
+  valName: any = '';
+
   constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private storageService: StorageService, private router: Router, private authenticationService: AuthenticationService, private apiService: ApiService, private toastr: ToastrService) {
     Chart.register(gradient);
 
     dashboardService.updateDashboardData();
+  }
+
+  public async updateValidatorName() {
+    await this.apiService.updateValidatorName(this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['id'], this.valName).then((data) => {
+      this.toastr.success('Name updated!', "", {
+        positionClass: "toast-top-left"
+      });
+      this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['name'] = this.valName;
+    }).catch((err) => {
+      this.toastr.error('Something went wrong.', "", {
+        positionClass: "toast-top-left"
+      });
+    });
+  }
+
+  public async fetchValidatorName(network: any, elem: any, nameElem: any) {
+    this.apiService.findValidatorNameByAddress(network.options[network.selectedIndex].text, elem.value).then((name: any) => {
+      nameElem.value = JSON.parse(name)['data'];
+    })
+  }
+
+  public async deleteValidator() {
+    if(confirm("Are you sure you want to delete this validator?")) {
+
+      await this.apiService.deleteAllRewards(this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['id']).then(async (data) => {
+        await this.apiService.deleteValidator(this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['id']).then((data) => {
+          this.toastr.success('Validator deleted.', "", {
+            positionClass: "toast-top-left"
+          });
+          this.dashboardService.selectValidator(0);
+          this.dashboardService.updateDashboardData();
+        }).catch((err) => {
+          this.toastr.error('Something went wrong.', "", {
+            positionClass: "toast-top-left"
+          });
+        });
+      }).catch((err) => {
+        this.toastr.error('Something went wrong.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    }
   }
 
   public truncateString(str: string, num: number) {
@@ -72,6 +116,7 @@ export class DashboardComponent {
           this.toastr.success('Validator synced!', "", {
             positionClass: "toast-top-left"
           });
+          this.dashboardService.selectValidator(0);
         }).catch((err) => {
           this.toastr.error('Unable to sync validator.', "", {
             positionClass: "toast-top-left"
@@ -131,7 +176,7 @@ export class DashboardComponent {
     //calculate total tokens & USD value earned
     let sumTokens = 0;
 
-    for(let i = 0; i < this.incomeReportData.length; i++) {
+    for (let i = 0; i < this.incomeReportData.length; i++) {
       sumTokens += this.incomeReportData[i]['amount'];
     }
 
