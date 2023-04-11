@@ -74,6 +74,19 @@ const getMonthlyRewardReportFromValidator = async (req, res) => {
     });
 };
 
+const deleteAllRewards = async (req, res) => {
+    const userId = req.user.id;
+    const validatorId = req.body.id;
+    reward.deleteAllRewards([validatorId, userId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+};
+
+
 const getRewardsFromValidatorInPeriod = async (req, res) => {
     const validatorId = req.body.id;
     const start = req.body.start;
@@ -171,5 +184,6 @@ module.exports = {
     getCombinedWeeklyRewards,
     getValidatorRewardOverview,
     getIncomeDistribution,
-    getMonthlyRewardReportFromValidator
+    getMonthlyRewardReportFromValidator,
+    deleteAllRewards
 };

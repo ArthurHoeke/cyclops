@@ -6,7 +6,8 @@ const validatorController = require('../Controllers/validator.controllers');
 const router = express.Router();
 
 router.post('/add', isLoggedIn, validatorController.add);
-router.post('/remove', isLoggedIn, validatorController.remove);
+router.post('/delete', isLoggedIn, validatorController.remove);
+router.post('/updateName', isLoggedIn, validatorController.updateName);
 router.get('/list', isLoggedIn, validatorController.getList);
-
+router.post('/findValidatorNameByAddress', isLoggedIn, validatorController.findValidatorNameByAddress);
 module.exports = router

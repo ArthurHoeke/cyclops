@@ -1,4 +1,5 @@
 const config = require("../Models/config.models");
+const validatorService = require("../Services/validator.services")
 
 const setSMTP = async (req, res) => {
     const smtpHost = req.body.smtpHost;
@@ -32,6 +33,7 @@ const setSubscanApiKey = async (req, res) => {
                 res.sendStatus(500);
             } else {
                 SUBSCAN_APIKEY = subscanApiKeyVar;
+                validatorService.periodicNetworkCheck();
                 res.sendStatus(200);
             }
         });

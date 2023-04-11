@@ -1,14 +1,14 @@
 const data = require('./data.utils');
 
-function getPolkadot1kvData() {
-    data.getData('https://polkadot.w3f.community/candidates')
+async function getPolkadot1kvData() {
+    await data.getData('https://polkadot.w3f.community/candidates')
         .then(data => {
             return data;
     });
 }
 
-function getKusama1kvData() {
-    data.getData('https://kusama.w3f.community/candidates')
+async function getKusama1kvData() {
+    await data.getData('https://kusama.w3f.community/candidates')
         .then(data => {
             return data;
     });

@@ -25,6 +25,12 @@ const getAllRewardsFromValidator = (data, cb) => {
     });
 }
 
+const deleteAllRewards = (data, cb) => {
+    return database.all('DELETE FROM reward WHERE reward.id IN (SELECT reward.id FROM reward JOIN validator ON validatorId = validator.id WHERE validatorId = ? AND validator.userId = ?)', data, (err, row) => {
+        cb(err, row)
+    });
+}
+
 //timestamp = unixtime
 const getRewardsFromValidatorInPeriod = (data, cb) => {
     return database.all('SELECT * FROM reward WHERE validatorId = ? AND timestamp BETWEEN ? AND ?', data, (err, row) => {
@@ -89,5 +95,6 @@ module.exports = {
     getCombinedWeeklyRewards,
     getValidatorRewardOverview,
     getIncomeDistribution,
-    getMonthlyRewardReportFromValidator
+    getMonthlyRewardReportFromValidator,
+    deleteAllRewards
 };

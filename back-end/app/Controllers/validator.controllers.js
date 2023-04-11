@@ -20,7 +20,7 @@ const add = async (req, res) => {
 };
 
 const remove = async (req, res) => {
-    const id = req.body.validatorId;
+    const id = req.body.id;
     const userId = req.user.id;
 
     if (id != null) {
@@ -48,6 +48,32 @@ const getList = async (req, res) => {
     });
 };
 
+const updateName = async (req, res) => {
+    const userId = req.user.id;
+    const validatorId = req.body.id;
+    const newName = req.body.name;
+
+    validator.updateName([newName, validatorId, userId], (err, data) => {
+        if (err) {
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+};
+
+const findValidatorNameByAddress = async (req, res) => {
+    const network = req.body.network;
+    const address = req.body.address;
+
+    const valName = await validatorService.findValidatorNameByAddress(network, address);
+    if (valName != null) {
+        res.status(200).json({ data: valName });
+    } else {
+        res.sendStatus(404);
+    }
+};
+
 async function getValidatorById(validatorId) {
     return new Promise((resolve) => {
         validator.getValidatorById([validatorId], async (err, data) => {
@@ -69,5 +95,7 @@ module.exports = {
     remove,
     getList,
     getValidatorById,
-    getAllValidatorIds
+    getAllValidatorIds,
+    updateName,
+    findValidatorNameByAddress
 };  

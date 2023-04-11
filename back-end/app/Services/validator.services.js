@@ -1,9 +1,11 @@
 const subscan = require("../Utils/subscan.utils");
+const w3f = require("../Utils/w3f.utils");
+const data = require("../Utils/data.utils");
+
 const validator = require("../Controllers/validator.controllers");
 const reward = require("../Controllers/reward.controllers");
 const network = require("../Controllers/network.controllers");
 const event = require("../Controllers/event.controllers");
-const data = require("../Utils/data.utils");
 
 networkList = [];
 networkEraProgress = {};
@@ -13,6 +15,9 @@ waitingNetworkValidators = [];
 
 rewardPointTracker = {};
 avgRewardPoints = [];
+
+var polkadot1kvData = null;
+var kusama1kvData = null;
 
 isSyncing = false;
 
@@ -52,6 +57,33 @@ async function periodicNetworkCheck() {
             await updateEraData();
         }
     }, 5 * 60000);
+}
+
+function thousandValidatorCheck() {
+    update1kvData();
+
+    //update 1kv data every hour
+    setInterval(async function () {
+        update1kvData();
+    }, 60 * 60000);
+}
+
+async function update1kvData() {
+    await w3f.getKusama1kvData().then((data) => {
+        kusama1kvData = data;
+
+        console.log(data.greenConsoleLog("Updated") + " Kusama 1kv data");
+    }).catch((err) => {
+        console.log(data.redConsoleLog("Failed") + " to update Kusama 1kv data (either due to the W3F API service being down, or request sent over HTTP)");
+    });
+
+    await w3f.getPolkadot1kvData().then((data) => {
+        polkadot1kvData = data;
+
+        console.log(data.greenConsoleLog("Updated") + " Polkadot 1kv data");
+    }).catch((err) => {
+        console.log(data.redConsoleLog("Failed") + " to update Polkadot 1kv data (either due to the W3F API service being down, or request sent over HTTP)");
+    });
 }
 
 // This function returns the status of a validator given the networkId and address.
@@ -355,8 +387,55 @@ async function processRewardList(validatorId, rewardList, rewardHashCache, local
     });
 }
 
+async function findValidatorNameByAddress(network, address) {
+    let networkId = null;
+    let name = null;
+
+    for(let i = 0; i < networkList.length; i++) {
+        if(networkList[i].name == network) {
+            networkId = i;
+            break;
+        }
+    }
+
+    if(networkId != null) {
+        for(let i = 0; i < activeNetworkValidators[networkId].length; i++) {
+            if(activeNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
+                if(activeNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
+                    name = activeNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
+                } else if(activeNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
+                    name = activeNetworkValidators[networkId][i]['stash_account_display']['display'];
+                }
+                break;
+            }
+        }
+        if(name == null) {
+            for(let i = 0; i < waitingNetworkValidators[networkId].length; i++) {
+                if(waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] != null) {
+                    name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
+                } else if(waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
+                    name = waitingNetworkValidators[networkId][i]['stash_account_display']['display'];
+                }
+                break;
+            }
+        }
+
+        return name;
+    } else {
+        return null;
+    }
+}
+
 function getNetworkEraData(name) {
     return networkEraProgress[name];
+}
+
+function getPolkadot1kvData() {
+    return polkadot1kvData;
+}
+
+function getKusama1kvData() {
+    return kusama1kvData;
 }
 
 module.exports = {
@@ -364,5 +443,9 @@ module.exports = {
     updateNetworkList,
     getValidatorStatus,
     performRewardSync,
-    getNetworkEraData
+    getNetworkEraData,
+    thousandValidatorCheck,
+    getPolkadot1kvData,
+    getKusama1kvData,
+    findValidatorNameByAddress
 };

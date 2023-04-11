@@ -26,6 +26,12 @@ const remove = (data, cb) => {
     });
 }
 
+const updateName = (data, cb) => {
+    return database.run('UPDATE validator SET name = ? WHERE id = ? AND userId = ?', data, (err) => {
+        cb(err)
+    });
+}
+
 const getList = (data, cb) => {
     return database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
         for(let i = 0; i < row.length; i++) {
@@ -53,5 +59,6 @@ module.exports = {
     remove,
     getList,
     getValidatorById,
-    getAllValidatorIds
+    getAllValidatorIds,
+    updateName
 };

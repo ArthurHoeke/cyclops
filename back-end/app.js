@@ -78,6 +78,8 @@ setTimeout(function () {
     }
   });
 
+  validatorService.thousandValidatorCheck();
+
   app.listen(port, () => {
     const unitTest = parseInt(process.argv.slice(2)[0]);
     if (unitTest === 1) {

@@ -15,4 +15,5 @@ router.get('/getYearlyRewardsFromValidator', isLoggedIn, rewardControllers.getYe
 router.get('/getCombinedWeeklyRewards', isLoggedIn, rewardControllers.getCombinedWeeklyRewards);
 router.post('/getValidatorRewardOverview', isLoggedIn, rewardControllers.getValidatorRewardOverview);
 router.get('/getIncomeDistribution', isLoggedIn, rewardControllers.getIncomeDistribution);
+router.post('/deleteAllFromValidator', isLoggedIn, rewardControllers.deleteAllRewards);
 module.exports = router

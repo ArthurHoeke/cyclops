@@ -44,6 +44,12 @@ const list = async (req, res) => {
         } else {
             for(let i = 0; i < data.length; i++) {
                 data[i].era = validatorService.getNetworkEraData(data[i].name);
+
+                if(data[i]['name'] == 'polkadot') {
+                    data[i]['1kv'] = validatorService.getPolkadot1kvData();
+                } else if (data[i]['name'] == 'kusama') {
+                    data[i]['1kv'] = validatorService.getKusama1kvData();
+                }
             }
             res.status(200).json({
                 data: data
