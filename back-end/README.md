@@ -44,12 +44,13 @@ Contains all end-points implementing controller functionality.
 |---------------|------------|------------------|------------------------------------------------------------------|-------|
 | `register`    | `POST`     | `users/register` | `email (string)` `password (string)`                             | `0`   |
 | `login`       | `POST`     | `users/login`    | `email (string)` `password (string)`                             | `0`   |
+| `verify`       | `GET`     | `users/login`    |                                                                  | `0`   |
 
 #### Network
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)`         | `1`   |
+| `create`                          | `POST`     | `network/create`                         | `name (string)` `ticker (string)` `icon (base64 string)` `decimals (integer)`         | `1`   |
 | `remove`                          | `POST`     | `network/remove`                         | `id (network ID integer)`                                        | `1`   |
 | `list`                         | `GET`      | `network/list`                           |                                                                  | `0`   |
 
@@ -58,28 +59,34 @@ Contains all end-points implementing controller functionality.
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
 | `add`                             | `POST`     | `validator/add`                          | `name (string)` `address (string)` `networkId (network ID integer)`                     | `1`   |
-| `remove`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
+| `delete`                          | `POST`     | `validator/remove`                       | `id (network ID integer)`                                        | `1`   |
 | `list`                         | `GET`      | `validator/list`                         |                                                                  | `0`   |
+| `updateName`                         | `POST`      | `validator/list`                         | `id (validator ID integer)` `name (string)`                                           | `0`   |
+| `findValidatorNameByAddress`                         | `POST`      | `validator/list`                         | `network (network ID integer)` `address (validator address string)`                               | `0`   |
 
 #### Reward
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
-| `getAllRewardsFromValidator`      | `GET`      | `reward/getAllRewardsFromValidator`      | `id (validator ID integer)`                                      | `0`   |
-| `getRewardsFromValidatorInPeriod` | `GET`      | `reward/getRewardsFromValidatorInPeriod` | `id (validator ID integer)` `start (unixtime string)` `end (unixtime string)` | `0`   |
-| `sync`                            | `GET`      | `reward/sync`                            | `id (validator ID integer)`                                      | `0`   |
-| `getWeeklyRewardsFromValidator`   | `GET`      | `reward/getWeeklyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
-| `getMonthlyRewardsFromValidator`  | `GET`      | `reward/getMonthlyRewardsFromValidator`  | `id (validator ID integer)`                                      | `0`   |
-| `getYearlyRewardsFromValidator`   | `GET`      | `reward/getYearlyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
-| `getCombinedWeeklyRewards`        | `GET`      | `reward/getCombinedWeeklyRewards`        |                                                                  | `0`   |
-| `getValidatorRewardOverview`      | `GET`      | `reward/getValidatorRewardOverview`      | `id (validator ID integer)`                                      | `0`   |
+| `getAllRewardsFromValidator`      | `POST`      | `reward/getAllRewardsFromValidator`      | `id (validator ID integer)`                                      | `0`   |
+| `getRewardsFromValidatorInPeriod` | `POST`      | `reward/getRewardsFromValidatorInPeriod` | `id (validator ID integer)` `start (unixtime string)` `end (unixtime string)` | `0`   |
+| `sync`                            | `POST`      | `reward/sync`                            | `id (validator ID integer)`                                      | `0`   |
+| `getWeeklyRewardsFromValidator`   | `POST`      | `reward/getWeeklyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
+| `getMonthlyRewardsFromValidator`  | `POST`      | `reward/getMonthlyRewardsFromValidator`  | `id (validator ID integer)`                                      | `0`   |
+| `getYearlyRewardsFromValidator`   | `POST`      | `reward/getYearlyRewardsFromValidator`   | `id (validator ID integer)`                                      | `0`   |
+| `getCombinedWeeklyRewards`        | `POST`      | `reward/getCombinedWeeklyRewards`        |                                                                  | `0`   |
+| `getValidatorRewardOverview`      | `POST`      | `reward/getValidatorRewardOverview`      | `id (validator ID integer)`                                      | `0`   |
+| `getWeeklyRewardsFromValidator`      | `POST`      | `reward/getWeeklyRewardsFromValidator`      | `id (validator ID integer)`                                      | `0`   |
+| `getMonthlyRewardReportFromValidator`      | `POST`      | `reward/getMonthlyRewardReportFromValidator`      | `id (validator ID integer)`                                      | `0`   |
+| `deleteAllFromValidator`      | `POST`      | `reward/getValidatorRewardOverview`      | `id (validator ID integer)`                                      | `0`   |
 
 #### Event
 
 | Function                          | Method     | URI                                      | Parameters                                                       | Role  |
 |-----------------------------------|------------|------------------------------------------|------------------------------------------------------------------|-------|
 | `get`                             | `GET`      | `event/get`                              | `id (validator ID integer)`                                      | `0`   |
-| `remove`                          | `POST`     | `event/remove`                           | `id (event ID integer)` `validatorId (validator ID integer)`     | `0`   |
+| `remove`                             | `GET`      | `event/remove`                              | `id (event ID integer)`                                      | `0`   |
+| `all`                          | `GET`     | `event/all`                           |      | `0`   |
 
 #### Config
 
