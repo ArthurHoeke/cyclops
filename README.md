@@ -71,8 +71,20 @@ To use Cyclops, both the front-end and back-end servers need to be running.
 
 First, navigate to the front-end folder and run `npm install` to install all the necessary dependencies. Then, run `ng serve` to start the front-end server. Next, navigate to the back-end folder and run npm install to install all the necessary dependencies. Finally, run `npm start` to start the back-end server. Once both servers are running, you can navigate to localhost:4200 in your browser to access Cyclops.
 
-*Note that currently only the front-end exists, and the back-end is still under development. Please refer to the individual readme files in each folder for more detailed instructions on how to launch the servers.*
+*Please refer to the individual readme files in each folder for more detailed instructions on how to setup the servers.*
 
+By default cyclops will run over the HTTP protocol, note that this is only meant for internal testing. HTTP should never be used for production, and will cause API issues with the w3f 1kv end-points. Once you have confirmed Cyclops to be running properly locally, you should obtain an SSL certificate and enable HTTPS by doing the following:
+
+1. Obtain an SSL certificate.
+I'd highly recommend using [letsencrypt](https://letsencrypt.org/), a service which provides free SSL certificates. The next couple of bullet points will go over obtaining a certificate using letsencrypt, if you're using your own method please skip to bullet point `4`.
+2. Install letsencrypt's certbot
+`sudo add-apt-repository ppa:certbot/certbot`
+`sudo apt-get update`
+`sudo apt-get install certbot`
+3. Generate your certificate using `certbot certonly --manual` and follow the setup steps.
+4. Uncomment the following lines from app.js: `21`, `22`, `23`, `83`. If you are not using certbot, please replace the paths of privkey.pem, cert.pem and chain.pem.
+
+Once the back-end server is running using HTTPS, make sure to adjust the front-end API end-point on [this line](https://github.com/ArthurHoeke/cyclops/blob/9acdabcff868fe93636a71d917bee119e8605b50/front-end/src/app/services/api/api.service.ts#L16) and create a build of the front-end using `ng build`. `ng serve` should never be used to host the production front-end.
 
 <!-- CONTRIBUTING -->
 ## Contributing
