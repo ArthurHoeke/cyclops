@@ -42,6 +42,8 @@ export class DashboardService {
 
   private count_nominators: any = 0;
 
+  public thousandValData = null;
+
   constructor(private apiService: ApiService, private coingeckoService: CoingeckoService, private toastr: ToastrService) { }
 
   public async updateDashboardData() {
@@ -185,6 +187,24 @@ export class DashboardService {
     for(let i = 0; i < this.eventList.length; i++) {
       if(this.eventList[i]['validatorId'] == selVal['id']) {
         this.selectValEventList.push(this.eventList[i]);
+      }
+    }
+
+    this.fetch1kvData(valIndex);
+  }
+
+  public async fetch1kvData(valIndex: any) {
+    this.thousandValData = null;
+    
+    const selValAddress = this.validatorList[valIndex - 1]['address'];
+    const thousandValList = this.networkList[this.validatorList[valIndex - 1]['networkId'] - 1]['1kv'];
+
+    for(let i = 0; i < thousandValList.length; i++) {
+      const stash = thousandValList[i]['stash'];
+
+      if(stash == selValAddress) {
+        this.thousandValData = thousandValList[i]['validity'];
+        break;
       }
     }
   }

@@ -63,7 +63,7 @@ export class DashboardComponent {
   }
 
   public async deleteValidator() {
-    if(confirm("Are you sure you want to delete this validator?")) {
+    if (confirm("Are you sure you want to delete this validator?")) {
 
       await this.apiService.deleteAllRewards(this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['id']).then(async (data) => {
         await this.apiService.deleteValidator(this.dashboardService.validatorList[this.dashboardService.getSelectedValidator() - 1]['id']).then((data) => {
@@ -477,6 +477,22 @@ export class DashboardComponent {
     } else {
       return false;
     }
+  }
+
+  formatType(str: any) {
+    // Split the string by underscore to create an array of words
+    const words = str.split('_');
+
+    // Capitalize the first letter of the first word and put the rest in lowercase
+    words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1).toLowerCase();
+
+    // Loop through the remaining words and put each in lowercase
+    for (let i = 1; i < words.length; i++) {
+      words[i] = words[i].toLowerCase();
+    }
+
+    // Join the words back into a single string without underscores
+    return words.join(' ');
   }
 
   public logout() {

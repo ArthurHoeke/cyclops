@@ -91,7 +91,8 @@
                                             <td>{{event.eventType}}</td>
                                             <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
                                             <td>{{event.description}}</td>
-                                            <td (click)="dashboardService.removeEvent(event.eventId)"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                            <td (click)="dashboardService.removeEvent(event.eventId)"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="36" height="36"
                                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                                                     class="ai ai-TrashCan">
@@ -190,7 +191,8 @@
                                 <div class="head">
                                     <p>Stash balance</p>
                                     <ng-container *ngIf="!dashboardService.isActive()">
-                                        <span class="nominatorStatus">{{dashboardService.getNominatorCount()}} nominators</span>
+                                        <span class="nominatorStatus">{{dashboardService.getNominatorCount()}}
+                                            nominators</span>
                                     </ng-container>
                                 </div>
                                 <div class="body">
@@ -222,7 +224,8 @@
                                         <tr>
                                             <td><b>Name</b></td>
                                             <td><input type="text" [(ngModel)]="valName" placeholder="new name"></td>
-                                            <td><button [disabled]="valName ==''" (click)="updateValidatorName()">Update</button></td>
+                                            <td><button [disabled]="valName ==''"
+                                                    (click)="updateValidatorName()">Update</button></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -420,8 +423,8 @@
                                             <th>Action</th>
                                         </tr>
                                         <tr>
-                                            <td><select [(ngModel)]="reportMonth" class="select select_up" id="historyMonthSwitch"
-                                                    (change)="fetchIncomeReportMonth()">
+                                            <td><select [(ngModel)]="reportMonth" class="select select_up"
+                                                    id="historyMonthSwitch" (change)="fetchIncomeReportMonth()">
                                                     <option [ngValue]="null" [disabled]="true">Select month</option>
                                                     <option value="1">Jan</option>
                                                     <option value="2">Feb</option>
@@ -438,14 +441,49 @@
                                                 </select></td>
                                             <td>{{incomeReportTokens}}</td>
                                             <td>${{incomeReportMonetary}}</td>
-                                            <td><button (click)="GeneratePDF()"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                        viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                                        class="ai ai-Download">
+                                            <td><button (click)="GeneratePDF()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        width="36" height="36" viewBox="0 0 24 24" fill="none"
+                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                        stroke-linejoin="round" class="ai ai-Download">
                                                         <path d="M12 15V3m0 12l-4-4m4 4l4-4" />
                                                         <path
                                                             d="M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.439a2 2 0 0 0 1.94-1.515L22 17" />
                                                     </svg> Income report</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>1kv statistics</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th style="width: 33%">Type</th>
+                                            <th style="width: 33%">Is valid</th>
+                                            <th style="width: 33%">Updated on</th>
+                                        </tr>
+                                        <tr *ngIf="dashboardService.thousandValData == null">
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr *ngFor="let val of dashboardService.thousandValData">
+                                            <td><b>{{formatType(val.type)}}</b></td>
+                                            <td>
+                                                <ng-container *ngIf="val.valid == true">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="#50B720" stroke-width="2" class="ai ai-CircleCheckFill"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6z"/></svg>
+                                                </ng-container>
+                                                <ng-container *ngIf="val.valid == false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="#B72020" stroke-width="2" class="ai ai-CircleXFill"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm3.707 8.707a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293a1 1 0 1 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293z"/></svg>
+                                                </ng-container>
+                                            </td>
+                                            <td>{{dashboardService.formatUnixTimestamp(val.updated)}}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -475,7 +513,8 @@
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Address:</label>
-                        <input class="form-control" type="text" placeholder="15wznkm7fMaJLFaw7B8K.." #addValAddress (keyup)="fetchValidatorName(addValNetwork, addValAddress, addValName)">
+                        <input class="form-control" type="text" placeholder="15wznkm7fMaJLFaw7B8K.." #addValAddress
+                            (keyup)="fetchValidatorName(addValNetwork, addValAddress, addValName)">
                     </div>
                     <div class="form-group">
                         <label for="message-text" class="col-form-label">Validator name:</label>
