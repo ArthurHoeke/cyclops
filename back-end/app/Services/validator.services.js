@@ -69,21 +69,40 @@ function thousandValidatorCheck() {
 }
 
 async function update1kvData() {
-    await w3f.getKusama1kvData().then((data) => {
-        kusama1kvData = data;
+    const kusamaw3f = await w3f.getKusama1kvData();
+    if(kusamaw3f == false) {
+        console.log(data.redConsoleLog("Failed") + " to update Kusama 1kv data (W3F API service is down)");
+    } else {
+        let kvList = [];
+        for(let i = 0; i < kusamaw3f.length; i++) {
+            kvList[i] = {};
+            kvList[i].stash = kusamaw3f[i]['stash'];
+            kvList[i].score = kusamaw3f[i]['score'];
+            kvList[i].validity = kusamaw3f[i]['validity'];
+        }
+
+        kusama1kvData = kvList;
 
         console.log(data.greenConsoleLog("Updated") + " Kusama 1kv data");
-    }).catch((err) => {
-        console.log(data.redConsoleLog("Failed") + " to update Kusama 1kv data (either due to the W3F API service being down, or request sent over HTTP)");
-    });
+    }
 
-    await w3f.getPolkadot1kvData().then((data) => {
-        polkadot1kvData = data;
+    const polkadotw3f = await w3f.getPolkadot1kvData();
+
+    if(polkadotw3f == false) {
+        console.log(data.redConsoleLog("Failed") + " to update Polkadot 1kv data (W3F API service is down)");
+    } else {
+        let kvList = [];
+        for(let i = 0; i < polkadotw3f.length; i++) {
+            kvList[i] = {};
+            kvList[i].stash = polkadotw3f[i]['stash'];
+            kvList[i].score = polkadotw3f[i]['score'];
+            kvList[i].validity = polkadotw3f[i]['validity'];
+        }
+
+        polkadot1kvData = kvList;
 
         console.log(data.greenConsoleLog("Updated") + " Polkadot 1kv data");
-    }).catch((err) => {
-        console.log(data.redConsoleLog("Failed") + " to update Polkadot 1kv data (either due to the W3F API service being down, or request sent over HTTP)");
-    });
+    }
 }
 
 // This function returns the status of a validator given the networkId and address.
@@ -402,7 +421,7 @@ async function findValidatorNameByAddress(network, address) {
         for(let i = 0; i < activeNetworkValidators[networkId].length; i++) {
             if(activeNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
                 if(activeNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
-                    name = activeNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
+                    name = activeNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] + " " + activeNetworkValidators[networkId][i]['stash_account_display']['parent']['sub_symbol'];
                 } else if(activeNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
                     name = activeNetworkValidators[networkId][i]['stash_account_display']['display'];
                 }
@@ -413,7 +432,7 @@ async function findValidatorNameByAddress(network, address) {
             for(let i = 0; i < waitingNetworkValidators[networkId].length; i++) {
                 if(waitingNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
                     if(waitingNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
-                        name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'];
+                        name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] + " " + waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['sub_symbol'];
                     } else if(waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
                         name = waitingNetworkValidators[networkId][i]['stash_account_display']['display'];
                     }

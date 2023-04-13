@@ -1,3 +1,5 @@
+const https = require('https');
+const fs = require('fs');
 var cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser')
@@ -17,6 +19,17 @@ var dataUtils = require('./app/Utils/data.utils');
 const testUtil = require('./app/Services/test.services');
 
 validatorService = require('./app/Services/validator.services');
+
+//replace yourdomain.com with your back-end hosting domain
+// const privateKey = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/privkey.pem', 'utf8');
+// const certificate = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/cert.pem', 'utf8');
+// const ca = fs.readFileSync('/etc/letsencrypt/live/yourdomain.com/chain.pem', 'utf8');
+
+// const credentials = {
+//   key: privateKey,
+//   cert: certificate,
+//   ca: ca
+// };
 
 app = express();
 app.use(cors());
@@ -53,9 +66,10 @@ app.use(function (err, req, res, next) {
   })
 });
 
+// const server = https.createServer(credentials, app);
+
 // timeout to allow database creation in case of first start up
 setTimeout(function () {
-
   // check if config table is present, if not perform initial setup
   config.getConfig((err, data) => {
     if (data == undefined) {
@@ -80,6 +94,7 @@ setTimeout(function () {
 
   validatorService.thousandValidatorCheck();
 
+  //replace app with variable 'server' of line #69
   app.listen(port, () => {
     const unitTest = parseInt(process.argv.slice(2)[0]);
     if (unitTest === 1) {

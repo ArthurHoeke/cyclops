@@ -1,17 +1,21 @@
 const data = require('./data.utils');
 
 async function getPolkadot1kvData() {
-    await data.getData('https://polkadot.w3f.community/candidates')
-        .then(data => {
-            return data;
-    });
+    try {
+        const val = await data.getData('https://polkadot.w3f.community/candidates');
+        return val;
+    } catch {
+        return false;
+    }
 }
 
 async function getKusama1kvData() {
-    await data.getData('https://kusama.w3f.community/candidates')
-        .then(data => {
-            return data;
-    });
+    try {
+        const val = await data.getData('https://kusama.w3f.community/candidates');
+        return val;
+    } catch {
+        return false;
+    }
 }
 
 module.exports = {
