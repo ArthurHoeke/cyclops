@@ -13,7 +13,7 @@ export class ApiService {
   constructor(private http: HttpClient, private router: Router, private storageService: StorageService) { }
 
   // base URL of the back-end API that the service will be interacting with, change to your own domain
-  private api: string = "https://localhost:3000/";
+  private api: string = "http://localhost:3000/";
 
   public getBaseURL() {
     return this.api;
