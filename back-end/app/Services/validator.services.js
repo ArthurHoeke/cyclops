@@ -173,28 +173,33 @@ async function trackValidatorRewardPoints(validatorId) {
         //being tracked
         let selValidator = null;
 
-        for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
-            if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
-                selValidator = activeNetworkValidators[networkId - 1][i];
-                break;
-            }
+        if(activeNetworkValidators[networkId - 1] != undefined) {
+            for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
+                if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                    selValidator = activeNetworkValidators[networkId - 1][i];
+                    break;
+                }
+            }   
         }
 
         if (selValidator != null) {
             const pointArr = rewardPointTracker[address];
-            if (pointArr[pointArr.length - 1] > selValidator['reward_point']) {
-                //new ERA, reset tracking
-                rewardPointTracker[address] = [selValidator['reward_point']];
-            } else {
-                //add points to tracking
-                rewardPointTracker[address].push(selValidator['reward_point']);
 
-                //if validator reward points differ more than 90% of the average, send warning e-mail
-                if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
-                    //to prevent event spamming, check if this is the first warning in the past 24hrs
-                    const eventList = await event.getEventsFromToday(validatorId, "low reward points");
-                    if (eventList.length == 0) {
-                        event.register(val, "low reward points", val.name + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+            if(pointArr[pointArr.length - 1] != undefined) {
+                if (pointArr[pointArr.length - 1] > selValidator['reward_point']) {
+                    //new ERA, reset tracking
+                    rewardPointTracker[address] = [selValidator['reward_point']];
+                } else {
+                    //add points to tracking
+                    rewardPointTracker[address].push(selValidator['reward_point']);
+    
+                    //if validator reward points differ more than 90% of the average, send warning e-mail
+                    if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
+                        //to prevent event spamming, check if this is the first warning in the past 24hrs
+                        const eventList = await event.getEventsFromToday(validatorId, "low reward points");
+                        if (eventList.length == 0) {
+                            event.register(val, "low reward points", val.name + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                        }
                     }
                 }
             }
