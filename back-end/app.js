@@ -105,3 +105,8 @@ setTimeout(function () {
     }
   });
 }, 500);
+
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  console.log("Preventing crash..");
+});

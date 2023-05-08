@@ -33,12 +33,12 @@ export class LoginComponent {
   public password: string = "";
 
   public login() {
-    if(this.email != "" && this.password != "") {
+    if (this.email != "" && this.password != "") {
       this.apiService.login(this.email, this.password).then((data: any) => {
         this.toastr.success('Welcome back!', "", {
           positionClass: "toast-top-left"
         });
-  
+
         this.storageService.setAccessToken(data.accessToken);
         this.authenticationService.setAuthenticationStatus(true);
         this.router.navigate(['/dashboard']);
@@ -56,12 +56,12 @@ export class LoginComponent {
   }
 
   public register() {
-    if(this.email != "" && this.password != "") {
+    if (this.email != "" && this.password != "") {
       this.apiService.register(this.email, this.password).then((data: any) => {
         this.toastr.success('Registered successfully!', "", {
           positionClass: "toast-top-left"
         });
-  
+
         this.storageService.setAccessToken(data.accessToken);
         this.router.navigate(['/dashboard']);
       }).catch((err) => {
