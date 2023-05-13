@@ -6,6 +6,7 @@ const validator = require("../Controllers/validator.controllers");
 const reward = require("../Controllers/reward.controllers");
 const network = require("../Controllers/network.controllers");
 const event = require("../Controllers/event.controllers");
+const nominator = require("../Controllers/nominator.controllers");
 
 networkList = [];
 networkEraProgress = {};
@@ -25,7 +26,7 @@ let interval;
 
 async function updateNetworkList() {
     networkList = await network.getTokenNames();
-    if(SUBSCAN_APIKEY != null) {
+    if (SUBSCAN_APIKEY != null) {
         await updateEraData();
     }
 }
@@ -34,7 +35,7 @@ async function updateEraData() {
     for (let i = 0; i < networkList.length; i++) {
         const eraData = await subscan.getEra(networkList[i].name);
 
-        if(eraData['data']['eraLength'] != undefined) {
+        if (eraData['data']['eraLength'] != undefined) {
             const eraObj = {
                 eraLength: eraData['data']['eraLength'],
                 eraProcess: eraData['data']['eraProcess']
@@ -51,7 +52,7 @@ async function periodicNetworkCheck() {
     //fetch all networks
     getNetworkValidators();
     this.interval = setInterval(async function () {
-        if(isSyncing == false) {
+        if (isSyncing == false) {
             console.clear();
             await getNetworkValidators();
             await updateEraData();
@@ -70,11 +71,11 @@ function thousandValidatorCheck() {
 
 async function update1kvData() {
     const kusamaw3f = await w3f.getKusama1kvData();
-    if(kusamaw3f == false) {
+    if (kusamaw3f == false) {
         console.log(data.redConsoleLog("Failed") + " to update Kusama 1kv data (W3F API service is down)");
     } else {
         let kvList = [];
-        for(let i = 0; i < kusamaw3f.length; i++) {
+        for (let i = 0; i < kusamaw3f.length; i++) {
             kvList[i] = {};
             kvList[i].stash = kusamaw3f[i]['stash'];
             kvList[i].score = kusamaw3f[i]['score'];
@@ -88,11 +89,11 @@ async function update1kvData() {
 
     const polkadotw3f = await w3f.getPolkadot1kvData();
 
-    if(polkadotw3f == false) {
+    if (polkadotw3f == false) {
         console.log(data.redConsoleLog("Failed") + " to update Polkadot 1kv data (W3F API service is down)");
     } else {
         let kvList = [];
-        for(let i = 0; i < polkadotw3f.length; i++) {
+        for (let i = 0; i < polkadotw3f.length; i++) {
             kvList[i] = {};
             kvList[i].stash = polkadotw3f[i]['stash'];
             kvList[i].score = polkadotw3f[i]['score'];
@@ -103,6 +104,11 @@ async function update1kvData() {
 
         console.log(data.greenConsoleLog("Updated") + " Polkadot 1kv data");
     }
+}
+
+async function getNominationHistory(validatorId) {
+    const history = await nominator.getNominationHistoryFromValidator(validatorId);
+    return history;
 }
 
 // This function returns the status of a validator given the networkId and address.
@@ -163,6 +169,30 @@ function getAverageRewardPoints() {
     }
 }
 
+async function trackValidatorNominations(validatorId) {
+    const val = await validator.getValidatorById(validatorId);
+
+    const networkId = val.networkId;
+    const address = val.address;
+
+    //not tracked yet
+    let selValidator = null;
+
+    if (waitingNetworkValidators[networkId - 1] != undefined) {
+        for (let i = 0; i < waitingNetworkValidators[networkId - 1].length; i++) {
+            if (waitingNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
+                selValidator = waitingNetworkValidators[networkId - 1][i];
+                break;
+            }
+        }
+
+        if (selValidator != null) {
+            const curNominations = selValidator['count_nominators'];
+            nominator.add(validatorId, curNominations);
+        }
+    }
+}
+
 async function trackValidatorRewardPoints(validatorId) {
     const val = await validator.getValidatorById(validatorId);
 
@@ -173,26 +203,26 @@ async function trackValidatorRewardPoints(validatorId) {
         //being tracked
         let selValidator = null;
 
-        if(activeNetworkValidators[networkId - 1] != undefined) {
+        if (activeNetworkValidators[networkId - 1] != undefined) {
             for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
                 if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
                     selValidator = activeNetworkValidators[networkId - 1][i];
                     break;
                 }
-            }   
+            }
         }
 
         if (selValidator != null) {
             const pointArr = rewardPointTracker[address];
 
-            if(pointArr[pointArr.length - 1] != undefined) {
+            if (pointArr[pointArr.length - 1] != undefined) {
                 if (pointArr[pointArr.length - 1] > selValidator['reward_point']) {
                     //new ERA, reset tracking
                     rewardPointTracker[address] = [selValidator['reward_point']];
                 } else {
                     //add points to tracking
                     rewardPointTracker[address].push(selValidator['reward_point']);
-    
+
                     //if validator reward points differ more than 90% of the average, send warning e-mail
                     if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
                         //to prevent event spamming, check if this is the first warning in the past 24hrs
@@ -210,7 +240,7 @@ async function trackValidatorRewardPoints(validatorId) {
         //not tracked yet
         let selValidator = null;
 
-        if(activeNetworkValidators[networkId - 1] != undefined) {
+        if (activeNetworkValidators[networkId - 1] != undefined) {
             for (let i = 0; i < activeNetworkValidators[networkId - 1].length; i++) {
                 if (activeNetworkValidators[networkId - 1][i]['stash_account_display']['address'] == address) {
                     selValidator = activeNetworkValidators[networkId - 1][i];
@@ -237,6 +267,7 @@ async function syncAllValidatorRewards() {
                 console.log("🔴" + "Syncing error.");
             } else {
                 trackValidatorRewardPoints(validatorList[i].id);
+                trackValidatorNominations(validatorList[i].id);
             }
         }
     }
@@ -415,30 +446,30 @@ async function findValidatorNameByAddress(network, address) {
     let networkId = null;
     let name = null;
 
-    for(let i = 0; i < networkList.length; i++) {
-        if(networkList[i].name == network) {
+    for (let i = 0; i < networkList.length; i++) {
+        if (networkList[i].name == network) {
             networkId = i;
             break;
         }
     }
 
-    if(networkId != null && activeNetworkValidators.length != 0 && waitingNetworkValidators.length != 0) {
-        for(let i = 0; i < activeNetworkValidators[networkId].length; i++) {
-            if(activeNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
-                if(activeNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
+    if (networkId != null && activeNetworkValidators.length != 0 && waitingNetworkValidators.length != 0) {
+        for (let i = 0; i < activeNetworkValidators[networkId].length; i++) {
+            if (activeNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
+                if (activeNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
                     name = activeNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] + " " + activeNetworkValidators[networkId][i]['stash_account_display']['parent']['sub_symbol'];
-                } else if(activeNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
+                } else if (activeNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
                     name = activeNetworkValidators[networkId][i]['stash_account_display']['display'];
                 }
                 break;
             }
         }
-        if(name == null) {
-            for(let i = 0; i < waitingNetworkValidators[networkId].length; i++) {
-                if(waitingNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
-                    if(waitingNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
+        if (name == null) {
+            for (let i = 0; i < waitingNetworkValidators[networkId].length; i++) {
+                if (waitingNetworkValidators[networkId][i]['stash_account_display']['address'] == address) {
+                    if (waitingNetworkValidators[networkId][i]['stash_account_display']['parent'] != null) {
                         name = waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['display'] + " " + waitingNetworkValidators[networkId][i]['stash_account_display']['parent']['sub_symbol'];
-                    } else if(waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
+                    } else if (waitingNetworkValidators[networkId][i]['stash_account_display']['display'] != null) {
                         name = waitingNetworkValidators[networkId][i]['stash_account_display']['display'];
                     }
                     break;
@@ -473,5 +504,6 @@ module.exports = {
     thousandValidatorCheck,
     getPolkadot1kvData,
     getKusama1kvData,
-    findValidatorNameByAddress
+    findValidatorNameByAddress,
+    getNominationHistory
 };

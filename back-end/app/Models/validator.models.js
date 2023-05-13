@@ -32,11 +32,14 @@ const updateName = (data, cb) => {
     });
 }
 
-const getList = (data, cb) => {
-    return database.all('SELECT * FROM validator WHERE userId = ?', data, (err, row) => {
+const getList = async (data, cb) => {
+    return database.all('SELECT * FROM validator WHERE userId = ?', data, async (err, row) => {
         for(let i = 0; i < row.length; i++) {
+            const nominatorHistory = await validatorService.getNominationHistory(row[i].id);
             const valData = validatorService.getValidatorStatus(row[i].networkId, row[i].address);
+
             row[i].details = (valData);
+            row[i].nominatorHistory = nominatorHistory;
         }
         cb(err, row)
     });

@@ -190,6 +190,8 @@ export class DashboardService {
       }
     }
 
+    this.updateNominatorChart(selVal['nominatorHistory']);
+
     this.fetch1kvData(valIndex);
   }
 
@@ -292,6 +294,33 @@ export class DashboardService {
     });
 
     Chart.getChart("stashBalanceChart")?.update("normal");
+  }
+
+  private formatDate(timestamp: any) {
+    const date = new Date(timestamp * 1000); // convert to milliseconds
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}/${month}/${year}`;
+  }
+
+  private updateNominatorChart(data: any) {
+    data = data.reverse();
+
+    let nominatorAmt: any = [];
+    let labels = [];
+
+    for(let i = 0; i < data.length; i++) {
+      nominatorAmt.push(data[i]['nominationCount']);
+      labels.push(this.formatDate(data[i]['timestamp']));
+    }
+
+    this.nominatorChartData.labels = labels;
+    this.nominatorChartData.datasets.forEach((dataset) => {
+      dataset.data = nominatorAmt;
+    });
+
+    Chart.getChart("nominatorChart")?.update("normal");
   }
 
   private getWeekdayIndexFromUnixTimestamp(unixTimestamp: any) {
@@ -497,6 +526,34 @@ export class DashboardService {
   };
 
   public lineChartData: ChartData<'line', number[], string | string[]> = {
+    labels: [],
+    datasets: [{
+      data: [],
+      borderWidth: 2,
+      pointRadius: 0.2,
+      tension: 0,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(230,0,122,.2)',
+            10000: 'rgba(230,0,122,.6)'
+          }
+        },
+        borderColor: {
+          axis: 'x',
+          colors: {
+            1: 'rgba(230,0,122,1)',
+          }
+        }
+      },
+      pointBorderColor: "white",
+      fill: true,
+    }],
+
+  };
+
+  public nominatorChartData: ChartData<'line', number[], string | string[]> = {
     labels: [],
     datasets: [{
       data: [],

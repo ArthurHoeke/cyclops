@@ -190,14 +190,26 @@
                             <div class="card">
                                 <div class="head">
                                     <p>Stash balance</p>
+                                </div>
+                                <div class="body">
+                                    <canvas id="stashBalanceChart" baseChart class="chart"
+                                        [data]="dashboardService.lineChartData" [options]="lineChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Nominators</p>
                                     <ng-container *ngIf="!dashboardService.isActive()">
                                         <span class="nominatorStatus">{{dashboardService.getNominatorCount()}}
                                             nominators</span>
                                     </ng-container>
                                 </div>
                                 <div class="body">
-                                    <canvas id="stashBalanceChart" baseChart class="chart"
-                                        [data]="dashboardService.lineChartData" [options]="lineChartOptions"
+                                    <canvas id="nominatorChart" baseChart class="chart"
+                                        [data]="dashboardService.nominatorChartData" [options]="lineChartOptions"
                                         [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
