@@ -173,6 +173,28 @@ export class ApiService {
     return promise;
   }
 
+  getMonthlyRewardsFromValidator(validatorId: string) {
+    const body = new HttpParams()
+      .set('id', validatorId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "reward/getMonthlyRewardsFromValidator";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   getValidatorRewardOverview(validatorId: string) {
     const body = new HttpParams()
       .set('id', validatorId)

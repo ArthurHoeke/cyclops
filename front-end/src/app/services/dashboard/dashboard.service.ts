@@ -84,6 +84,10 @@ export class DashboardService {
         await this.apiService.getWeeklyRewardsFromValidator(this.validatorList[i].id).then((data: any) => {
           this.validatorList[i].weeklyRewardList = data['data'];
         });
+
+        await this.apiService.getMonthlyRewardsFromValidator(this.validatorList[i].id).then((data: any) => {
+          this.validatorList[i].monthlyRewardList = data['data'];
+        });
       }
 
     }).catch((err) => {
@@ -184,8 +188,8 @@ export class DashboardService {
 
     this.selectValEventList = [];
 
-    for(let i = 0; i < this.eventList.length; i++) {
-      if(this.eventList[i]['validatorId'] == selVal['id']) {
+    for (let i = 0; i < this.eventList.length; i++) {
+      if (this.eventList[i]['validatorId'] == selVal['id']) {
         this.selectValEventList.push(this.eventList[i]);
       }
     }
@@ -197,14 +201,14 @@ export class DashboardService {
 
   public async fetch1kvData(valIndex: any) {
     this.thousandValData = null;
-    
+
     const selValAddress = this.validatorList[valIndex - 1]['address'];
     const thousandValList = this.networkList[this.validatorList[valIndex - 1]['networkId'] - 1]['1kv'];
 
-    for(let i = 0; i < thousandValList.length; i++) {
+    for (let i = 0; i < thousandValList.length; i++) {
       const stash = thousandValList[i]['stash'];
 
-      if(stash == selValAddress) {
+      if (stash == selValAddress) {
         this.thousandValData = thousandValList[i]['validity'];
         break;
       }
@@ -244,9 +248,13 @@ export class DashboardService {
 
     //calculate combined rewards
     let combinedDailyRewards = [0, 0, 0, 0, 0, 0, 0];
+    let combinedMonthlyRewards = [0,0,0,0,0,0,0,0,0,0,0,0];
     for (let i = 0; i < this.validatorList.length; i++) {
       const val = this.validatorList[i];
       const net = this.networkList[val.networkId - 1];
+
+      console.log(val)
+
       for (let i2 = 0; i2 < val['weeklyRewardList'].length; i2++) {
         const rewardObj = val['weeklyRewardList'][i2];
 
@@ -254,13 +262,30 @@ export class DashboardService {
 
         combinedDailyRewards[dayIndex] += net['price'] * this.calculateDecimals(rewardObj['reward_sum'], net['decimals'])
       }
+
+      for (let i3 = 0; i3 < 11; i3++) {
+        let rewardObj = null;
+        if(val['monthlyRewardList'][i3] != undefined) {
+          rewardObj = val['monthlyRewardList'][i3]['total_reward']
+        } else {
+          rewardObj = 0;
+        }
+
+        combinedMonthlyRewards[i3] += net['price'] * this.calculateDecimals(rewardObj, net['decimals'])
+      }
     }
 
     this.dailyIncomeData.datasets.forEach((dataset) => {
       dataset.data = combinedDailyRewards;
     });
 
+    this.monthlyIncomeData.datasets.forEach((dataset) => {
+      dataset.data = combinedMonthlyRewards;
+    });
+
     Chart.getChart("combinedDailyRewardChart")?.update("normal");
+    Chart.getChart("combinedMonthlyRewardChart")?.update("normal");
+
     let dayNumber = new Date().getDay() - 1;
     if (dayNumber < 0) {
       dayNumber++;
@@ -315,7 +340,7 @@ export class DashboardService {
     let nominatorAmt: any = [];
     let labels = [];
 
-    for(let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       nominatorAmt.push(data[i]['nominationCount']);
       labels.push(this.formatDate(data[i]['timestamp']));
     }
@@ -443,14 +468,14 @@ export class DashboardService {
   }
 
   private updateEraRewardPoints(data: any) {
-    if(data != null) {
+    if (data != null) {
       this.eraRewardPoints = data;
 
       this.eraChartData.labels = this.createEmptyLabelList(data);
       this.eraChartData.datasets.forEach((dataset) => {
         dataset.data = data;
       });
-  
+
       Chart.getChart("eraPointChart")?.update("normal");
     }
   }
@@ -645,8 +670,8 @@ export class DashboardService {
       borderWidth: 0,
       borderRadius: 5,
       // barPercentage: 0.5,
-      barThickness: 30,
-      maxBarThickness: 30,
+      barThickness: 25,
+      maxBarThickness: 25,
       minBarLength: 2,
       gradient: {
         backgroundColor: {
@@ -654,6 +679,34 @@ export class DashboardService {
           colors: {
             0: 'rgba(230,0,122,.2)',
             100: 'rgba(230,0,122,1)'
+          }
+        },
+      },
+    }]
+  };
+
+  public monthlyIncomeData: ChartData<'bar', number[], string | string[]> = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [{
+      data: [],
+      backgroundColor: [
+        '#14151B'
+      ],
+      borderColor: [
+        '#202127'
+      ],
+      borderWidth: 0,
+      borderRadius: 5,
+      // barPercentage: 0.5,
+      barThickness: 20,
+      maxBarThickness: 20,
+      minBarLength: 2,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(50,125,255,.2)',
+            1000000: 'rgba(50,125,255,1)'
           }
         },
       },
