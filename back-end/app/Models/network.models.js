@@ -47,7 +47,7 @@ const getNetworkFromId = (data, cb) => {
 }
 
 const getTokenNames = (cb) => {
-    return database.all('SELECT name FROM network ORDER BY id', (err, data) => {
+    return database.all('SELECT name, id FROM network ORDER BY id', (err, data) => {
         cb(err, data)
     });
 }

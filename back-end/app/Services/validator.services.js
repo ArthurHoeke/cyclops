@@ -7,12 +7,16 @@ const reward = require("../Controllers/reward.controllers");
 const network = require("../Controllers/network.controllers");
 const event = require("../Controllers/event.controllers");
 const nominator = require("../Controllers/nominator.controllers");
+const pool = require("../Controllers/pool.controllers");
+const poolMeta = require("../Controllers/poolMeta.controllers");
 
 networkList = [];
 networkEraProgress = {};
 
 activeNetworkValidators = [];
 waitingNetworkValidators = [];
+
+poolList = {};
 
 rewardPointTracker = {};
 avgRewardPoints = [];
@@ -28,6 +32,7 @@ async function updateNetworkList() {
     networkList = await network.getTokenNames();
     if (SUBSCAN_APIKEY != null) {
         await updateEraData();
+        await updatePoolData();
     }
 }
 
@@ -45,6 +50,37 @@ async function updateEraData() {
     }
 }
 
+async function updatePoolData() {
+    //fetch all pools from database
+    const trackedPools = await pool.getAllPools();
+
+    for (let i = 0; i < networkList.length; i++) {
+        const poolData = await subscan.getPool(networkList[i].name);
+
+        if (poolData['data'] != undefined) {
+            const poolObj = poolData['data']['list'];
+            this.poolList[networkList[i].name] = poolObj;
+
+            //loop through pools, if networkId is equals to networkList[i]['id'] insert poolMeta
+            for (let i2 = 0; i2 < poolObj.length; i2++) {
+                const selPool = poolObj[i2];
+
+
+                //loop through tracked pool list, if any matches add meta to db
+                for (let i3 = 0; i3 < trackedPools.length; i3++) {
+
+                    const trackedPool = trackedPools[i3];
+
+                    if (trackedPool['networkId'] == networkList[i]['id'] && selPool['pool_id'] == trackedPool['id']) {
+                        //push data to db
+                        poolMeta.add(trackedPool['id'], trackedPool['networkId'], selPool['total_bonded'], selPool['member_count'], selPool['claimable']);
+                    }
+                }
+            }
+        }
+    }
+}
+
 // This async function periodically fetches all the validators of each network, sets the activeNetworkValidators and waitingNetworkValidators variables and starts the syncAllValidatorRewards function.
 async function periodicNetworkCheck() {
     await updateNetworkList()
@@ -56,6 +92,7 @@ async function periodicNetworkCheck() {
             console.clear();
             await getNetworkValidators();
             await updateEraData();
+            await updatePoolData();
         }
     }, 5 * 60000);
 }
@@ -224,13 +261,13 @@ async function trackValidatorRewardPoints(validatorId) {
                     rewardPointTracker[address].push(selValidator['reward_point']);
 
                     //if validator reward points differ more than 90% of the average, send warning e-mail
-                    if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
-                        //to prevent event spamming, check if this is the first warning in the past 24hrs
-                        const eventList = await event.getEventsFromToday(validatorId, "low reward points");
-                        if (eventList.length == 0) {
-                            event.register(val, "low reward points", val.name + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
-                        }
-                    }
+                    // if (data.compareAndCalculatePercentageDifference(avgRewardPoints[networkId - 1], selValidator['reward_point']) >= 95 && selValidator['reward_point'] > 1000) {
+                    //     //to prevent event spamming, check if this is the first warning in the past 24hrs
+                    //     const eventList = await event.getEventsFromToday(validatorId, "low reward points");
+                    //     if (eventList.length == 0) {
+                    //         event.register(val, "low reward points", val.name + " is currently amongst the 5% worst performing validators based on the average reward points on the network.");
+                    //     }
+                    // }
                 }
             }
         } else {
@@ -374,7 +411,7 @@ async function performRewardSync(validatorId) {
     let eventData = await subscan.getValidatorEvents(networkData.name, validatorData.address, 0);
 
     // If there was an error retrieving events, return false
-    if (eventData.code != 0) {
+    if (eventData != undefined && eventData.code != 0) {
         isSyncing = false;
         return false;
     } else {
@@ -483,8 +520,30 @@ async function findValidatorNameByAddress(network, address) {
     }
 }
 
+async function findPoolNameByID(network, id) {
+    let name = null;
+    const list = poolList[network];
+
+    for (let i = 0; i < list.length; i++) {
+        if (list[i]['pool_id'] == id) {
+            name = list[i]['metadata'];
+            break;
+        }
+    }
+
+    if (name != null) {
+        return name;
+    } else {
+        return null;
+    }
+}
+
 function getNetworkEraData(name) {
     return networkEraProgress[name];
+}
+
+async function getPoolMeta(poolId, networkId) {
+    return await poolMeta.getPoolMeta(poolId, networkId);
 }
 
 function getPolkadot1kvData() {
@@ -505,5 +564,7 @@ module.exports = {
     getPolkadot1kvData,
     getKusama1kvData,
     findValidatorNameByAddress,
-    getNominationHistory
+    getNominationHistory,
+    findPoolNameByID,
+    getPoolMeta
 };

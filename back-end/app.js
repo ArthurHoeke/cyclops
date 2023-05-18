@@ -14,6 +14,7 @@ var rewardRouter = require('./app/Routes/reward.routes');
 var userRouter = require('./app/Routes/user.routes');
 var validatorRouter = require('./app/Routes/validator.routes');
 var configRouter = require('./app/Routes/config.routes');
+var poolRouter = require('./app/Routes/pool.routes');
 
 var dataUtils = require('./app/Utils/data.utils');
 const testUtil = require('./app/Services/test.services');
@@ -52,6 +53,7 @@ app.use('/reward', rewardRouter);
 app.use('/network', networkRouter);
 app.use('/event', eventRouter);
 app.use('/config', configRouter);
+app.use('/pool', poolRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

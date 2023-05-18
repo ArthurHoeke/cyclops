@@ -3,7 +3,8 @@ const createNominationTable = () => {
         CREATE TABLE IF NOT EXISTS nominator (
         validatorId integer,
         nominationCount integer,
-        timestamp integer)`;
+        timestamp integer,
+        FOREIGN KEY(validatorId) REFERENCES validator(id))`;
 
     return database.run(sqlQuery);
 }
@@ -30,7 +31,7 @@ const add = (data, cb) => {
 };
 
 const getNominationHistoryFromValidator = (data, cb) => {
-    return database.all('SELECT nominationCount, timestamp FROM nominator WHERE validatorId = ? ORDER BY timestamp DESC', data, (err, row) => {
+    return database.all('SELECT nominationCount, timestamp FROM nominator WHERE validatorId = ? ORDER BY timestamp DESC LIMIT 100', data, (err, row) => {
         cb(err, row)
     });
 }

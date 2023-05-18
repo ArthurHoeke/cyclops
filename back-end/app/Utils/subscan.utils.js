@@ -11,6 +11,17 @@ async function getEra(networkName) {
     });
 }
 
+async function getPool(networkName) {
+    return new Promise((resolve) => {
+        dataUtil.postData('https://' + networkName + '.api.subscan.io/api/scan/nomination_pool/pools', {
+            "row": 1
+        }, SUBSCAN_APIKEY)
+        .then(data => {
+            resolve(data);
+        });
+    });
+}
+
 async function getActiveValidators(networkName) {
     return new Promise((resolve) => {
         dataUtil.postData('https://' + networkName + '.api.subscan.io/api/scan/staking/validators', {
@@ -61,6 +72,7 @@ async function getValidatorEvents(networkName, validatorAddress, page) {
 
 module.exports = {
     getEra,
+    getPool,
     getActiveValidators,
     getValidatorDetails,
     getValidatorEvents,
