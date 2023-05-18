@@ -67,6 +67,20 @@
                 <!-- Dashboard overview container -->
                 <ng-container *ngIf="onOverview()">
                     <div class="row">
+                        <div class="col">
+                            <div id="notificationContainer" class="mb-3">
+                                <div id="supportIcon">
+                                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path
+                                            d="M2.5 0C1.1195 0 0 0.994083 0 2.22054C0 3.21058 0.4375 5.56031 4.744 7.93562C4.82114 7.97773 4.9097 8 5 8C5.0903 8 5.17886 7.97773 5.256 7.93562C9.5625 5.56031 10 3.21058 10 2.22054C10 0.994083 8.8805 0 7.5 0C6.1195 0 5 1.34578 5 1.34578C5 1.34578 3.8805 0 2.5 0Z"
+                                            fill="white" />
+                                    </svg>
+                                </div>
+                                <p>Consider supporting Cyclops by nominating <a href="https://decentradot.com/"
+                                        target="_blank">decentraDOT validators</a>. Thank you!</p>
+                            </div>
+                        </div>
                         <div class="col-12 mb-3">
                             <div class="card">
                                 <div class="head">
@@ -181,12 +195,83 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <div class="card poolContainer">
+                                <div class="head">
+                                    <p>My pools</p>
+                                    <button (click)="toggleModal(addPoolModal)"><svg xmlns="http://www.w3.org/2000/svg"
+                                            width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                            class="ai ai-Plus">
+                                            <path d="M12 20v-8m0 0V4m0 8h8m-8 0H4" />
+                                        </svg> Add pool</button>
+                                </div>
+                                <div class="body">
+
+                                    <ng-container *ngFor="let pool of dashboardService.poolList">
+                                        <div class="poolHeadContainer mb-3">
+                                            <div class="poolIcon">
+                                                <img [src]="dashboardService.networkList[pool.networkId-1]['icon']">
+                                            </div>
+                                            <p *ngIf="pool['meta'].length != 0">{{pool['name']}}</p>
+                                            <p *ngIf="pool['meta'].length == 0">Retrieving pool data in a few minutes..</p>
+                                        </div>
+                                        <div class="poolWrapper">
+                                            <div>
+                                                <div class="poolData">
+                                                    <small>Total pooled</small>
+                                                    <p>{{calculatePoolMonetaryValue(pool['networkId'],
+                                                        pool['meta'][0]['totalBond'])}}</p>
+
+                                                    <div class="changeWrapper"
+                                                        [ngClass]="{ 'positive': calculateDifferenceValue(pool, 'totalBond').includes('+'), 'negative': calculateDifferenceValue(pool, 'totalBond').includes('-') }">
+                                                        <p>{{calculateDifferenceValue(pool, "totalBond")}} <small>today</small></p>
+                                                    </div>
+                                                </div>
+                                                <canvas class="poolChart" baseChart class="chart"
+                                                    [data]="getPoolMetaData(pool['meta'], 'totalBond', pool['networkId'])" [options]="poolChartOptions"
+                                                    [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
+                                            </div>
+                                            <div>
+                                                <div class="poolData">
+                                                    <small>Member count</small>
+                                                    <p>{{pool['meta'][0]['memberCount']}}</p>
+                                                    <div class="changeWrapper"
+                                                        [ngClass]="{ 'positive': calculateDifferenceNumber(pool, 'memberCount').includes('+'), 'negative': calculateDifferenceNumber(pool, 'memberCount').includes('-') }">
+                                                        <p>{{calculateDifferenceNumber(pool, "memberCount")}} <small>today</small></p>
+                                                    </div>
+                                                </div>
+                                                <canvas class="poolChart" baseChart class="chart"
+                                                    [data]="getPoolMetaData(pool['meta'], 'memberCount', pool['networkId'])" [options]="poolChartOptions"
+                                                    [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
+                                            </div>
+                                            <div>
+                                                <div class="poolData">
+                                                    <small>Pending rewards</small>
+                                                    <p>{{calculatePoolMonetaryValue(pool['networkId'],
+                                                        pool['meta'][0]['pendingRewards'])}}</p>
+                                                    <div class="changeWrapper"
+                                                        [ngClass]="{ 'positive': calculateDifferenceValue(pool, 'pendingRewards').includes('+'), 'negative': calculateDifferenceValue(pool, 'pendingRewards').includes('-') }">
+                                                        <p>{{calculateDifferenceValue(pool, "pendingRewards")}} <small>today</small></p>
+                                                    </div>
+                                                </div>
+                                                <canvas class="poolChart" baseChart class="chart"
+                                                    [data]="getPoolMetaData(pool['meta'], 'pendingRewards', pool['networkId'])" [options]="poolChartOptions"
+                                                    [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </ng-container>
 
                 <!-- Validator overview container -->
                 <ng-container *ngIf="!onOverview()">
                     <div class="row">
-                        <div class="col mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
                                 <div class="head">
                                     <p>Stash balance</p>
@@ -198,7 +283,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
                                 <div class="head">
                                     <p>Nominators</p>
@@ -489,10 +574,20 @@
                                             <td><b>{{formatType(val.type)}}</b></td>
                                             <td>
                                                 <ng-container *ngIf="val.valid == true">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="#50B720" stroke-width="2" class="ai ai-CircleCheckFill"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6z"/></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="#50B720" stroke-width="2"
+                                                        class="ai ai-CircleCheckFill">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6z" />
+                                                    </svg>
                                                 </ng-container>
                                                 <ng-container *ngIf="val.valid == false">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="#B72020" stroke-width="2" class="ai ai-CircleXFill"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm3.707 8.707a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293a1 1 0 1 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293z"/></svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="#B72020" stroke-width="2"
+                                                        class="ai ai-CircleXFill">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm3.707 8.707a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293a1 1 0 1 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293z" />
+                                                    </svg>
                                                 </ng-container>
                                             </td>
                                             <td>{{dashboardService.formatUnixTimestamp(val.updated)}}</td>
@@ -512,7 +607,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Add new validator</h5>
+                <h5 class="modal-title">Add new validator</h5>
             </div>
             <div class="modal-body">
                 <form>
@@ -540,6 +635,52 @@
 
                 <button type="button" class="btn btn-dark" *ngIf="!dashboardService.isSyncing()"
                     (click)="submitValidator(addValName.value, addValAddress.value, addValNetwork.value, addValidatorModal)">Submit
+                    validator</button>
+                <button type="button" class="btn btn-dark" *ngIf="dashboardService.isSyncing()" id="syncButton"><svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="ai ai-ArrowCycle">
+                        <path d="M22 12c0 6-4.39 10-9.806 10C7.792 22 4.24 19.665 3 16" />
+                        <path d="M2 12C2 6 6.39 2 11.806 2 16.209 2 19.76 4.335 21 8" />
+                        <path d="M7 17l-4-1-1 4" />
+                        <path d="M17 7l4 1 1-4" />
+                    </svg>Syncing..</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" #addPoolModal tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add new pool</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Network:</label>
+                        <select class="form-control" #addPoolNetwork>
+                            <option *ngFor="let network of dashboardService.networkList;" [value]="network.id">
+                                {{network.name}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Pool ID:</label>
+                        <input class="form-control" type="text" placeholder="5" #addPoolID
+                            (keyup)="fetchPoolName(addPoolNetwork, addPoolID, addPoolName)">
+                    </div>
+                    <div class="form-group">
+                        <label for="message-text" class="col-form-label">Pool name:</label>
+                        <input class="form-control" type="text" placeholder="My pool" #addPoolName>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" data-dismiss="modal" *ngIf="!dashboardService.isSyncing()"
+                    (click)="toggleModal(addPoolModal)">Cancel</button>
+                <button type="button" class="btn btn-dark"
+                    (click)="submitPool(addPoolName.value, addPoolID.value, addPoolNetwork.value, addPoolModal)">Submit
                     validator</button>
                 <button type="button" class="btn btn-dark" *ngIf="dashboardService.isSyncing()" id="syncButton"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"

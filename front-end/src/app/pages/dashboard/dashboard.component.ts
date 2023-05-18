@@ -62,6 +62,99 @@ export class DashboardComponent {
     })
   }
 
+  public async fetchPoolName(network: any, elem: any, nameElem: any) {
+    this.apiService.findPoolNameByID(network.options[network.selectedIndex].text, elem.value).then((name: any) => {
+      nameElem.value = JSON.parse(name)['data'];
+    })
+  }
+
+  public getPoolMetaData(meta: any, property: any, networkId: any) {
+    let arr: any = [];
+
+    for(let i = 0; i < meta.length; i++) {
+      arr.push(this.calculatePoolTokensRaw(networkId, meta[i][property]));
+    }
+
+    arr.reverse();
+
+    let lineChart = this.dashboardService.poolChartData;
+
+    lineChart.labels = this.dashboardService.createEmptyLabelList(arr);
+    lineChart.datasets.forEach((dataset) => {
+      dataset.data = arr;
+    });
+
+    return lineChart;
+  }
+
+  private getSign(value: any) {
+    if (value > 0) {
+      return '+' ;
+    } else {
+      return ''; // Return nothing if value is 0
+    }
+  }
+
+  private isSameDay(timestamp: any) {
+    const date1 = new Date(); // Get today's date
+    const date2 = new Date(timestamp * 1000);
+  
+    // Compare the year, month, and day of the two dates
+    const isSameYear = date1.getFullYear() === date2.getFullYear();
+    const isSameMonth = date1.getMonth() === date2.getMonth();
+    const isSameDay = date1.getDate() === date2.getDate();
+  
+    // Return true if all three conditions are true, indicating the same day
+    return isSameYear && isSameMonth && isSameDay;
+  }
+  public calculateDifferenceValue(data: any, property: any) {
+    const selNetwork = this.dashboardService.networkList[data['networkId'] - 1];
+
+    data = data['meta'];
+    let curValue = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const newVal = data[i][property];
+      const inputDate = new Date(data[i]['timestamp']);
+
+      if (i == 0) {
+        curValue = newVal;
+      }
+
+      if (!this.isSameDay(inputDate)) {
+        const diff = curValue - newVal;
+
+        return this.getSign(diff) + this.dashboardService.addThousandSeperator(this.dashboardService.calculateDecimals(diff, selNetwork['decimals']).toFixed(0)) + " " + selNetwork['ticker'];
+      }
+    }
+
+    return "0";
+  }
+
+  public calculateDifferenceNumber(data: any, property: any) {
+    const selNetwork = this.dashboardService.networkList[data['networkId'] - 1];
+
+    data = data['meta'];
+    let curValue = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      const newVal = data[i][property];
+      const inputDate = new Date(data[i]['timestamp']);
+
+      if (i == 0) {
+        curValue = newVal;
+      }
+
+      if (!this.isSameDay(inputDate)) {
+        const diff = curValue - newVal;
+
+        return this.getSign(diff) + this.dashboardService.addThousandSeperator(diff);
+      }
+    }
+
+    return "0";
+  }
+
   public async deleteValidator() {
     if (confirm("Are you sure you want to delete this validator?")) {
 
@@ -125,6 +218,26 @@ export class DashboardComponent {
 
         this.toggleModal(modal);
         this.dashboardService.toggleSyncing();
+      }).catch((err) => {
+        this.toastr.error('Something went wrong.', "", {
+          positionClass: "toast-top-left"
+        });
+      });
+    } else {
+      this.toastr.error('Fill in all fields.', "", {
+        positionClass: "toast-top-left"
+      });
+    }
+  }
+
+  public async submitPool(name: string, id: string, network: any, modal: HTMLDivElement) {
+    if (name != "" && id != "" && network != "") {
+      this.apiService.addPool(name, id, network).then(async (data) => {
+
+        //update validator list
+        await this.dashboardService.getPoolList();
+
+        this.toggleModal(modal);
       }).catch((err) => {
         this.toastr.error('Something went wrong.', "", {
           positionClass: "toast-top-left"
@@ -432,6 +545,37 @@ export class DashboardComponent {
     }
   }
 
+  poolChartOptions: any = {
+    responsive: false,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scaleShowLabels: false,
+    scales: {
+      y: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          color: '#202126',
+          display: true
+        }
+      },
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          color: '#202126',
+          display: false
+        }
+      }
+    }
+  }
+
   eraChartOptions: any = {
     responsive: false,
     maintainAspectRatio: true,
@@ -461,6 +605,16 @@ export class DashboardComponent {
         }
       }
     }
+  }
+
+  public calculatePoolMonetaryValue(networkId: any, tokens: any) {
+    const selNetwork = this.dashboardService.networkList[networkId - 1];
+    return this.dashboardService.addThousandSeperator(this.dashboardService.calculateDecimals(tokens, selNetwork['decimals']).toFixed(0)) + " " + this.dashboardService.networkList[networkId - 1]['ticker'];
+  }
+
+  public calculatePoolTokensRaw(networkId: any, tokens: any) {
+    const selNetwork = this.dashboardService.networkList[networkId - 1];
+    return this.dashboardService.calculateDecimals(tokens, selNetwork['decimals']).toFixed(0);
   }
 
   public roundTwoDigits(percentage: number) {

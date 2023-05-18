@@ -238,6 +238,26 @@ export class ApiService {
     return promise;
   }
 
+  getPoolList() {
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "pool/list";
+      this.http.get(apiURL, {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken())
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   deleteEvent(eventId: string) {
     const body = new HttpParams()
       .set('id', eventId)
@@ -355,6 +375,30 @@ export class ApiService {
     return promise;
   }
 
+  findPoolNameByID(network: string, id: string) {
+    const body = new HttpParams()
+      .set('network', network)
+      .set('id', id)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "pool/findPoolNameByID";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
   verifyJWT() {
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "user/verify";
@@ -400,6 +444,32 @@ export class ApiService {
       .set('networkId', networkId)
     let promise = new Promise((resolve, reject) => {
       let apiURL = this.getBaseURL() + "validator/add";
+      this.http.post(apiURL, body.toString(), {
+        headers: new HttpHeaders()
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('auth-token', this.storageService.getAccessToken()),
+          responseType: 'text'
+      })
+        .toPromise()
+        .then(
+          res => {
+            resolve(res);
+          }
+        ).catch((err) => {
+          reject(err);
+        });
+    });
+    return promise;
+  }
+
+  
+  addPool(name: string, id: string, networkId: number) {
+    const body = new HttpParams()
+      .set('name', name)
+      .set('id', id)
+      .set('networkId', networkId)
+    let promise = new Promise((resolve, reject) => {
+      let apiURL = this.getBaseURL() + "pool/create";
       this.http.post(apiURL, body.toString(), {
         headers: new HttpHeaders()
           .set('Content-Type', 'application/x-www-form-urlencoded')

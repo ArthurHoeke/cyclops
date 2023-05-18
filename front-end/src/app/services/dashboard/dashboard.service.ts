@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { ApiService } from '../api/api.service';
 import { CoingeckoService } from '../coingecko/coingecko.service';
 
-import { ChartData, ChartType, Chart } from 'chart.js';
+import { ChartData, Chart } from 'chart.js';
 import { ToastrService } from 'ngx-toastr';
-import { Timestamp } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +20,7 @@ export class DashboardService {
   public networkList: any = [];
 
   public eventList: any = [];
+  public poolList: any = [];
   public selectValEventList: any = [];
 
   public validatorRewardOverview: any;
@@ -269,12 +269,19 @@ export class DashboardService {
 
     await this.updateEventList();
 
+    await this.getPoolList();
+
     this.toastr.clear();
   }
 
   private async updateEventList() {
     const eventList: any = await this.apiService.getAllEvents();
     this.eventList = eventList['data'];
+  }
+
+  public async getPoolList() {
+    const poolList: any = await this.apiService.getPoolList();
+    this.poolList = poolList['data'];
   }
 
   private updateStashChart(data: any, decimals: any) {
@@ -305,8 +312,6 @@ export class DashboardService {
   }
 
   private updateNominatorChart(data: any) {
-    data = data.reverse();
-
     let nominatorAmt: any = [];
     let labels = [];
 
@@ -314,6 +319,9 @@ export class DashboardService {
       nominatorAmt.push(data[i]['nominationCount']);
       labels.push(this.formatDate(data[i]['timestamp']));
     }
+
+    labels.reverse();
+    nominatorAmt.reverse();
 
     this.nominatorChartData.labels = labels;
     this.nominatorChartData.datasets.forEach((dataset) => {
@@ -447,7 +455,7 @@ export class DashboardService {
     }
   }
 
-  private createEmptyLabelList(input: any) {
+  public createEmptyLabelList(input: any) {
     let output = [];
     for (let i = 0; i < input.length; i++) {
       output.push("");
@@ -550,7 +558,33 @@ export class DashboardService {
       pointBorderColor: "white",
       fill: true,
     }],
+  };
 
+  public poolChartData: ChartData<'line', number[], string | string[]> = {
+    labels: [],
+    datasets: [{
+      data: [],
+      borderWidth: 2,
+      pointRadius: 0.2,
+      tension: 0,
+      gradient: {
+        backgroundColor: {
+          axis: 'y',
+          colors: {
+            0: 'rgba(126, 32, 183,.2)',
+            100000000: 'rgba(126, 32, 183,.6)'
+          }
+        },
+        borderColor: {
+          axis: 'x',
+          colors: {
+            1: 'rgba(126, 32, 183,1)',
+          }
+        }
+      },
+      pointBorderColor: "white",
+      fill: true,
+    }],
   };
 
   public nominatorChartData: ChartData<'line', number[], string | string[]> = {
@@ -564,14 +598,14 @@ export class DashboardService {
         backgroundColor: {
           axis: 'y',
           colors: {
-            0: 'rgba(230,0,122,.2)',
-            10000: 'rgba(230,0,122,.6)'
+            0: 'rgba(14, 228, 216,.2)',
+            10000: 'rgba(14, 228, 216,.6)'
           }
         },
         borderColor: {
           axis: 'x',
           colors: {
-            1: 'rgba(230,0,122,1)',
+            1: 'rgba(14, 228, 216,1)',
           }
         }
       },
