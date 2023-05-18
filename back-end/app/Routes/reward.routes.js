@@ -10,7 +10,7 @@ router.post('/getWeeklyRewardsFromValidator', isLoggedIn, rewardControllers.getW
 router.post('/getAllRewardsFromValidator', isLoggedIn, rewardControllers.getAllRewardsFromValidator);
 router.post('/getMonthlyRewardReportFromValidator', isLoggedIn, rewardControllers.getMonthlyRewardReportFromValidator);
 router.get('/getRewardsFromValidatorInPeriod', isLoggedIn, rewardControllers.getRewardsFromValidatorInPeriod);
-router.get('/getMonthlyRewardsFromValidator', isLoggedIn, rewardControllers.getMonthlyRewardsFromValidator);
+router.post('/getMonthlyRewardsFromValidator', isLoggedIn, rewardControllers.getMonthlyRewardsFromValidator);
 router.get('/getYearlyRewardsFromValidator', isLoggedIn, rewardControllers.getYearlyRewardsFromValidator);
 router.get('/getCombinedWeeklyRewards', isLoggedIn, rewardControllers.getCombinedWeeklyRewards);
 router.post('/getValidatorRewardOverview', isLoggedIn, rewardControllers.getValidatorRewardOverview);

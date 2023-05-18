@@ -45,7 +45,17 @@ const getWeeklyRewardsFromValidator = (data, cb) => {
 }
 
 const getMonthlyRewardsFromValidator = (data, cb) => {
-    return database.all(`SELECT amount, timestamp, hash FROM reward WHERE strftime('%Y-%m', timestamp, 'unixepoch') = strftime('%Y-%m', 'now') AND validatorId = ?`, data, (err, row) => {
+    return database.all(`SELECT 
+    strftime('%m', datetime(timestamp, 'unixepoch')) AS month,
+    SUM(amount) AS total_reward
+FROM 
+    reward
+WHERE 
+    validatorId = ? 
+    AND strftime('%Y', datetime(timestamp, 'unixepoch')) = strftime('%Y', 'now')
+GROUP BY 
+    month;
+`, data, (err, row) => {
         cb(err, row)
     });
 }
