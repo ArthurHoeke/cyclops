@@ -43,19 +43,21 @@
                         </svg>
                         Add validator</button>
                 </div>
-                <div id="validatorList" *ngFor="let validator of dashboardService.validatorList; index as i;">
-                    <div class="validator mt-3" [ngClass]="{'active' : isActive(i+1)}"
-                        (click)="dashboardService.selectValidator(i+1)">
-                        <div class="logoWrapper">
-                            <img [src]="dashboardService.networkList[validator.networkId-1]['icon']">
-                        </div>
-                        <div class="detailsWrapper">
-                            <div>
-                                <p>{{validator.name}}</p>
-                                <span
-                                    class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
+                <div id="validatorList">
+                    <div *ngFor="let validator of dashboardService.validatorList; index as i;">
+                        <div class="validator mt-3" [ngClass]="{'active' : isActive(i+1)}"
+                            (click)="dashboardService.selectValidator(i+1)">
+                            <div class="logoWrapper">
+                                <img [src]="dashboardService.networkList[validator.networkId-1]['icon']">
                             </div>
-                            <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
+                            <div class="detailsWrapper">
+                                <div>
+                                    <p>{{validator.name}}</p>
+                                    <span
+                                        class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
+                                </div>
+                                <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -244,7 +246,7 @@
                                                     </div>
                                                 </div>
                                                 <canvas class="poolChart" baseChart class="chart"
-                                                    [data]="getPoolMetaData(pool['meta'], 'totalBond', pool['networkId'])" [options]="poolChartOptions"
+                                                    [data]="getPoolMetaData(pool['meta'], 'totalBond', pool['networkId'], true)" [options]="poolChartOptions"
                                                     [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
                                             </div>
                                             <div>
@@ -257,7 +259,7 @@
                                                     </div>
                                                 </div>
                                                 <canvas class="poolChart" baseChart class="chart"
-                                                    [data]="getPoolMetaData(pool['meta'], 'memberCount', pool['networkId'])" [options]="poolChartOptions"
+                                                    [data]="getPoolMetaData(pool['meta'], 'memberCount', pool['networkId'], false)" [options]="poolChartOptions"
                                                     [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
                                             </div>
                                             <div>
@@ -271,7 +273,7 @@
                                                     </div>
                                                 </div>
                                                 <canvas class="poolChart" baseChart class="chart"
-                                                    [data]="getPoolMetaData(pool['meta'], 'pendingRewards', pool['networkId'])" [options]="poolChartOptions"
+                                                    [data]="getPoolMetaData(pool['meta'], 'pendingRewards', pool['networkId'], true)" [options]="poolChartOptions"
                                                     [type]="lineChartType" style="width: 115px; height: 75px;"></canvas>
                                             </div>
                                         </div>
@@ -284,91 +286,6 @@
 
                 <!-- Validator overview container -->
                 <ng-container *ngIf="!onOverview()">
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Stash balance</p>
-                                </div>
-                                <div class="body">
-                                    <canvas id="stashBalanceChart" baseChart class="chart"
-                                        [data]="dashboardService.lineChartData" [options]="lineChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Nominators</p>
-                                    <ng-container *ngIf="!dashboardService.isActive()">
-                                        <span class="nominatorStatus">{{dashboardService.getNominatorCount()}}
-                                            nominators</span>
-                                    </ng-container>
-                                </div>
-                                <div class="body">
-                                    <canvas id="nominatorChart" baseChart class="chart"
-                                        [data]="dashboardService.nominatorChartData" [options]="lineChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Validator settings</p>
-                                </div>
-                                <div class="body tableWrapper">
-                                    <table>
-                                        <tr>
-                                            <th>Setting</th>
-                                            <th>Option</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Active</b></td>
-                                            <td>-</td>
-                                            <td><button (click)="deleteValidator()">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Name</b></td>
-                                            <td><input type="text" [(ngModel)]="valName" placeholder="new name"></td>
-                                            <td><button [disabled]="valName ==''"
-                                                    (click)="updateValidatorName()">Update</button></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Critical events</p>
-                                </div>
-                                <div class="body tableWrapper">
-                                    <table>
-                                        <tr>
-                                            <th style="width: 33%">Validator</th>
-                                            <th style="width: 33%">Event</th>
-                                            <th style="width: 33%">Date</th>
-                                        </tr>
-                                        <tr *ngIf="dashboardService.eventList.length == 0">
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
-                                        <tr *ngFor="let event of dashboardService.selectValEventList">
-                                            <td><b>{{event.name}}</b></td>
-                                            <td>{{event.eventType}}</td>
-                                            <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card eraProgressContainer">
@@ -470,18 +387,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col mb-3">
-                            <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
-                                <div class="head">
-                                    <p>ERA points</p>
-                                </div>
-                                <div class="body">
-                                    <canvas id="eraPointChart" baseChart class="chart"
-                                        [data]="dashboardService.eraChartData" [options]="eraChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
@@ -515,6 +420,107 @@
                                                 {{dashboardService.validatorRewardOverview['ticker']}}</td>
                                         </tr>
                                     </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
+                                <div class="head">
+                                    <p>ERA points</p>
+                                </div>
+                                <div class="body">
+                                    <canvas id="eraPointChart" baseChart class="chart"
+                                        [data]="dashboardService.eraChartData" [options]="eraChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Nominators</p>
+                                    <ng-container *ngIf="!dashboardService.isActive()">
+                                        <span class="nominatorStatus">{{dashboardService.getNominatorCount()}}
+                                            nominators</span>
+                                    </ng-container>
+                                </div>
+                                <div class="body">
+                                    <canvas id="nominatorChart" baseChart class="chart"
+                                        [data]="dashboardService.nominatorChartData" [options]="lineChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Yearly overview</p>
+                                    <p>in USD</p>
+                                </div>
+                                <div class="body">
+                                    <canvas id="combinedMonthlyRewardChart" baseChart class="chart"
+                                        [data]="dashboardService.monthlyIncomeData" [options]="dailyIncomeChartOption"
+                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                    </canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>1kv statistics</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th style="width: 33%">Type</th>
+                                            <th style="width: 33%">Is valid</th>
+                                            <th style="width: 33%">Updated on</th>
+                                        </tr>
+                                        <tr *ngIf="dashboardService.thousandValData == null">
+                                            <td>-</td>
+                                            <td>-</td>
+                                            <td>-</td>
+                                        </tr>
+                                        <tr *ngFor="let val of dashboardService.thousandValData">
+                                            <td><b>{{formatType(val.type)}}</b></td>
+                                            <td>
+                                                <ng-container *ngIf="val.valid == true">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="#50B720" stroke-width="2"
+                                                        class="ai ai-CircleCheckFill">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6z" />
+                                                    </svg>
+                                                </ng-container>
+                                                <ng-container *ngIf="val.valid == false">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
+                                                        viewBox="0 0 24 24" fill="#B72020" stroke-width="2"
+                                                        class="ai ai-CircleXFill">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm3.707 8.707a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293a1 1 0 1 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293z" />
+                                                    </svg>
+                                                </ng-container>
+                                            </td>
+                                            <td>{{dashboardService.formatUnixTimestamp(val.updated)}}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Stash balance</p>
+                                </div>
+                                <div class="body">
+                                    <canvas id="stashBalanceChart" baseChart class="chart"
+                                        [data]="dashboardService.lineChartData" [options]="lineChartOptions"
+                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -567,44 +573,54 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
                             <div class="card">
                                 <div class="head">
-                                    <p>1kv statistics</p>
+                                    <p>Validator settings</p>
                                 </div>
                                 <div class="body tableWrapper">
                                     <table>
                                         <tr>
-                                            <th style="width: 33%">Type</th>
-                                            <th style="width: 33%">Is valid</th>
-                                            <th style="width: 33%">Updated on</th>
+                                            <th>Setting</th>
+                                            <th>Option</th>
+                                            <th>Action</th>
                                         </tr>
-                                        <tr *ngIf="dashboardService.thousandValData == null">
+                                        <tr>
+                                            <td><b>Active</b></td>
+                                            <td>-</td>
+                                            <td><button (click)="deleteValidator()">Delete</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Name</b></td>
+                                            <td><input type="text" [(ngModel)]="valName" placeholder="new name"></td>
+                                            <td><button [disabled]="valName ==''"
+                                                    (click)="updateValidatorName()">Update</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Critical events</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th style="width: 33%">Validator</th>
+                                            <th style="width: 33%">Event</th>
+                                            <th style="width: 33%">Date</th>
+                                        </tr>
+                                        <tr *ngIf="dashboardService.eventList.length == 0">
                                             <td>-</td>
                                             <td>-</td>
                                             <td>-</td>
                                         </tr>
-                                        <tr *ngFor="let val of dashboardService.thousandValData">
-                                            <td><b>{{formatType(val.type)}}</b></td>
-                                            <td>
-                                                <ng-container *ngIf="val.valid == true">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                        viewBox="0 0 24 24" fill="#50B720" stroke-width="2"
-                                                        class="ai ai-CircleCheckFill">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm4.768 9.14a1 1 0 1 0-1.536-1.28l-4.3 5.159-2.225-2.226a1 1 0 0 0-1.414 1.414l3 3a1 1 0 0 0 1.475-.067l5-6z" />
-                                                    </svg>
-                                                </ng-container>
-                                                <ng-container *ngIf="val.valid == false">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                                                        viewBox="0 0 24 24" fill="#B72020" stroke-width="2"
-                                                        class="ai ai-CircleXFill">
-                                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                                            d="M12 1C5.925 1 1 5.925 1 12s4.925 11 11 11 11-4.925 11-11S18.075 1 12 1zm3.707 8.707a1 1 0 0 0-1.414-1.414L12 10.586 9.707 8.293a1 1 0 1 0-1.414 1.414L10.586 12l-2.293 2.293a1 1 0 1 0 1.414 1.414L12 13.414l2.293 2.293a1 1 0 0 0 1.414-1.414L13.414 12l2.293-2.293z" />
-                                                    </svg>
-                                                </ng-container>
-                                            </td>
-                                            <td>{{dashboardService.formatUnixTimestamp(val.updated)}}</td>
+                                        <tr *ngFor="let event of dashboardService.selectValEventList">
+                                            <td><b>{{event.name}}</b></td>
+                                            <td>{{event.eventType}}</td>
+                                            <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
                                         </tr>
                                     </table>
                                 </div>

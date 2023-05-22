@@ -155,31 +155,27 @@ export class DashboardService {
     this.updateWeeklyRewardList(selVal['weeklyRewardList'], selNetwork['price'], selNetwork['decimals']);
 
     await this.apiService.getValidatorRewardOverview(selVal.id).then((data: any) => {
-      data = data['data'];
+      data = data['data'][0];
+      console.log(data)
       this.validatorRewardOverview = {
         ticker: selNetwork['ticker'],
         allTime: {
-          reward: 0,
-          monetaryValue: 0
+          reward: this.calculateDecimals(data['allTime'], selNetwork['decimals']).toFixed(2),
+          monetaryValue: selNetwork['price'] * this.calculateDecimals(data['allTime'], selNetwork['decimals'])
         },
         daily: {
-          reward: 0,
-          monetaryValue: 0
+          reward: this.calculateDecimals(data['daily'], selNetwork['decimals']).toFixed(2),
+          monetaryValue: selNetwork['price'] * this.calculateDecimals(data['daily'], selNetwork['decimals'])
         },
         monthly: {
-          reward: 0,
-          monetaryValue: 0
+          reward: this.calculateDecimals(data['monthly'], selNetwork['decimals']).toFixed(2),
+          monetaryValue: selNetwork['price'] * this.calculateDecimals(data['monthly'], selNetwork['decimals'])
         },
         weekly: {
-          reward: 0,
-          monetaryValue: 0
+          reward: this.calculateDecimals(data['weekly'], selNetwork['decimals']).toFixed(2),
+          monetaryValue: selNetwork['price'] * this.calculateDecimals(data['weekly'], selNetwork['decimals'])
         }
       };
-
-      for (let i = 0; i < data.length; i++) {
-        this.validatorRewardOverview[data[i]['period']]['reward'] = this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']).toFixed(2);
-        this.validatorRewardOverview[data[i]['period']]['monetaryValue'] = selNetwork['price'] * this.calculateDecimals(data[i]['rewards'], selNetwork['decimals']);
-      }
     });
 
     await this.apiService.getAllRewardsFromValidator(selVal.id).then((data: any) => {
@@ -195,6 +191,9 @@ export class DashboardService {
     }
 
     this.updateNominatorChart(selVal['nominatorHistory']);
+
+
+    this.updateMonthlyRewardList(selVal['monthlyRewardList'], selNetwork['price'], selNetwork['decimals']);
 
     this.fetch1kvData(valIndex);
   }
@@ -248,24 +247,21 @@ export class DashboardService {
 
     //calculate combined rewards
     let combinedDailyRewards = [0, 0, 0, 0, 0, 0, 0];
-    let combinedMonthlyRewards = [0,0,0,0,0,0,0,0,0,0,0,0];
+    let combinedMonthlyRewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     for (let i = 0; i < this.validatorList.length; i++) {
       const val = this.validatorList[i];
       const net = this.networkList[val.networkId - 1];
 
-      console.log(val)
-
       for (let i2 = 0; i2 < val['weeklyRewardList'].length; i2++) {
         const rewardObj = val['weeklyRewardList'][i2];
 
-        const dayIndex = this.getWeekdayIndexFromUnixTimestamp(rewardObj['timestamp']);
-
-        combinedDailyRewards[dayIndex] += net['price'] * this.calculateDecimals(rewardObj['reward_sum'], net['decimals'])
+        const dayIndex = this.setWeekdayIndex(rewardObj['weekday']);
+        combinedDailyRewards[dayIndex] += net['price'] * this.calculateDecimals(rewardObj['total_amount'], net['decimals']);
       }
 
       for (let i3 = 0; i3 < 11; i3++) {
         let rewardObj = null;
-        if(val['monthlyRewardList'][i3] != undefined) {
+        if (val['monthlyRewardList'][i3] != undefined) {
           rewardObj = val['monthlyRewardList'][i3]['total_reward']
         } else {
           rewardObj = 0;
@@ -286,10 +282,7 @@ export class DashboardService {
     Chart.getChart("combinedDailyRewardChart")?.update("normal");
     Chart.getChart("combinedMonthlyRewardChart")?.update("normal");
 
-    let dayNumber = new Date().getDay() - 1;
-    if (dayNumber < 0) {
-      dayNumber++;
-    }
+    let dayNumber = this.setWeekdayIndex(new Date().getDay());
     this.totalRewardsToday = combinedDailyRewards[dayNumber];
 
     await this.updateEventList();
@@ -356,10 +349,8 @@ export class DashboardService {
     Chart.getChart("nominatorChart")?.update("normal");
   }
 
-  private getWeekdayIndexFromUnixTimestamp(unixTimestamp: any) {
-    const date = new Date(unixTimestamp * 1000); // Convert to milliseconds
-    const weekdayIndex = date.getDay() - 1; // Sunday is 0, subtract 1 to make Monday 0
-    return weekdayIndex; // Convert negative values to Sunday (6)
+  private setWeekdayIndex(index: any) {
+    return (index === 0) ? 6 : index - 1;
   }
 
   public async selectValidator(index: number) {
@@ -409,12 +400,35 @@ export class DashboardService {
     return "$ " + this.addThousandSeperator((this.totalRewardsToday).toFixed(2));
   }
 
+  private updateMonthlyRewardList(data: any, tokenPrice: any, decimals: any) {
+    const combinedMonthlyRewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
+    for (let i = 0; i < 11; i++) {
+      let rewardObj = null;
+      if (data[i] != undefined) {
+        rewardObj = data[i]['total_reward']
+      } else {
+        rewardObj = 0;
+      }
+
+      combinedMonthlyRewards[i] += tokenPrice * this.calculateDecimals(rewardObj, decimals)
+    }
+
+    this.monthlyIncomeData.datasets.forEach((dataset) => {
+      dataset.data = combinedMonthlyRewards;
+    });
+
+    Chart.getChart("combinedMonthlyRewardChart")?.update("normal");
+  }
+
+
+
   private updateWeeklyRewardList(data: any, tokenPrice: any, decimals: any) {
     const weeklyRewardList = [0, 0, 0, 0, 0, 0, 0];
 
     for (let i = 0; i < data.length; i++) {
-      const dayIndex = this.getWeekdayIndexFromUnixTimestamp(data[i]['timestamp']);
-      weeklyRewardList[dayIndex] = tokenPrice * this.calculateDecimals(data[i].reward_sum, decimals);
+      const dayIndex = this.setWeekdayIndex(data[i]['weekday']);
+      weeklyRewardList[dayIndex] = tokenPrice * this.calculateDecimals(data[i].total_amount, decimals);
     }
 
     this.dailyIncomeData.datasets.forEach((dataset) => {

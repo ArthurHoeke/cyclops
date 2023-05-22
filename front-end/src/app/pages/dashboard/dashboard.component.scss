@@ -279,6 +279,8 @@ main {
         #validatorList {
             display: flex;
             flex-direction: column;
+            overflow-y: scroll;
+            max-height: 500px;
 
             .validator {
                 border: 1px solid #202127;

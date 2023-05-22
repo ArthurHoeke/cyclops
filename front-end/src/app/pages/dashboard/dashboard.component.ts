@@ -68,11 +68,15 @@ export class DashboardComponent {
     })
   }
 
-  public getPoolMetaData(meta: any, property: any, networkId: any) {
+  public getPoolMetaData(meta: any, property: any, networkId: any, isToken: boolean) {
     let arr: any = [];
 
     for(let i = 0; i < meta.length; i++) {
-      arr.push(this.calculatePoolTokensRaw(networkId, meta[i][property]));
+      if(isToken) {
+        arr.push(this.calculatePoolTokensRaw(networkId, meta[i][property]));
+      } else {
+        arr.push(meta[i][property]);
+      }
     }
 
     arr.reverse();
@@ -132,8 +136,6 @@ export class DashboardComponent {
   }
 
   public calculateDifferenceNumber(data: any, property: any) {
-    const selNetwork = this.dashboardService.networkList[data['networkId'] - 1];
-
     data = data['meta'];
     let curValue = 0;
 
