@@ -23,7 +23,7 @@ const register = async (req, res) => {
           res.sendStatus(409);
         } else {
           User.getUserIdByEmail([email],(err, row) => {
-            const accessToken = dataUtil.generateAccessToken(row.id, email, password, role);
+            const accessToken = dataUtil.generateAccessToken(row.id, email, role);
   
             res.status(201).json({
               accessToken: accessToken
@@ -54,7 +54,7 @@ const login = async (req, res) => {
 
         bcrypt.compare(password, pwHash, function (err, match) {
           if (match && !err) {
-            const accessToken = dataUtil.generateAccessToken(id, email, pwHash, role);
+            const accessToken = dataUtil.generateAccessToken(id, email, role);
 
             res.status(200).json({
               accessToken: accessToken
