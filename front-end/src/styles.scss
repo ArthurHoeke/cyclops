@@ -1,36 +1,6 @@
-@font-face {
-    font-family: 'Titlillium';
-    src: url('assets/font/TitilliumWeb-Black.ttf');
-    font-weight: 800;
-}
-
-@font-face {
-    font-family: 'Titlillium';
-    src: url('assets/font/TitilliumWeb-Bold.ttf');
-    font-weight: 700;
-}
-
-@font-face {
-    font-family: 'Titlillium';
-    src: url('assets/font/TitilliumWeb-SemiBold.ttf');
-    font-weight: 600;
-}
-
-@font-face {
-    font-family: 'Titlillium';
-    src: url('assets/font/TitilliumWeb-Regular.ttf');
-    font-weight: 500;
-}
-
-@font-face {
-    font-family: 'Titlillium';
-    src: url('assets/font/TitilliumWeb-Light.ttf');
-    font-weight: 400;
-}
-
 body {
-    font-family: 'Titlillium';
-    background-color: #0B0A10;
+    font-family: "Rubik", sans-serif;
+    background-color: #1a1d1f;
     color: white;
     overflow-y: scroll;
 }
@@ -42,18 +12,18 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: #0B0A10;
+    background: #1a1d1f;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: #2c283d;
+    background: #272b30;
     border-radius: 100px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: #2c283d;
+    background: #272b30;
 }
 
 nav {

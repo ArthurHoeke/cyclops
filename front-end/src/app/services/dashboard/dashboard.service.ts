@@ -395,9 +395,24 @@ export class DashboardService {
     return this.count_nominators;
   }
 
-  public getTotalRewardsToday() {
-    //dummy
-    return "$ " + this.addThousandSeperator((this.totalRewardsToday).toFixed(2));
+  public getIntegerOfTotalRewardsToday() {
+    let totalRewards = (this.totalRewardsToday).toFixed(2);
+    let parts = totalRewards.split('.');
+    // If there's no decimal part, return directly
+    if (parts.length !== 2) return "$" + this.addThousandSeperator(totalRewards);
+  
+    let integerPart = parts[0];
+    return "$" + this.addThousandSeperator(integerPart);
+  }
+  
+  public getDecimalOfTotalRewardsToday() {
+    let totalRewards = (this.totalRewardsToday).toFixed(2);
+    let parts = totalRewards.split('.');
+    // If there's no decimal part, return an empty string
+    if (parts.length !== 2) return "";
+  
+    let decimalPart = parts[1];
+    return `${decimalPart}`;
   }
 
   private updateMonthlyRewardList(data: any, tokenPrice: any, decimals: any) {
@@ -507,7 +522,7 @@ export class DashboardService {
     datasets: [{
       data: [this.pastEraPercentage, this.leftEraPercentage],
       backgroundColor: [
-        '#78023B',
+        '#fff',
         '#313035',
       ],
       borderAlign: 'center',
@@ -577,20 +592,20 @@ export class DashboardService {
     datasets: [{
       data: [],
       borderWidth: 2,
-      pointRadius: 0.2,
+      pointRadius: 0.0,
       tension: 0,
       gradient: {
         backgroundColor: {
           axis: 'y',
           colors: {
-            0: 'rgba(230,0,122,.2)',
-            10000: 'rgba(230,0,122,.6)'
+            0: 'rgba(59, 96, 216,.2)',
+            10000: 'rgba(59, 96, 216,.6)'
           }
         },
         borderColor: {
           axis: 'x',
           colors: {
-            1: 'rgba(230,0,122,1)',
+            1: '#3b60d8',
           }
         }
       },
@@ -659,10 +674,11 @@ export class DashboardService {
     datasets: [{
       data: [],
       backgroundColor: [
-        '#5CBD0C',
-        '#F7C217',
-        '#FF5072',
-        '#A7E2FD'
+        '#3d64e1',
+        '#ebb362',
+        '#b8acf6',
+        '#e7ccee',
+        '#dde0e6'
       ],
       borderAlign: 'center',
       borderRadius: 100,
@@ -684,15 +700,15 @@ export class DashboardService {
       borderWidth: 0,
       borderRadius: 5,
       // barPercentage: 0.5,
-      barThickness: 25,
-      maxBarThickness: 25,
-      minBarLength: 2,
+      barThickness: 30,
+      maxBarThickness: 30,
+      minBarLength: 4,
       gradient: {
         backgroundColor: {
           axis: 'y',
           colors: {
-            0: 'rgba(230,0,122,.2)',
-            100: 'rgba(230,0,122,1)'
+            0: 'rgb(81, 126, 246, 0.5)',
+            100: '#517ef6'
           }
         },
       },
@@ -712,15 +728,15 @@ export class DashboardService {
       borderWidth: 0,
       borderRadius: 5,
       // barPercentage: 0.5,
-      barThickness: 20,
-      maxBarThickness: 20,
+      barThickness: 30,
+      maxBarThickness: 30,
       minBarLength: 2,
       gradient: {
         backgroundColor: {
           axis: 'y',
           colors: {
-            0: 'rgba(50,125,255,.2)',
-            1000000: 'rgba(50,125,255,1)'
+            0: 'rgb(159, 116, 198, .5)',
+            1000000: '#9f74c6'
           }
         },
       },

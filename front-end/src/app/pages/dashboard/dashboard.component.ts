@@ -35,12 +35,18 @@ export class DashboardComponent {
   incomeReportTokens: any = 0;
   incomeReportMonetary: any = 0;
 
+  mobileNav: boolean = true;
+
   valName: any = '';
 
   constructor(public dashboardService: DashboardService, private coingeckoService: CoingeckoService, private storageService: StorageService, private router: Router, private authenticationService: AuthenticationService, private apiService: ApiService, private toastr: ToastrService) {
     Chart.register(gradient);
 
     dashboardService.updateDashboardData();
+  }
+
+  toggleMobileNav() {
+    this.mobileNav = !this.mobileNav;
   }
 
   public async updateValidatorName() {
@@ -86,6 +92,27 @@ export class DashboardComponent {
     lineChart.labels = this.dashboardService.createEmptyLabelList(arr);
     lineChart.datasets.forEach((dataset) => {
       dataset.data = arr;
+    });
+
+    return lineChart;
+  }
+
+  public getSparklineMeta(data: any) {
+    data.reverse();
+
+    if (data.length > 60) {
+      // If yes, use splice to cut down the array to 15 items
+      data.splice(60);
+    }
+
+    data.reverse();
+  
+
+    let lineChart = this.dashboardService.lineChartData;
+
+    lineChart.labels = this.dashboardService.createEmptyLabelList(data);
+    lineChart.datasets.forEach((dataset) => {
+      dataset.data = data;
     });
 
     return lineChart;
@@ -442,7 +469,7 @@ export class DashboardComponent {
 
   dailyIncomeChartOption: any = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false
@@ -451,13 +478,13 @@ export class DashboardComponent {
     scales: {
       y: {
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: true
         }
       },
       x: {
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: false
         }
       }
@@ -486,8 +513,8 @@ export class DashboardComponent {
   }
 
   lineChartOptions: any = {
-    responsive: false,
-    maintainAspectRatio: true,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false
@@ -500,7 +527,7 @@ export class DashboardComponent {
           display: true,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: true
         }
       },
@@ -509,7 +536,7 @@ export class DashboardComponent {
           display: true,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: false
         }
       }
@@ -517,8 +544,8 @@ export class DashboardComponent {
   }
 
   tokenChartOptions: any = {
-    responsive: false,
-    maintainAspectRatio: true,
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: false
@@ -531,7 +558,7 @@ export class DashboardComponent {
           display: true,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: true
         }
       },
@@ -540,7 +567,38 @@ export class DashboardComponent {
           display: false,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
+          display: false
+        }
+      }
+    }
+  }
+
+  sparklineOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scaleShowLabels: false,
+    scales: {
+      y: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          color: '#1e2527',
+          display: false
+        }
+      },
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          color: '#1e2527',
           display: false
         }
       }
@@ -562,7 +620,7 @@ export class DashboardComponent {
           display: false,
         },
         grid: {
-          color: '#202126',
+          color: '#282b30',
           display: true
         }
       },
@@ -571,7 +629,7 @@ export class DashboardComponent {
           display: false,
         },
         grid: {
-          color: '#202126',
+          color: '#1e2527',
           display: false
         }
       }
@@ -593,7 +651,7 @@ export class DashboardComponent {
           display: true,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: true
         }
       },
@@ -602,7 +660,7 @@ export class DashboardComponent {
           display: true,
         },
         grid: {
-          color: '#141318',
+          color: '#1e2527',
           display: false
         }
       }

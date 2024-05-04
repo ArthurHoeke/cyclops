@@ -11,11 +11,14 @@
 main {
     width: 650px;
     height: 100vh;
-    background-color: black;
+    background-color: #272c30;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+
+    border-radius: 30px;
+    bordeR: 20px solid #1a1d1f;
 }
 
 main > div {
@@ -50,12 +53,12 @@ aside .usp_container .usp {
     font-weight: 500;
     color: #CBCBCD;
     width: 370px;
-    background-color: #13111A;
+    background-color: #282c30;
 }
 
 aside .usp_container .usp.transparent {
     background-color: transparent;
-    border: 1px solid #13111A;
+    border: 1px solid #282c30;
 }
 
 aside .usp_container .usp h2 {
@@ -76,12 +79,12 @@ aside .usp_container .usp div {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #0B0A10;
+    background-color: #1a1d1f;
     margin-bottom: 15px;
 }
 
 aside .usp_container .usp.transparent div {
-    background-color: #13111A;
+    background-color: #282c30;
 }
 
 .form-group:first-of-type {
@@ -90,11 +93,10 @@ aside .usp_container .usp.transparent div {
 
 input {
     border: none;
-    border: 1px solid #232227;
-    background-color: #0B0A10;
+    background-color: #1a1d1f;
     padding: 10px 0px 10px 10px;
     border-radius: 10px;
-    font-family: "Titlillium";
+    font-family: "Rubik", sans-serif;
     font-weight: 600;
     width: 100%;
     color: white;
@@ -105,12 +107,13 @@ input {
 
 button {
     border: none;
-    background-color: white;
+    background-color:#3d64e1;
+    color: white;
     width: 100%;
     height: 50px;
-    border-radius: 8px;
+    border-radius: 100px;
     box-shadow: none;
-    font-family: "Titlillium";
+    font-family: "Rubik", sans-serif;
     font-weight: 700;
     font-size: 14px;
     cursor: pointer;
@@ -135,7 +138,7 @@ label {
 }
 
 a {
-    color: #4C5370;
+    color: #505558;
     font-weight: 600;
     font-size: 14px;
     margin-top: 25px;
@@ -152,7 +155,7 @@ a {
     margin-bottom: 20px;
 
     p {
-        color: #4C5370;
+        color: #505558;
         font-weight: 600;
         margin-left: 15px;
         margin-right: 15px;
@@ -162,7 +165,7 @@ a {
 
     span {
         width: 40%;
-        background-color: #4C5370;
+        background-color: #505558;
         height: 2px;
     }
 }

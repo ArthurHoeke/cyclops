@@ -1,76 +1,58 @@
-<nav class="container mt-4 mb-5">
-    <div id="left">
-        <img src="assets/logo/cyclops.svg" id="logo">
-        <a [routerLink]="['/dashboard']" class="active">Dashboard</a>
-        <a [routerLink]="['/settings']" *ngIf="isAdmin()">Settings</a>
-    </div>
-    <div id="right">
-        <a id="logoutButton" (click)="logout()"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                stroke-linejoin="round" class="ai ai-SignOut">
-                <path d="M13 12h9m0 0l-3.333-4M22 12l-3.333 4" />
-                <path
-                    d="M14 7V5.174a2 2 0 0 0-2.166-1.993l-8 .666A2 2 0 0 0 2 5.84v12.32a2 2 0 0 0 1.834 1.993l8 .667A2 2 0 0 0 14 18.826V17" />
-            </svg></a>
-    </div>
-</nav>
-<main class="container">
-    <div class="row">
-        <aside class="col-sm-12 col-md-12 col-lg-5 col-xl-4 mb-3">
-            <div class="card">
-                <h2>My validators</h2>
-                <h3>Today: <span>{{dashboardService.getTotalRewardsToday()}}</span></h3>
-                <div id="manageButtonWrapper" class="mt-2">
-                    <button [ngClass]="{'active' : isActive(0)}" (click)="dashboardService.selectValidator(0)"><svg
-                            width="13" height="13" viewBox="0 0 13 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M4.66667 1H1.61111C1.2736 1 1 1.2736 1 1.61111V4.66667C1 5.00417 1.2736 5.27778 1.61111 5.27778H4.66667C5.00417 5.27778 5.27778 5.00417 5.27778 4.66667V1.61111C5.27778 1.2736 5.00417 1 4.66667 1Z"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M4.66667 7.72223H1.61111C1.2736 7.72223 1 7.99583 1 8.33334V11.3889C1 11.7264 1.2736 12 1.61111 12H4.66667C5.00417 12 5.27778 11.7264 5.27778 11.3889V8.33334C5.27778 7.99583 5.00417 7.72223 4.66667 7.72223Z"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M11.3888 1H8.33328C7.99577 1 7.72217 1.2736 7.72217 1.61111V4.66667C7.72217 5.00417 7.99577 5.27778 8.33328 5.27778H11.3888C11.7263 5.27778 11.9999 5.00417 11.9999 4.66667V1.61111C11.9999 1.2736 11.7263 1 11.3888 1Z"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                            <path
-                                d="M11.3888 7.72223H8.33328C7.99577 7.72223 7.72217 7.99583 7.72217 8.33334V11.3889C7.72217 11.7264 7.99577 12 8.33328 12H11.3888C11.7263 12 11.9999 11.7264 11.9999 11.3889V8.33334C11.9999 7.99583 11.7263 7.72223 11.3888 7.72223Z"
-                                stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>Overview</button>
-                    <button (click)="toggleModal(addValidatorModal)" data-toggle="modal" data-target="#exampleModal"
-                        data-whatever="@mdo"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 11V6M6 6V1M6 6H11M6 6H1" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        Add validator</button>
-                </div>
-                <div id="validatorList">
-                    <div *ngFor="let validator of dashboardService.validatorList; index as i;">
-                        <div class="validator mt-3" [ngClass]="{'active' : isActive(i+1)}"
-                            (click)="dashboardService.selectValidator(i+1)">
-                            <div class="logoWrapper">
-                                <img [src]="dashboardService.networkList[validator.networkId-1]['icon']">
-                            </div>
-                            <div class="detailsWrapper">
-                                <div>
-                                    <p>{{validator.name}}</p>
-                                    <span
-                                        class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
-                                </div>
-                                <p class="address mt-2">{{truncateString(validator.address, 30)}}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<main class="container-fluid h100vh">
+    <div class="row h-100">
+        <aside *ngIf="mobileNav" class="pt-3 col-sm-12 col-md-12 col-lg-5 col-xl-3 mb-3">
+            <svg (click)="toggleMobileNav()" class="mobileClose" xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20L4 4m16 0L4 20"/></svg>
+
+            <svg class="mb-3" width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="42" height="42" rx="10" fill="white"/>
+                <path d="M32.0173 23.469H27.6997C27.6997 24.084 27.6699 25.1297 27.6103 25.6832C27.2828 28.0205 26.3895 28.9738 24.3051 29.4351C23.7096 29.5582 22.8461 29.6504 22.0123 29.6812C21.387 29.7119 20.8511 29.7119 20.3151 29.7119C19.4813 29.7119 18.7072 29.6812 17.8734 29.5889C15.134 29.3121 13.9727 28.5433 13.5558 25.4372C13.4069 24.2686 13.3176 22.6079 13.3176 21.0395C13.3176 19.5325 13.3771 17.9949 13.4665 16.857C13.7345 13.4126 15.0744 12.2747 17.8436 12.0287C18.588 11.9672 19.3622 11.9057 20.2853 11.9057C20.4937 11.9057 20.7022 11.9057 20.9106 11.9057C21.9528 11.9057 22.7865 11.9672 23.5905 12.0595C25.8833 12.3055 27.253 13.3511 27.4614 15.7806C27.4912 16.2112 27.521 16.8262 27.521 17.2875H31.9279C31.9279 16.611 31.9279 15.6576 31.8684 15.104C31.2728 9.96822 29.0098 8.49206 24.1563 8.09226C23.2332 8.03075 22.191 8 20.9404 8C19.4813 8 18.1712 8.03075 17.0992 8.09226C11.8883 8.43055 9.71464 10.3988 9.20844 15.9651C9.08933 17.3798 9 19.2558 9 21.0395C9.02978 22.9154 9.11911 24.8529 9.29776 26.2983C9.92307 31.5879 12.2159 33.1563 16.7717 33.4946C17.7245 33.5869 18.9156 33.6484 20.2258 33.6484C20.4342 33.6484 20.6426 33.6484 20.8511 33.6484C22.3697 33.6484 23.6501 33.5561 24.6922 33.4331C29.3969 32.8795 31.3026 31.2804 31.8982 26.1445C31.9875 25.468 32.0173 24.2071 32.0173 23.469Z" fill="black"/>
+                <path d="M20.5093 24.6246C22.6281 24.6246 24.3458 22.9069 24.3458 20.7881C24.3458 18.6693 22.6281 16.9517 20.5093 16.9517C18.3905 16.9517 16.6729 18.6693 16.6729 20.7881C16.6729 22.9069 18.3905 24.6246 20.5093 24.6246Z" fill="black"/>
+            </svg>
+            
+            <h3>{{dashboardService.getIntegerOfTotalRewardsToday()}}<span>.{{dashboardService.getDecimalOfTotalRewardsToday()}}</span> <small>today</small></h3>
+
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li class="nav-item">
+                  <a [ngClass]="{'active' : isActive(0)}" (click)="dashboardService.selectValidator(0)" class="nav-link" aria-current="page">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-Home"><path d="M21 19v-6.733a4 4 0 0 0-1.245-2.9L13.378 3.31a2 2 0 0 0-2.755 0L4.245 9.367A4 4 0 0 0 3 12.267V19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z"/></svg>
+                    Overview
+                  </a>
+                </li>
+                <li>
+                  <a [routerLink]="['/settings']" class="nav-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-Gear"><path d="M14 3.269C14 2.568 13.432 2 12.731 2H11.27C10.568 2 10 2.568 10 3.269v0c0 .578-.396 1.074-.935 1.286-.085.034-.17.07-.253.106-.531.23-1.162.16-1.572-.249v0a1.269 1.269 0 0 0-1.794 0L4.412 5.446a1.269 1.269 0 0 0 0 1.794v0c.41.41.48 1.04.248 1.572a7.946 7.946 0 0 0-.105.253c-.212.539-.708.935-1.286.935v0C2.568 10 2 10.568 2 11.269v1.462C2 13.432 2.568 14 3.269 14v0c.578 0 1.074.396 1.286.935.034.085.07.17.105.253.231.531.161 1.162-.248 1.572v0a1.269 1.269 0 0 0 0 1.794l1.034 1.034a1.269 1.269 0 0 0 1.794 0v0c.41-.41 1.04-.48 1.572-.249.083.037.168.072.253.106.539.212.935.708.935 1.286v0c0 .701.568 1.269 1.269 1.269h1.462c.701 0 1.269-.568 1.269-1.269v0c0-.578.396-1.074.935-1.287.085-.033.17-.068.253-.104.531-.232 1.162-.161 1.571.248v0a1.269 1.269 0 0 0 1.795 0l1.034-1.034a1.269 1.269 0 0 0 0-1.794v0c-.41-.41-.48-1.04-.249-1.572.037-.083.072-.168.106-.253.212-.539.708-.935 1.286-.935v0c.701 0 1.269-.568 1.269-1.269V11.27c0-.701-.568-1.269-1.269-1.269v0c-.578 0-1.074-.396-1.287-.935a7.755 7.755 0 0 0-.105-.253c-.23-.531-.16-1.162.249-1.572v0a1.269 1.269 0 0 0 0-1.794l-1.034-1.034a1.269 1.269 0 0 0-1.794 0v0c-.41.41-1.04.48-1.572.249a7.913 7.913 0 0 0-.253-.106C14.396 4.343 14 3.847 14 3.27v0z"/><path d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0z"/></svg>
+                    Settings
+                  </a>
+                </li>
+                <li>
+                    <a class="nav-link" (click)="logout()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-SignOut"><path d="M13 12h9m0 0l-3.333-4M22 12l-3.333 4"/><path d="M14 7V5.174a2 2 0 0 0-2.166-1.993l-8 .666A2 2 0 0 0 2 5.84v12.32a2 2 0 0 0 1.834 1.993l8 .667A2 2 0 0 0 14 18.826V17"/></svg>
+                      Log out
+                    </a>
+                  </li>
+                <li class="border-top my-3"></li>
+
+                <li class="validator" *ngFor="let validator of dashboardService.validatorList; index as i;">
+                    <a class="nav-link" [ngClass]="{'active' : isActive(i+1)}" (click)="dashboardService.selectValidator(i+1)">
+                        <img [src]="dashboardService.networkList[validator.networkId-1]['icon']">
+                        <p class="m-0 p-0">{{validator.name}}</p>
+                        <span class="{{validator['details']['status']}}">{{validator['details']['status']}}</span>
+                    </a>
+                </li>
+              </ul>
+
+              <div class="card bottom">
+                <button (click)="toggleModal(addValidatorModal)"><svg _ngcontent-aen-c3="" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-Plus"><path _ngcontent-aen-c3="" d="M12 20v-8m0 0V4m0 8h8m-8 0H4"></path></svg> Add Validator</button>
+              </div>
         </aside>
-        <section class="col-sm-12 col-md-12 col-lg-7 col-xl-8">
+        <section class="pt-3 col-sm-12 col-md-12 col-lg-7 col-xl-9">
             <div class="container">
 
                 <!-- Dashboard overview container -->
                 <ng-container *ngIf="onOverview()">
                     <div class="row">
                         <div class="col">
-                            <div id="notificationContainer" class="mb-3">
+                            <div id="notificationContainer" class="d-none d-md-flex mb-3">
                                 <div id="supportIcon">
                                     <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -83,7 +65,7 @@
                                         target="_blank">decentraDOT validators</a>. Thank you!</p>
                             </div>
                         </div>
-                        <div class="col-12 mb-3">
+                        <!-- <div class="col-12 mb-3">
                             <div class="card">
                                 <div class="head">
                                     <p>Critical events</p>
@@ -124,10 +106,10 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card incomePieContainer">
                                 <div class="head">
                                     <p>Income distribution</p>
@@ -153,28 +135,27 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card tableWrapper">
                                 <div class="head">
                                     <p>Token prices</p>
                                 </div>
                                 <div class="body">
                                     <table>
-                                        <tr>
-                                            <th>Token</th>
-                                            <th>Price</th>
-                                            <th>Change</th>
-                                        </tr>
                                         <tr *ngFor="let network of dashboardService.networkList">
                                             <td><img [src]="network.icon"></td>
-                                            <td>${{roundTwoDigits(network.price)}}</td>
-                                            <td class="priceChangeWrapper"
-                                                [ngClass]="{'down' : !isPositive(network.change), 'up' : isPositive(network.change)}">
-                                                <img src="assets/icons/caret_up.svg" *ngIf="isPositive(network.change)">
-                                                <img src="assets/icons/caret_down.svg"
-                                                    *ngIf="!isPositive(network.change)">
-                                                {{roundTwoDigits(network.change)}}%
+                                            <td>
+                                                ${{roundTwoDigits(network.price)}}
+                                                <p class="priceChangeWrapper mb-0"
+                                                [ngClass]="{'down' : !isPositive(network.change), 'up' : isPositive(network.change)}"><img src="assets/icons/caret_up.svg" *ngIf="isPositive(network.change)">
+                                                    <img src="assets/icons/caret_down.svg"
+                                                        *ngIf="!isPositive(network.change)">
+                                                    {{roundTwoDigits(network.change)}}%</p>
                                             </td>
+                                            
+                                            <td width="250px"><canvas baseChart class="chart"
+                                                [data]="getSparklineMeta(network.sparkline)" [options]="sparklineOptions"
+                                                [type]="lineChartType" style="width: 250px; height: 75px;"></canvas></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -182,7 +163,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Combined daily rewards</p>
@@ -191,12 +172,12 @@
                                 <div class="body">
                                     <canvas id="combinedDailyRewardChart" baseChart class="chart"
                                         [data]="dashboardService.dailyIncomeData" [options]="dailyIncomeChartOption"
-                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                        [type]="dailyIncomeChartType" style="height: 200px;">
                                     </canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Combined monthly rewards</p>
@@ -205,14 +186,14 @@
                                 <div class="body">
                                     <canvas id="combinedMonthlyRewardChart" baseChart class="chart"
                                         [data]="dashboardService.monthlyIncomeData" [options]="dailyIncomeChartOption"
-                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                        [type]="dailyIncomeChartType" style="height: 200px;">
                                     </canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-3">
+                        <div class="col-12 mb-2">
                             <div class="card poolContainer">
                                 <div class="head">
                                     <p>My pools</p>
@@ -223,10 +204,10 @@
                                             <path d="M12 20v-8m0 0V4m0 8h8m-8 0H4" />
                                         </svg> Add pool</button>
                                 </div>
-                                <div class="body">
+                                <div class="body p-3 pt-0">
 
                                     <ng-container *ngFor="let pool of dashboardService.poolList">
-                                        <div class="poolHeadContainer mb-3">
+                                        <div class="poolHeadContainer mb-2">
                                             <div class="poolIcon">
                                                 <img [src]="dashboardService.networkList[pool.networkId-1]['icon']">
                                             </div>
@@ -287,7 +268,7 @@
                 <!-- Validator overview container -->
                 <ng-container *ngIf="!onOverview()">
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card eraProgressContainer">
                                 <div class="head">
                                     <p>ERA progress</p>
@@ -307,7 +288,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card tokenPriceContainer">
                                 <div class="head">
                                     <p>7d price change</p>
@@ -323,7 +304,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Weekly overview</p>
@@ -332,12 +313,12 @@
                                 <div class="body">
                                     <canvas id="weeklyOverviewChart" baseChart class="chart"
                                         [data]="dashboardService.dailyIncomeData" [options]="dailyIncomeChartOption"
-                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                        [type]="dailyIncomeChartType" style="height: 200px;">
                                     </canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Reward overview</p>
@@ -387,7 +368,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
                                     <p>Bond overview</p>
@@ -423,7 +404,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col mb-3">
+                        <div class="col mb-2">
                             <div class="card" [ngClass]="{'disabled' : !dashboardService.isActive()}">
                                 <div class="head">
                                     <p>ERA points</p>
@@ -431,13 +412,13 @@
                                 <div class="body">
                                     <canvas id="eraPointChart" baseChart class="chart"
                                         [data]="dashboardService.eraChartData" [options]="eraChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                        [type]="lineChartType" style="width: 100%; height: 200px;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Nominators</p>
@@ -449,11 +430,11 @@
                                 <div class="body">
                                     <canvas id="nominatorChart" baseChart class="chart"
                                         [data]="dashboardService.nominatorChartData" [options]="lineChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                        [type]="lineChartType" style="width: 100%; height: 200px;"></canvas>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Yearly overview</p>
@@ -462,14 +443,14 @@
                                 <div class="body">
                                     <canvas id="combinedMonthlyRewardChart" baseChart class="chart"
                                         [data]="dashboardService.monthlyIncomeData" [options]="dailyIncomeChartOption"
-                                        [type]="dailyIncomeChartType" style="max-height: 300px;">
+                                        [type]="dailyIncomeChartType" style="height: 200px;">
                                     </canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>1kv statistics</p>
@@ -512,7 +493,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Stash balance</p>
@@ -520,13 +501,13 @@
                                 <div class="body">
                                     <canvas id="stashBalanceChart" baseChart class="chart"
                                         [data]="dashboardService.lineChartData" [options]="lineChartOptions"
-                                        [type]="lineChartType" style="width: 100%; height: 250px;"></canvas>
+                                        [type]="lineChartType" style="height: 200px;"></canvas>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-3">
+                        <div class="col-12 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Income report</p>
@@ -573,7 +554,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Validator settings</p>
@@ -600,7 +581,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-3">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Critical events</p>
@@ -630,6 +611,10 @@
                 </ng-container>
             </div>
         </section>
+
+        <div (click)="toggleMobileNav()" class="mobileNavButton" *ngIf="mobileNav == false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-ThreeLineHorizontal"><path d="M5 6h14M5 12h14M5 18h14"/></svg>
+        </div>
     </div>
 </main>
 
