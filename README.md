@@ -22,7 +22,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About Cyclops
 
-![image](https://github.com/ArthurHoeke/cyclops/assets/34348870/cb92be98-13e5-49a7-a546-2bb7976e242d)
+![image](https://github.com/ArthurHoeke/cyclops/assets/34348870/5846e379-81e8-4a4a-a7eb-4b9d6a809ab3)
+
 
 
 Cyclops is a validator dashboard application built using Angular and Node/Express that helps Polkadot network validators easily keep track of all their validators, their income, and performance. Cyclops uses the Polkadot Subscan API to gather data and provide a reliable source of validator information.
