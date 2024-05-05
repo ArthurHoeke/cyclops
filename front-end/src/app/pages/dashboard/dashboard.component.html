@@ -141,7 +141,7 @@
                                     <p>Token prices</p>
                                 </div>
                                 <div class="body">
-                                    <table>
+                                    <table class="largeCells">
                                         <tr *ngFor="let network of dashboardService.networkList">
                                             <td><img [src]="network.icon"></td>
                                             <td>
@@ -153,7 +153,7 @@
                                                     {{roundTwoDigits(network.change)}}%</p>
                                             </td>
                                             
-                                            <td width="250px"><canvas baseChart class="chart"
+                                            <td class="priceSparkline"><canvas baseChart class="chart"
                                                 [data]="getSparklineMeta(network.sparkline)" [options]="sparklineOptions"
                                                 [type]="lineChartType" style="width: 250px; height: 75px;"></canvas></td>
                                         </tr>
@@ -507,7 +507,34 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-12 mb-2">
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
+                            <div class="card">
+                                <div class="head">
+                                    <p>Validator settings</p>
+                                </div>
+                                <div class="body tableWrapper">
+                                    <table>
+                                        <tr>
+                                            <th>Setting</th>
+                                            <th>Option</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Active</b></td>
+                                            <td>-</td>
+                                            <td><button (click)="deleteValidator()">Delete</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Name</b></td>
+                                            <td><input type="text" [(ngModel)]="valName" placeholder="new name"></td>
+                                            <td><button [disabled]="valName ==''"
+                                                    (click)="updateValidatorName()">Update</button></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
                             <div class="card">
                                 <div class="head">
                                     <p>Income report</p>
@@ -547,61 +574,6 @@
                                                         <path
                                                             d="M2 17l.621 2.485A2 2 0 0 0 4.561 21H19.439a2 2 0 0 0 1.94-1.515L22 17" />
                                                     </svg> Income report</button></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Validator settings</p>
-                                </div>
-                                <div class="body tableWrapper">
-                                    <table>
-                                        <tr>
-                                            <th>Setting</th>
-                                            <th>Option</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Active</b></td>
-                                            <td>-</td>
-                                            <td><button (click)="deleteValidator()">Delete</button></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Name</b></td>
-                                            <td><input type="text" [(ngModel)]="valName" placeholder="new name"></td>
-                                            <td><button [disabled]="valName ==''"
-                                                    (click)="updateValidatorName()">Update</button></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-lg-12 col-xl-6 mb-2">
-                            <div class="card">
-                                <div class="head">
-                                    <p>Critical events</p>
-                                </div>
-                                <div class="body tableWrapper">
-                                    <table>
-                                        <tr>
-                                            <th style="width: 33%">Validator</th>
-                                            <th style="width: 33%">Event</th>
-                                            <th style="width: 33%">Date</th>
-                                        </tr>
-                                        <tr *ngIf="dashboardService.eventList.length == 0">
-                                            <td>-</td>
-                                            <td>-</td>
-                                            <td>-</td>
-                                        </tr>
-                                        <tr *ngFor="let event of dashboardService.selectValEventList">
-                                            <td><b>{{event.name}}</b></td>
-                                            <td>{{event.eventType}}</td>
-                                            <td>{{dashboardService.formatUnixTimestamp(event.timestamp)}}</td>
                                         </tr>
                                     </table>
                                 </div>

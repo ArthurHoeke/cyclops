@@ -79,6 +79,7 @@ export class DashboardService {
     });
     await this.apiService.getValidators().then(async (res: any) => {
       this.validatorList = res['data'];
+      console.log(this.validatorList)
 
       for (let i = 0; i < this.validatorList.length; i++) {
         await this.apiService.getWeeklyRewardsFromValidator(this.validatorList[i].id).then((data: any) => {
@@ -566,7 +567,7 @@ export class DashboardService {
       data: [],
       borderWidth: 2,
       pointRadius: 0,
-      tension: 0.15,
+      tension: 0,
       gradient: {
         backgroundColor: {
           axis: 'y',
