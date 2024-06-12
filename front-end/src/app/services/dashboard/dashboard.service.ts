@@ -221,6 +221,8 @@ export class DashboardService {
       positionClass: "toast-top-left"
     });
 
+
+    //setup income pie
     let incomePerValidator: any = await this.apiService.getIncomeDistribution();
 
     incomePerValidator = incomePerValidator['data'];
@@ -246,45 +248,58 @@ export class DashboardService {
 
     Chart.getChart("incomePieChart")?.update("normal");
 
-    //calculate combined rewards
-    let combinedDailyRewards = [0, 0, 0, 0, 0, 0, 0];
-    let combinedMonthlyRewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    for (let i = 0; i < this.validatorList.length; i++) {
-      const val = this.validatorList[i];
-      const net = this.networkList[val.networkId - 1];
+    //calculate combined rewards for bar chart and daily income
 
-      for (let i2 = 0; i2 < val['weeklyRewardList'].length; i2++) {
-        const rewardObj = val['weeklyRewardList'][i2];
+    const dailyRewards = new Array(7).fill(0); // Pre-fill daily rewards with zeros
+    const monthlyRewards = new Array(12).fill(0); // Pre-fill monthly rewards with zeros
 
-        const dayIndex = this.setWeekdayIndex(rewardObj['weekday']);
-        combinedDailyRewards[dayIndex] += net['price'] * this.calculateDecimals(rewardObj['total_amount'], net['decimals']);
+    for (const validator of this.validatorList) {
+      const network = this.networkList.find((n: { id: any; }) => n.id === validator.networkId);
+
+      if (!network) {
+        console.warn(`Network not found for validator: ${validator.name}`);
+        continue;
       }
 
-      for (let i3 = 0; i3 < 11; i3++) {
-        let rewardObj = null;
-        if (val['monthlyRewardList'][i3] != undefined) {
-          rewardObj = val['monthlyRewardList'][i3]['total_reward']
-        } else {
-          rewardObj = 0;
+      // Iterate through validator's weekly rewards (if available)
+      if (validator.weeklyRewardList) {
+        for (const item of validator.weeklyRewardList) {
+          // Get the day as a number
+          const dayIndex = this.setWeekdayIndex(item.weekday);
+          dailyRewards[dayIndex] += network.price * this.calculateDecimals(item.total_amount, network.decimals);
         }
+      }
 
-        combinedMonthlyRewards[i3] += net['price'] * this.calculateDecimals(rewardObj, net['decimals'])
+      // Iterate through validator's monthly rewards (if available)
+      if (validator.monthlyRewardList) {
+        for (const item of validator.monthlyRewardList) {
+          // Get the month as a number (assuming month is a property within the item)
+          const dataMonth = parseInt(item.month, 10);
+
+          // Ensure dataMonth is within the valid range (1-12)
+          if (dataMonth < 1 || dataMonth > 12) {
+            console.error("Invalid month provided in validator data:", item.month);
+            continue; // Skip to the next item in the loop
+          }
+
+          // Update the specific month based on dataMonth (zero-based index)
+          const monthIndex = dataMonth - 1;
+          const reward = item.total_reward || 0;
+          monthlyRewards[monthIndex] += network.price * this.calculateDecimals(reward, network.decimals);
+        }
       }
     }
 
-    this.dailyIncomeData.datasets.forEach((dataset) => {
-      dataset.data = combinedDailyRewards;
-    });
+    // Update chart data sets
+    this.dailyIncomeData.datasets.forEach(dataset => dataset.data = dailyRewards);
+    this.monthlyIncomeData.datasets.forEach(dataset => dataset.data = monthlyRewards);
 
-    this.monthlyIncomeData.datasets.forEach((dataset) => {
-      dataset.data = combinedMonthlyRewards;
-    });
-
-    Chart.getChart("combinedDailyRewardChart")?.update("normal");
-    Chart.getChart("combinedMonthlyRewardChart")?.update("normal");
+    // Update charts
+    Chart.getChart("combinedDailyRewardChart")?.update();
+    Chart.getChart("combinedMonthlyRewardChart")?.update();
 
     let dayNumber = this.setWeekdayIndex(new Date().getDay());
-    this.totalRewardsToday = combinedDailyRewards[dayNumber];
+    this.totalRewardsToday = dailyRewards[dayNumber];
 
     await this.updateEventList();
 
@@ -401,17 +416,17 @@ export class DashboardService {
     let parts = totalRewards.split('.');
     // If there's no decimal part, return directly
     if (parts.length !== 2) return "$" + this.addThousandSeperator(totalRewards);
-  
+
     let integerPart = parts[0];
     return "$" + this.addThousandSeperator(integerPart);
   }
-  
+
   public getDecimalOfTotalRewardsToday() {
     let totalRewards = (this.totalRewardsToday).toFixed(2);
     let parts = totalRewards.split('.');
     // If there's no decimal part, return an empty string
     if (parts.length !== 2) return "";
-  
+
     let decimalPart = parts[1];
     return `${decimalPart}`;
   }
@@ -419,15 +434,23 @@ export class DashboardService {
   private updateMonthlyRewardList(data: any, tokenPrice: any, decimals: any) {
     const combinedMonthlyRewards = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
-    for (let i = 0; i < 11; i++) {
-      let rewardObj = null;
-      if (data[i] != undefined) {
-        rewardObj = data[i]['total_reward']
-      } else {
-        rewardObj = 0;
+    for (const item of data) {
+      // Get the month as a number (assuming month is a property within the item)
+      const dataMonth = parseInt(item.month, 10);
+
+      // Ensure dataMonth is within the valid range (1-12)
+      if (dataMonth < 1 || dataMonth > 12) {
+        console.error("Invalid month provided in data:", item.month);
+        continue; // Skip to the next item in the loop
       }
 
-      combinedMonthlyRewards[i] += tokenPrice * this.calculateDecimals(rewardObj, decimals)
+      // Update the specific month based on dataMonth (zero-based index)
+      const monthIndex = dataMonth - 1;
+      let rewardObj = 0;
+      if (item) {
+        rewardObj = item['total_reward'];
+      }
+      combinedMonthlyRewards[monthIndex] += tokenPrice * this.calculateDecimals(rewardObj, decimals);
     }
 
     this.monthlyIncomeData.datasets.forEach((dataset) => {
@@ -436,7 +459,6 @@ export class DashboardService {
 
     Chart.getChart("combinedMonthlyRewardChart")?.update("normal");
   }
-
 
 
   private updateWeeklyRewardList(data: any, tokenPrice: any, decimals: any) {
