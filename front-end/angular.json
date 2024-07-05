@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "cyclops:build:production"
+              "buildTarget": "cyclops:build:production"
             },
             "development": {
-              "browserTarget": "cyclops:build:development"
+              "buildTarget": "cyclops:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -80,7 +80,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "cyclops:build"
+            "buildTarget": "cyclops:build"
           }
         },
         "test": {
