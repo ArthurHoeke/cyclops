@@ -398,7 +398,17 @@ async function performRewardSync(validatorId) {
     console.log(data.yellowConsoleLog("Started sync") + " for validator " + validatorData.address);
 
     // Retrieve all rewards for this validator and store them in a cache for later use
-    const rewardData = await reward.getAllRewardsFromValidatorAsync(validatorId);
+
+    let rewardData;
+    
+    try {
+    	rewardData = await reward.getAllRewardsFromValidatorAsync(validatorId);
+    } catch (err) {
+    	console.log(err);
+    	isSyncing = false;
+        return false;
+    }
+
     var rewardHashCache = {};
     rewardData.forEach(function (reward) {
         rewardHashCache[reward.hash] = reward.id;
