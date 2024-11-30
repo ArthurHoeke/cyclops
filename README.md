@@ -6,7 +6,7 @@
   <p align="center" style="margin-top: 30px;">
     Cyclops keeps a watchful eye on your Polkadot validators, giving you a clear vision of their performance and rewards.
     <br />
-    <a href="https://cyclops.decentradot.com"><strong>View demo »</strong></a>
+    <a href="https://dashboard.decentradot.com"><strong>View demo »</strong></a>
     <br />
     <br />
     ·
