@@ -385,11 +385,9 @@ async function getNetworkValidators() {
 async function performRewardSync(validatorId) {
     isSyncing = true;
 
-    // First, retrieve validator data using its ID
     const validatorData = await validator.getValidatorById(validatorId);
-
-    // If the validator data is undefined, exit the function and return false
-    if (validatorData == undefined) {
+    if (!validatorData) {
+        console.warn(`Validator with ID ${validatorId} not found.`);
         isSyncing = false;
         return false;
     }
@@ -397,71 +395,69 @@ async function performRewardSync(validatorId) {
     console.log(data.getDividerLogString());
     console.log(data.yellowConsoleLog("Started sync") + " for validator " + validatorData.address);
 
-    // Retrieve all rewards for this validator and store them in a cache for later use
-
     let rewardData;
-    
     try {
-    	rewardData = await reward.getAllRewardsFromValidatorAsync(validatorId);
+        rewardData = await reward.getAllRewardsFromValidatorAsync(validatorId);
     } catch (err) {
-    	console.log(err);
-    	isSyncing = false;
+        console.error(`Error fetching rewards for validator ${validatorId}:`, err.message);
+        isSyncing = false;
         return false;
     }
 
-    var rewardHashCache = {};
-    rewardData.forEach(function (reward) {
+    const rewardHashCache = {};
+    rewardData.forEach((reward) => {
         rewardHashCache[reward.hash] = reward.id;
     });
 
-    // Get the network data for this validator
     const networkData = await network.getNetworkFromId(validatorData.networkId);
 
-    // Get all events for this validator's address
+    // Fetch initial event data
     let eventData = await subscan.getValidatorEvents(networkData.name, validatorData.address, 0);
-
-    // If there was an error retrieving events, return false
-    if (eventData != undefined && eventData.code != 0) {
+    if (!eventData || eventData.code !== 0) {
+        console.warn(`Failed to fetch event data for validator ${validatorData.address}, skipping.`);
         isSyncing = false;
         return false;
-    } else {
-        // Otherwise, store the event data
-        eventData = eventData.data;
     }
 
-    // Store the reward list from the event data
-    let rewardList = eventData.list;
+    const realtimeRewardCount = eventData.data.count;
+    const locallyStoredRewardCount = rewardData.length;
 
-    // Store the count of rewards in real-time and in the local cache
-    let realtimeRewardCount = eventData.count;
-    let locallyStoredRewardCount = rewardData.length;
-
-    // If the counts are the same, there is no need to sync, return true
-    if (realtimeRewardCount == locallyStoredRewardCount) {
-        console.log("🟢" + "Already synced");
+    if (realtimeRewardCount === locallyStoredRewardCount) {
+        console.log("🟢 Already synced");
         isSyncing = false;
         return true;
     }
 
-    // Loop through all pages of rewards data (up to 100 entries per page) and process them
+    // Process reward pages
     for (let i = 0; i < Math.ceil(realtimeRewardCount / 100); i++) {
-        if (i > 0) {
-            // If there is more than one page, retrieve the next page of events
-            eventData = await subscan.getValidatorEvents(networkData.name, validatorData.address, i);
-            rewardList = eventData['data'].list;
-        }
-        // Process the reward list and retrieve the new local stored reward count
-        const newLocalStoreCount = await processRewardList(validatorId, rewardList, rewardHashCache, locallyStoredRewardCount)
-        if (realtimeRewardCount == newLocalStoreCount) {
-            // If the real-time and local counts match, there is no need to continue processing, break out of the loop
-            console.log("🟢" + "Finished syncing");
-            break;
+        try {
+            if (i > 0) {
+                eventData = await subscan.getValidatorEvents(networkData.name, validatorData.address, i);
+                if (!eventData || eventData.code !== 0) {
+                    console.warn(`Error fetching page ${i} for validator ${validatorData.address}, skipping this page.`);
+                    continue;
+                }
+            }
+
+            const rewardList = eventData.data.list;
+            const newLocalStoreCount = await processRewardList(
+                validatorId,
+                rewardList,
+                rewardHashCache,
+                locallyStoredRewardCount
+            );
+
+            if (realtimeRewardCount === newLocalStoreCount) {
+                console.log("🟢 Finished syncing");
+                break;
+            }
+        } catch (err) {
+            console.error(`Error processing page ${i} for validator ${validatorData.address}:`, err.message);
+            continue; // Continue to the next page even if there's an error
         }
     }
 
     isSyncing = false;
-
-    // Return true to indicate the sync was successfu
     return true;
 }
 

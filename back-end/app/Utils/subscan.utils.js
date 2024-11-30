@@ -58,16 +58,21 @@ async function getValidatorDetails(networkName, validatorAddress) {
 
 //This API is only available in Polkadot, Kusama, Westend network
 async function getValidatorEvents(networkName, validatorAddress, page) {
-    return new Promise((resolve) => {
-        dataUtil.postData('https://' + networkName + '.api.subscan.io/api/v2/scan/account/reward_slash', {
-        "row": 100,
-        "page": page,
-        "address": validatorAddress
-    }, SUBSCAN_APIKEY)
-        .then(data => {
-            resolve(data);
-        });
-    });
+    try {
+        const data = await dataUtil.postData(
+            'https://' + networkName + '.api.subscan.io/api/v2/scan/account/reward_slash',
+            {
+                row: 100,
+                page: page,
+                address: validatorAddress,
+            },
+            SUBSCAN_APIKEY
+        );
+        return data;
+    } catch (err) {
+        console.error(`Error fetching events for validator ${validatorAddress}:`, err.message);
+        return null; // Return null to indicate failure
+    }
 }
 
 module.exports = {
